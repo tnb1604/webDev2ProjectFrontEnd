@@ -1,102 +1,60 @@
 <template>
-    <div class="login-container">
-      <h2>Login</h2>
-      <form @submit.prevent="login">
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" v-model="email" required />
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="card-title text-center">Login</h3>
+
+            <form @submit.prevent="handleLogin">
+              <div class="mb-3">
+                <label for="usernameOrEmail" class="form-label">Username or Email</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="usernameOrEmail"
+                  v-model="usernameOrEmail"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" v-model="password" required />
+              </div>
+
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+
+              <p class="mt-3 text-center">
+                Don't have an account? <router-link to="/register">Register here</router-link>
+              </p>
+            </form>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password" required />
-        </div>
-        <button type="submit" class="submit-btn">Login</button>
-      </form>
-      <p>Don't have an account? <router-link to="/register">Register here</router-link></p>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-      };
-    },
-    methods: {
-      async login() {
-        try {
-          const response = await axios.post('http://localhost/routes/login.php', {
-            email: this.email,
-            password: this.password,
-          });
-          if (response.data.success) {
-            // Save token or user data if needed (e.g., to localStorage)
-            this.$router.push('/'); // Redirect to homepage after successful login
-          } else {
-            alert('Login failed. Please check your credentials.');
-          }
-        } catch (error) {
-          console.error('Error during login:', error);
-          alert('An error occurred during login.');
-        }
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .login-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      usernameOrEmail: '',
+      password: ''
+    };
+  },
+  methods: {
+    handleLogin() {
+      // Handle login logic here
+      console.log('Logging in with', this.usernameOrEmail);
+    }
   }
-  
-  h2 {
-    text-align: center;
-    color: #42b983;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  label {
-    display: block;
-    font-weight: bold;
-  }
-  
-  input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-top: 0.2rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  button.submit-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #42b983;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button.submit-btn:hover {
-    background-color: #36a275;
-  }
-  
-  p {
-    text-align: center;
-    margin-top: 1rem;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+/* Add any custom styles if needed */
+</style>

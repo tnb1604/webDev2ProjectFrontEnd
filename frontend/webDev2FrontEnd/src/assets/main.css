@@ -5,6 +5,7 @@
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  display: block; /* Changed from flex to block */
 }
 
 a,
@@ -23,13 +24,12 @@ a,
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
+    display: block; /* Changed from flex to block */
+    place-items: initial; /* Removed centering */
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: block; /* Changed from grid to block */
     padding: 0 2rem;
   }
 }

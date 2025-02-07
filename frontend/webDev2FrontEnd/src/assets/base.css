@@ -34,6 +34,11 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --color-navbar: #ff9800; /* Orange color for navbar */
+  --color-background: #e0f7fa; /* Light green background */
+  --color-text: #8f7a7a; /* Dark text color */
+  --color-background-light-blue: #add8e6; /* Light blue background */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -59,9 +64,10 @@
 }
 
 body {
+  /* Ensure Bootstrap styles are not overridden */
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--color-background-light-blue);
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -83,4 +89,10 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Add styles for the navbar */
+.navbar {
+  background-color: var(--color-navbar);
+  color: white;
 }
