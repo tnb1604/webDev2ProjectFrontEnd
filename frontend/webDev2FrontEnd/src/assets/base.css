@@ -1,8 +1,8 @@
 
 :root {
-  --color-background-light-blue: #add8e6; /* Color for background */
+  --color-background-light-blue: #e0e0e0; /* Color for background */
 }
 
 .navbar {
-  background-color: #111111;
+  background-color: #1b1b1b;
 }
