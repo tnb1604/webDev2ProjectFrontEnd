@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import GameCard from "@/components/GameCard.vue";  // Import GameCard
+import GameCard from "@/components/GameCard.vue"; // Import GameCard
 
 const games = ref([]);
+const searchQuery = ref(""); // Search bar input
 
 onMounted(async () => {
     try {
@@ -13,83 +14,52 @@ onMounted(async () => {
         console.error("Error fetching games:", error);
     }
 });
+
+// Filter games based on search query
+const filteredGames = () => {
+    return games.value.filter(game =>
+        game.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+};
 </script>
 
 <template>
-    <div class="homepage">
-        <h1>Welcome to the Game Review Platform</h1>
-        <div v-if="games.length === 0">
-            <p>Loading games...</p>
+    <!-- Hero Section -->
+    <div class="position-relative text-white text-center" style="height: 490px; overflow: hidden;">
+        <!-- Dark overlay -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"></div>
+
+        <!-- Background Image -->
+        <img src="/homepagepiclol.jpg" class="img-fluid w-100 h-100 object-fit-cover" alt="Homepage Banner">
+
+        <!-- Text Content -->
+        <div class="position-absolute top-50 start-50 translate-middle w-100">
+            <h1 class="fw-bold mb-3">Find and share trustworthy reviews</h1>
+            <h3 class="fw-light mb-5">Real reviews from gamers of all kinds</h3>
+            <div class="container">
+                <input v-model="searchQuery" type="text" class="form-control form-control-lg mx-auto mt-3 w-50" placeholder="Search games...">
+            </div>
         </div>
-        <div v-else class="game-cards-container">
-            <!-- Loop through each game and use the GameCard component -->
-            <GameCard
-                v-for="game in games"
-                :key="game.id"
-                :game="game"
-            />
+    </div>
+
+    <!-- Game Cards Section -->
+    <div class="container mt-4">
+        <!-- Catalog Text -->
+        <h2 class="text-center mb-4">Our Game Catalog</h2>
+
+        <div v-if="filteredGames().length === 0" class="text-center">
+            <p class="text-muted">No games found...</p>
+        </div>
+
+        <div v-else class="row justify-content-center">
+            <div v-for="game in filteredGames()" :key="game.id" class="col-md-4 col-sm-6 mb-4">
+                <GameCard :game="game" />
+            </div>
         </div>
     </div>
 </template>
 
-<style scoped>
-/* Reset some default margins and paddings */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-.homepage {
-    text-align: center;
-    padding: 20px;
-}
 
-h1 {
-    color: #42b983;
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
 
-p {
-    font-size: 1.2rem;
-    color: #333;
-}
 
-.game-cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center the cards horizontally */
-    gap: 20px; /* Add space between the cards */
-    margin-top: 20px;
-}
-
-.game-card {
-    width: 250px; /* Set the width for the game card */
-    flex: 1 1 250px; /* Allow cards to grow and shrink while maintaining width */
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    text-align: center;
-    padding: 16px;
-    background-color: #fff;
-}
-
-.game-card img {
-    width: 100%;
-    max-width: 200px;
-    height: auto;
-    border-radius: 8px;
-}
-
-@media (max-width: 768px) {
-    .game-cards-container {
-        justify-content: space-around; /* Adjust the card alignment on smaller screens */
-    }
-
-    .game-card {
-        width: 100%; /* Ensure cards take full width on smaller screens */
-        max-width: 300px;
-    }
-}
-</style>
