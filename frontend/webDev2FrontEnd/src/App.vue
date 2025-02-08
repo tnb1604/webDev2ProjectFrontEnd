@@ -1,12 +1,16 @@
 <template>
-  <div id="app">
+  <div id="app" class="wrapper">
     <NavBar /> <!-- Use NavBar component here -->
-    <main>
+    <main class="main-content">
       <router-view></router-view> <!-- This will load the specific page based on routing -->
     </main>
+
+  </div>
+  <div>
     <Footer /> <!-- Use Footer component here -->
   </div>
 </template>
+
 
 <script>
 import NavBar from './components/NavBar.vue'; // Import NavBar component
