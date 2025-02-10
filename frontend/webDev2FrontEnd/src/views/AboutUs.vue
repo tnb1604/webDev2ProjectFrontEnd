@@ -38,7 +38,7 @@
         <div class="text-center mt-5">
             <h3 class="fw-semibold">Join Our Community</h3>
             <p class="text-muted">Be part of the best gaming review community. Sign up today!</p>
-            <a href="/register" class="btn btn-primary">Get Started</a>
+            <a href="/register" class="btn btn-primary mb-5">Get Started</a>
         </div>
     </div>
 </template>
