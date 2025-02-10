@@ -3,6 +3,7 @@
     <footer class="text-white py-2 mt-0" style="background-color: #1b1b1b;">
         <div class="container">
             <div class="row justify-content-between">
+
                 <!-- Logo Section -->
                 <div class="col-12 col-md-3 text-center text-md-left mb-0">
                     <img src="/public/controllerlogo.png" alt="Logo" class="logo-img" style="height: 100px;">
@@ -63,6 +64,7 @@
                     <p class="mb-0 small text-muted">© 2025 The Game Review Platform. All rights reserved.</p>
                 </div>
             </div>
+            
         </div>
     </footer>
 </template>

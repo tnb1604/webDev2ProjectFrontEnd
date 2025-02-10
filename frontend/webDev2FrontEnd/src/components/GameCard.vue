@@ -14,6 +14,7 @@
             <!-- Link to game details page -->
             <router-link :to="`/game/${game.id}`" class="btn btn-primary">View Details</router-link>
         </div>
+        
     </div>
 </template>
 
