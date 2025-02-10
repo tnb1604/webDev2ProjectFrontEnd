@@ -1,26 +1,30 @@
 <template>
   <div id="app" class="wrapper">
-    <NavBar /> <!-- Use NavBar component here -->
+   <NavBar></NavBar>
     <main class="main-content">
-      <router-view></router-view> <!-- This will load the specific page based on routing -->
+      <router-view></router-view>
     </main>
 
   </div>
   <div>
-    <Footer /> <!-- Use Footer component here -->
+   <Footer></Footer>
   </div>
 </template>
 
 
 <script>
-import NavBar from './components/NavBar.vue'; // Import NavBar component
-import Footer from './components/Footer.vue'; // Import Footer component
+import NavBar from './components/NavBar.vue';
+import Footer from './components/Footer.vue';
+import GameCardGrid from './components/GameCardGrid.vue';
 
 export default {
   name: "App",
   components: {
     NavBar,
-    Footer, // Register Footer component
+    Footer, 
+    GameCardGrid
   }
+
+
 };
 </script>

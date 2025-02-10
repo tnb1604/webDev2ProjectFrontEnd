@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import GameCard from "@/components/GameCard.vue"; // Import GameCard
+import GameCardGrid from "@/components/GameCardGrid.vue";
 
 const games = ref([]);
 const searchQuery = ref(""); // Search bar input
@@ -24,6 +24,7 @@ const filteredGames = () => {
 </script>
 
 <template>
+    
     <!-- Hero Section -->
     <div class="position-relative text-white text-center" style="height: 490px; overflow: hidden;">
         <!-- Dark overlay -->
@@ -37,29 +38,15 @@ const filteredGames = () => {
             <h1 class="fw-bold mb-3">Find and share trustworthy reviews</h1>
             <h3 class="fw-light mb-5">Real reviews from gamers of all kinds</h3>
             <div class="container">
-                <input v-model="searchQuery" type="text" class="form-control form-control-lg mx-auto mt-3 w-50" placeholder="Search games...">
+                <input v-model="searchQuery" type="text" class="form-control form-control-lg mx-auto mt-3 w-50"
+                    placeholder="Search games...">
             </div>
         </div>
     </div>
 
     <!-- Game Cards Section -->
-    <div class="container mt-4">
-        <!-- Catalog Text -->
-        <h2 class="text-center mb-4">Our Game Catalog</h2>
+    <GameCardGrid></GameCardGrid>
+    
 
-        <div v-if="filteredGames().length === 0" class="text-center">
-            <p class="text-muted">No games found...</p>
-        </div>
 
-        <div v-else class="row justify-content-center">
-            <div v-for="game in filteredGames()" :key="game.id" class="col-md-4 col-sm-6 mb-4">
-                <GameCard :game="game" />
-            </div>
-        </div>
-    </div>
 </template>
-
-
-
-
-

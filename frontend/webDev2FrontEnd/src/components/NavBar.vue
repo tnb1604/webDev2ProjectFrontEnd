@@ -49,7 +49,4 @@ const logout = () => {
   color: #dddddd; /* Set the text color */
 }
 
-
-
-
 </style>

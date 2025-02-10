@@ -5,13 +5,10 @@
         
         <!-- Display game title -->
         <div class="card-body">
-            <h5 class="card-title">{{ game.title }}</h5>
-            
-            <!-- Display game genre and release date -->
+            <h5 class="card-name">{{ game.name }}</h5>
             <p class="card-text">{{ game.genre }}</p>
-            <p class="card-text">{{ game.release_date }}</p>
-
-            <!-- Link to game details page -->
+            <p class="card-text">Released: {{ game.release_date }}</p>
+            <p class="card-text">{{ game.average_rating }}</p>
             <router-link :to="`/game/${game.id}`" class="btn btn-primary">View Details</router-link>
         </div>
         
@@ -20,17 +17,15 @@
 
 <script>
 export default {
+    name: "GameCard",
     props: {
-        game: {
-            type: Object,
-            required: true
-        }
-    }
+        game: Object,
+    },
 };
 </script>
 
 <style scoped>
 .card {
-    margin: 10px; /* Optional: Add margin to separate cards */
+    margin: 1px; /* Optional: Add margin to separate cards */
 }
 </style>
