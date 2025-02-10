@@ -16,7 +16,7 @@
                         <a href="#" class="text-white text-decoration-none">contact@gamereview.com</a>
                         <br>
                         <i class="bi bi-telephone me-1"></i>
-                        <a href="#" class="text-white text-decoration-none">+1 234 567 890</a>
+                        <a href="#" class="text-white text-decoration-none">+31 6 12345678</a>
                     </p>
                 </div>
 
