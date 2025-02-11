@@ -61,10 +61,15 @@
             <!-- Footer Bottom -->
             <div class="row mt-2 justify-content-center">
                 <div class="col-12 text-center">
-                    <p class="mb-0 small text-muted">© 2025 The Game Review Platform. All rights reserved.</p>
+                    <p class="mt-1 mb-0 small copyright-text">© 2025 The Game Review Platform. All rights reserved.</p>
                 </div>
             </div>
             
         </div>
     </footer>
 </template>
+<style scoped>
+    .copyright-text {
+        color: #a5a5a5;
+    }
+</style>
