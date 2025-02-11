@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import GameCardGrid from "@/components/GameCardGrid.vue";
+import SearchBar from "@/components/SearchBar.vue"; // Import SearchBar component
 
 const games = ref([]);
 const searchQuery = ref(""); // Search bar input
@@ -21,10 +22,14 @@ const filteredGames = () => {
         game.title.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
 };
+
+// Handle search event
+const handleSearch = (query) => {
+    searchQuery.value = query;
+};
 </script>
 
 <template>
-    
     <!-- Hero Section -->
     <div class="position-relative text-white text-center" style="height: 490px; overflow: hidden;">
         <!-- Dark overlay -->
@@ -38,15 +43,11 @@ const filteredGames = () => {
             <h1 class="fw-bold mb-3">Find and share trustworthy reviews</h1>
             <h3 class="fw-light mb-5">Real reviews from gamers of all kinds</h3>
             <div class="container">
-                <input v-model="searchQuery" type="text" class="form-control form-control-lg mx-auto mt-3 w-50"
-                    placeholder="Search games...">
+                <SearchBar :placeholder="'Search games...'" @search="handleSearch" />
             </div>
         </div>
     </div>
 
     <!-- Game Cards Section -->
-    <GameCardGrid></GameCardGrid>
-    
-
-
+    <GameCardGrid :games="filteredGames()" />
 </template>

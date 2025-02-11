@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-center mt-4 mb-4">Game Card Grid</h1>
+    <h1 class="text-center mt-4 mb-5">Games</h1>
     <div class="grid-container mb-5 ms-5 me-5">
         <GameCard v-for="game in games" :key="game.id" :game="game" />
     </div>
@@ -19,7 +19,7 @@ export default {
             games: [
                 { 
                     id: 1, 
-                    name: "Cyberpunk 2077", 
+                    title: "Cyberpunk 2077", 
                     description: "Night city action game", 
                     genre: "Action", 
                     average_rating: 5, 
@@ -28,7 +28,7 @@ export default {
                 },
                 { 
                     id: 2, 
-                    name: "Minecraft", 
+                    title: "Minecraft", 
                     description: "Sandbox adventure", 
                     genre: "Adventure", 
                     average_rating: 4, 
@@ -37,7 +37,7 @@ export default {
                 },
                 { 
                     id: 19, 
-                    name: "Cyberpunk 2077", 
+                    title: "Cyberpunk 2077", 
                     description: "Night city action game", 
                     genre: "Action", 
                     average_rating: 5, 
@@ -46,7 +46,7 @@ export default {
                 },
                 { 
                     id: 42, 
-                    name: "Minecraft", 
+                    title: "Minecraft", 
                     description: "Sandbox adventure", 
                     genre: "Adventure", 
                     average_rating: 4, 
@@ -55,7 +55,7 @@ export default {
                 },
                 { 
                     id: 12, 
-                    name: "Cyberpunk 2077", 
+                    title: "Cyberpunk 2077", 
                     description: "Night city action game", 
                     genre: "Action", 
                     average_rating: 5, 
@@ -64,7 +64,7 @@ export default {
                 },
                 { 
                     id: 25, 
-                    name: "Minecraft", 
+                    title: "Minecraft", 
                     description: "Sandbox adventure", 
                     genre: "Adventure", 
                     average_rating: 4, 
@@ -73,7 +73,7 @@ export default {
                 },
                 { 
                     id: 21, 
-                    name: "Cyberpunk 2077", 
+                    title: "Cyberpunk 2077", 
                     description: "Night city action game", 
                     genre: "Action", 
                     average_rating: 5, 
@@ -82,7 +82,7 @@ export default {
                 },
                 { 
                     id: 42, 
-                    name: "Minecraft", 
+                    title: "Minecraft", 
                     description: "Sandbox adventure", 
                     genre: "Adventure", 
                     average_rating: 4, 
@@ -103,7 +103,8 @@ export default {
 <style scoped>
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust min-width to match the new card size */
+    gap: 24px; /* Increase the gap between cards */
+    padding: 16px; /* Add padding to the grid container */
 }
 </style>

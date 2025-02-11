@@ -1,17 +1,23 @@
 <template>
-    <div class="input-group mb-3">
+    <div class="input-group mb-3 search-bar">
       <input
         v-model="searchQuery"
         @input="onSearch"
         type="text"
         class="form-control"
-        placeholder="Search games by title"
+        :placeholder="placeholder"
       />
     </div>
 </template>
 
 <script>
 export default {
+    props: {
+      placeholder: {
+        type: String,
+        default: 'Search...'
+      }
+    },
     data() {
       return {
         searchQuery: ''
@@ -26,5 +32,10 @@ export default {
 </script>
 
 <style scoped>
-/* Add any custom styles if needed */
+.search-bar input {
+    height: 50px; /* Increase height */
+    max-width: 650px; /* Decrease width */
+    margin: 0 auto; /* Center align */
+    border-radius: 15px; /* Round the corners */
+}
 </style>

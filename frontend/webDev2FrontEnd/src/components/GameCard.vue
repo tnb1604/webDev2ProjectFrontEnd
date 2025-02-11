@@ -5,10 +5,13 @@
         
         <!-- Display game title -->
         <div class="card-body">
-            <h5 class="card-name">{{ game.name }}</h5>
+            <h5 class="card-name">{{ game.title }}</h5>
             <p class="card-text">{{ game.genre }}</p>
             <p class="card-text">Released: {{ game.release_date }}</p>
-            <p class="card-text">{{ game.average_rating }}</p>
+            <p class="card-text">
+                <span>{{ game.average_rating }}</span>
+                <StarRating class="ms-2 mb-1" :rating="game.average_rating" />
+            </p>
             <router-link :to="`/game/${game.id}`" class="btn btn-primary">View Details</router-link>
         </div>
         
@@ -16,16 +19,31 @@
 </template>
 
 <script>
+import StarRating from './StarRating.vue';
+
 export default {
     name: "GameCard",
     props: {
         game: Object,
+    },
+    components: {
+        StarRating
     },
 };
 </script>
 
 <style scoped>
 .card {
-    margin: 1px; /* Optional: Add margin to separate cards */
+    margin: 10px; /* Adjust margin to separate cards */
+    width: 300px; /* Adjust the width of the card */
+    height: 450px; /* Adjust the height of the card */
+}
+.card-img-top {
+    height: 200px; /* Adjust the height of the image */
+    object-fit: cover; /* Ensure the image covers the area */
+}
+.card-text {
+    display: flex;
+    align-items: center;
 }
 </style>
