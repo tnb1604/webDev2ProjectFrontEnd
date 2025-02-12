@@ -1,49 +1,23 @@
 <template>
   <div class="container mt-5">
-    <!-- Game Image Section -->
-    <div class="row">
-      <div class="col-12">
-        <img :src="game.imagePath" class="img-fluid rounded shadow-lg mb-4" alt="Game Image" />
-      </div>
-    </div>
-
-    <!-- Game Details Section -->
-    <div class="row">
-      <div class="col-md-8">
-        <h1 class="text-center mb-3">{{ game.title }}</h1>
-        <p class="lead">{{ game.description }}</p>
-        <div class="mb-3">
-          <p><strong>Release Date:</strong> <span class="text-muted">{{ game.releaseDate }}</span></p>
-          <p><strong>Genre:</strong> <span class="badge bg-secondary">{{ game.genre }}</span></p>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Reviews Section -->
+    <GameDetailsBlock :game="game" />
     <div class="mt-5">
-      <h3 class="mb-2">Reviews</h3>
-      <p class="d-flex align-items-center">
-        <strong class="me-1">Average Rating:</strong>
-        <StarRating class="me-2" :rating="game.averageRating" size="small" />
-        <span class="d-flex align-items-center average-rating">
-          {{ game.averageRating }} / 5
-        </span>
-      </p>
-      <ReviewList />
+      <ReviewList :reviews="reviews" :averageRating="game.averageRating" />
     </div>
   </div>
 </template>
 
 <script>
-import StarRating from '@/components/StarRating.vue';
-import ReviewList from '../components/ReviewList.vue';
+import GameDetailsBlock from '@/components/GameDetailsBlock.vue';
+import ReviewList from '@/components/ReviewList.vue';
+import ReviewForm from '@/components/ReviewForm.vue';
 
 export default {
   name: 'GameDetail',
   components: {
+    GameDetailsBlock,
     ReviewList,
-    StarRating
+    ReviewForm
   },
   data() {
     return {
@@ -54,7 +28,25 @@ export default {
         genre: 'RPG, Shooter',
         imagePath: '/public/cyberpunk2077.jpg',
         averageRating: 4.5
-      }
+      },
+      reviews: [
+        {
+          id: 1,
+          rating: 5,
+          review_title: "Masterpiece!",
+          review_text: "Absolutely amazing game with a deep story and great combat.",
+          user_name: "John Doe",
+          created_at: "2023-10-01"
+        },
+        {
+          id: 2,
+          rating: 4,
+          review_title: "Great game",
+          review_text: "Intriguing story and fun gameplay, but some bugs need fixing.",
+          user_name: "Jane Smith",
+          created_at: "2023-10-03"
+        }
+      ]
     };
   },
   mounted() {
@@ -101,7 +93,8 @@ img {
 }
 
 .average-rating {
-  color: #ffb833; /* Change this color to your desired color */
+  color: #ffb833;
+  /* Change this color to your desired color */
   font-weight: bold;
 }
 </style>

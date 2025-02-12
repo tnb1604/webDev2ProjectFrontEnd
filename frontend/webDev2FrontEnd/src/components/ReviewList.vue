@@ -1,38 +1,33 @@
 <template>
     <div class="mb-4">
+        <h3 class="mb-2">Reviews</h3>
+        <p class="d-flex align-items-center">
+            <strong class="me-1">Average Rating:</strong>
+            <StarRating class="me-2" :rating="averageRating" size="small" />
+            <span class="d-flex align-items-center average-rating">
+                {{ averageRating }} / 5
+            </span>
+        </p>
+        <ReviewForm class="mb-4"/>
         <Review v-for="review in reviews" :key="review.id" :review="review" />
     </div>
 </template>
 
 <script>
 import Review from './Review.vue';
+import StarRating from './StarRating.vue';
+import ReviewForm from '@/components/ReviewForm.vue';
 
 export default {
     name: "ReviewList",
     components: {
-        Review
+        Review,
+        StarRating
+        , ReviewForm
     },
-    data() {
-        return {
-            reviews: [
-                {
-                    id: 1,
-                    rating: 5,
-                    review_title: "Masterpiece!",
-                    review_text: "Absolutely amazing game with a deep story and great combat.",
-                    user_name: "John Doe",
-                    created_at: "2023-10-01"
-                },
-                {
-                    id: 2,
-                    rating: 4,
-                    review_title: "Great game",
-                    review_text: "Intruiging story and fun gameplay, but some bugs need fixing.",
-                    user_name: "Jane Smith",
-                    created_at: "2023-10-03"
-                }
-            ]
-        };
+    props: {
+        reviews: Array,
+        averageRating: Number
     }
 };
 </script>
