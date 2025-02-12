@@ -4,6 +4,7 @@ import GameDetail from '../views/GameDetail.vue';
 import LoginPage from '../views/Login.vue'; // Assuming you have a login page
 import RegisterPage from '../views/Register.vue'; // Assuming you have a register page
 import AboutUs from '../views/AboutUs.vue'; // Import the AboutUs component
+import GameModifyForm from '../views/GameModifyForm.vue'; // Import the GameModifyForm component
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/about',
     name: 'AboutUs',
     component: AboutUs, // Use the imported AboutUs component
+  },
+  {
+    path: '/modify-game/:id',
+    name: 'GameModifyForm',
+    component: GameModifyForm,
   },
 ];
 

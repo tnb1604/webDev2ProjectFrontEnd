@@ -7,9 +7,9 @@
         The Game Review Platform
       </router-link>
 
-
-      <!-- Right Section (Login/Logout) -->
+      <!-- Right Section (Login/Logout/Add Game) -->
       <div class="d-flex">
+        <!-- <AddButton/> -->
         <router-link v-if="!isLoggedIn" to="/login" class="btn btn-outline-light me-2">Login</router-link>
         <router-link v-if="!isLoggedIn" to="/register" class="btn btn-outline-light me-2">Register</router-link>
 
@@ -22,6 +22,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+// import AddButton from './AddButton.vue';
 
 // State for logged in user
 const isLoggedIn = ref(false); // Update this based on actual auth logic
@@ -37,8 +38,6 @@ const logout = () => {
 </script>
 
 <style scoped>
-
-
 .logo-img {
   height: 46px;
   margin-right: 10px;
@@ -48,5 +47,4 @@ const logout = () => {
   font-family: 'Impact', sans-serif;
   color: #dddddd; /* Set the text color */
 }
-
 </style>

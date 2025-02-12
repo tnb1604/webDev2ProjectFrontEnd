@@ -37,21 +37,21 @@ export default {
                 },
                 { 
                     id: 19, 
-                    title: "Cyberpunk 2077", 
-                    description: "Night city action game", 
-                    genre: "Action", 
+                    title: "The Witcher 3: Wild Hunt", 
+                    description: "Open-world RPG", 
+                    genre: "RPG, Fighter", 
                     average_rating: 5, 
-                    release_date: "2020-12-10", 
-                    image_path: "/public/cyberpunk2077.jpg" 
+                    release_date: "2015-05-18", 
+                    image_path: "/public/thewitcher3.jpg" 
                 },
                 { 
                     id: 42, 
-                    title: "Minecraft", 
-                    description: "Sandbox adventure", 
-                    genre: "Adventure", 
+                    title: "League of    Legends", 
+                    description: "Team-based strategy game", 
+                    genre: "MOBA", 
                     average_rating: 4, 
-                    release_date: "2009-05-17", 
-                    image_path: "/public/minecraft.jpg" 
+                    release_date: "2009-10-27", 
+                    image_path: "/public/lol.webp" 
                 },
                 { 
                     id: 12, 
