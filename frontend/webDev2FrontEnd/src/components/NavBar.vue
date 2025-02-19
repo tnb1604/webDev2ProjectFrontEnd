@@ -27,8 +27,8 @@ import { useRouter } from "vue-router";
 // import AddButton from './AddButton.vue';
 
 // State for logged in user and admin status
-const isLoggedIn = ref(true); // Update this based on actual auth logic
-const isAdmin = ref(true); // Update this based on actual admin logic
+const isLoggedIn = ref(false); // Update this based on actual auth logic
+const isAdmin = ref(false); // Update this based on actual admin logic
 
 const router = useRouter();
 
