@@ -33,9 +33,9 @@ export default {
 
 <style scoped>
 .search-bar input {
-    height: 50px; /* Increase height */
-    max-width: 650px; /* Decrease width */
-    margin: 0 auto; /* Center align */
-    border-radius: 15px; /* Round the corners */
+    height: 50px;
+    max-width: 650px;
+    margin: 0 auto;
+    border-radius: 15px;
 }
 </style>

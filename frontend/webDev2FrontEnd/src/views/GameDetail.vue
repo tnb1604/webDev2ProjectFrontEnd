@@ -10,14 +10,12 @@
 <script>
 import GameDetailsBlock from '@/components/GameDetailsBlock.vue';
 import ReviewList from '@/components/ReviewList.vue';
-import ReviewForm from '@/components/ReviewForm.vue';
 
 export default {
   name: 'GameDetail',
   components: {
     GameDetailsBlock,
-    ReviewList,
-    ReviewForm
+    ReviewList
   },
   data() {
     return {

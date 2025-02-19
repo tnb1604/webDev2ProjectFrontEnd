@@ -49,7 +49,6 @@ export default {
 <style scoped>
 .review-form {
   max-width: 600px;
-  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;

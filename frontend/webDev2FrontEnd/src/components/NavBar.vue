@@ -9,7 +9,9 @@
 
       <!-- Right Section (Login/Logout/Add Game) -->
       <div class="d-flex">
-        <!-- <AddButton/> -->
+        <!-- Add Game Button (visible only to admins) -->
+        <router-link v-if="isLoggedIn && isAdmin" to="/modify-game/new" class="btn btn-outline-light me-2">Add Game</router-link>
+
         <router-link v-if="!isLoggedIn" to="/login" class="btn btn-outline-light me-2">Login</router-link>
         <router-link v-if="!isLoggedIn" to="/register" class="btn btn-outline-light me-2">Register</router-link>
 
@@ -24,8 +26,9 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 // import AddButton from './AddButton.vue';
 
-// State for logged in user
-const isLoggedIn = ref(false); // Update this based on actual auth logic
+// State for logged in user and admin status
+const isLoggedIn = ref(true); // Update this based on actual auth logic
+const isAdmin = ref(true); // Update this based on actual admin logic
 
 const router = useRouter();
 
@@ -33,6 +36,7 @@ const router = useRouter();
 const logout = () => {
   // Perform logout logic here (e.g., remove user session/token)
   isLoggedIn.value = false;
+  isAdmin.value = false;
   router.push("/"); // Redirect to homepage
 };
 </script>

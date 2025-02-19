@@ -28,6 +28,7 @@
 <script>
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'GameDetailsBlock',
@@ -38,12 +39,16 @@ export default {
         EditButton,
         DeleteButton,
     },
+    setup() {
+        const router = useRouter();
+        return { router };
+    },
     methods: {
         deleteGame(gameId) {
             console.log(`Deleting game with ID: ${gameId}`);
         },
         editGame(gameId) {
-            console.log(`Editing game with ID: ${gameId}`);
+            this.router.push(`/modify-game/${gameId}`);
         },
     }
 };

@@ -6,7 +6,9 @@
 
                 <!-- Logo Section -->
                 <div class="col-12 col-md-3 text-center text-md-left mb-0">
-                    <img src="/public/controllerlogo.png" alt="Logo" class="logo-img" style="height: 100px;">
+                    <router-link to="/">
+                        <img src="/public/controllerlogo.png" alt="Logo" class="logo-img" style="height: 100px;">
+                    </router-link>
                 </div>
 
                 <!-- Contact Info Section -->

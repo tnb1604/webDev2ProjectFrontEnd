@@ -2,7 +2,6 @@
     <div class="container mt-4 mb-4">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h2 class="text-center mb-4">Add New Game</h2>
                 <form @submit.prevent="submitForm">
                     <ImageUpload @image-selected="setImage" />
                     <div class="mb-3">
@@ -21,7 +20,7 @@
                         <label for="releaseDate" class="form-label">Release Date:</label>
                         <input type="date" id="releaseDate" v-model="game.releaseDate" class="form-control" required />
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Add Game</button>
+                    <button type="submit" class="btn btn-primary w-100">{{ isEditMode ? 'Update Game' : 'Add Game' }}</button>
                 </form>
             </div>
         </div>
@@ -29,39 +28,65 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
 import ImageUpload from './ImageUpload.vue';
 
 export default {
-  components: {
-    ImageUpload
-  },
-  data() {
-    return {
-      game: {
-        image: null, // This will hold the selected image file
-        title: '',
-        description: '',
-        genre: '',
-        releaseDate: ''
-      }
-    };
-  },
-  methods: {
-    setImage(image) {
-      this.game.image = image; // Set the selected image to the game object
+    components: {
+        ImageUpload
     },
-    submitForm() {
-      // Handle form submission logic here
-      console.log('Game added:', this.game);
-      // Reset form
-      this.game = {
-        image: null,
-        title: '',
-        description: '',
-        genre: '',
-        releaseDate: ''
-      };
+    props: {
+        gameId: {
+            type: String,
+            required: true
+        }
+    },
+    setup(props) {
+        const game = ref({
+            image: null,
+            title: '',
+            description: '',
+            genre: '',
+            releaseDate: ''
+        });
+        const isEditMode = ref(false);
+
+        onMounted(() => {
+            if (props.gameId !== 'new') {
+                isEditMode.value = true;
+                // Fetch game details and populate the form
+                // Example: fetchGameDetails(props.gameId).then(data => game.value = data);
+            }
+        });
+
+        const setImage = (image) => {
+            game.value.image = image;
+        };
+
+        const submitForm = () => {
+            if (isEditMode.value) {
+                console.log('Game updated:', game.value);
+                // Update game logic here
+            } else {
+                console.log('Game added:', game.value);
+                // Add game logic here
+            }
+            // Reset form
+            game.value = {
+                image: null,
+                title: '',
+                description: '',
+                genre: '',
+                releaseDate: ''
+            };
+        };
+
+        return {
+            game,
+            isEditMode,
+            setImage,
+            submitForm
+        };
     }
-  }
 };
 </script>

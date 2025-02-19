@@ -1,7 +1,7 @@
 <template>
     <button 
-      @click="confirmEdit" 
-      class="btn btn-warning"
+      @click="editEntity" 
+      class="btn btn-primary"
       :class="customClass"
     >
       Edit
@@ -28,5 +28,10 @@ export default {
             default: ""
         }
     },
+    methods: {
+        editEntity() {
+            this.editAction(this.entityId); // Execute edit action
+        }
+    }
 };
 </script>
