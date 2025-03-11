@@ -1,110 +1,59 @@
 <template>
-    <h1 class="text-center mt-4 mb-5">Games</h1>
-    <div class="grid-container mb-5 ms-5 me-5">
-        <GameCard v-for="game in games" :key="game.id" :game="game" />
+    <div>
+        <h1 class="text-center mt-4 mb-5">Games</h1>
+        <!-- Loading state -->
+        <div v-if="loading" class="text-center">Loading games...</div>
+        
+        <!-- Show error message if fetching fails -->
+        <div v-if="error" class="text-center text-danger">Error fetching games. Please try again later.</div>
+        
+        <!-- Show the game cards when data is loaded -->
+        <div v-else class="grid-container mb-5 ms-5 me-5">
+            <GameCard v-for="game in games" :key="game.id" :game="game" />
+        </div>
     </div>
 </template>
 
-
 <script>
 import GameCard from "./GameCard.vue";
+import api from '../utils/axios.js'; // Ensure this path is correct
 
 export default {
     name: "GameCardGrid",
-    components  : {
+    components: {
         GameCard
     },
     data() {
         return {
-            games: [
-                { 
-                    id: 1, 
-                    title: "Cyberpunk 2077", 
-                    description: "Night city action game", 
-                    genre: "Action", 
-                    average_rating: 5, 
-                    release_date: "2020-12-10", 
-                    image_path: "/public/cyberpunk2077.jpg" 
-                },
-                { 
-                    id: 2, 
-                    title: "Minecraft", 
-                    description: "Sandbox adventure", 
-                    genre: "Adventure", 
-                    average_rating: 4, 
-                    release_date: "2009-05-17", 
-                    image_path: "/public/minecraft.jpg" 
-                },
-                { 
-                    id: 19, 
-                    title: "The Witcher 3: Wild Hunt", 
-                    description: "Open-world RPG", 
-                    genre: "RPG, Fighter", 
-                    average_rating: 5, 
-                    release_date: "2015-05-18", 
-                    image_path: "/public/thewitcher3.jpg" 
-                },
-                { 
-                    id: 42, 
-                    title: "League of    Legends", 
-                    description: "Team-based strategy game", 
-                    genre: "MOBA", 
-                    average_rating: 4, 
-                    release_date: "2009-10-27", 
-                    image_path: "/public/lol.webp" 
-                },
-                { 
-                    id: 12, 
-                    title: "Cyberpunk 2077", 
-                    description: "Night city action game", 
-                    genre: "Action", 
-                    average_rating: 5, 
-                    release_date: "2020-12-10", 
-                    image_path: "/public/cyberpunk2077.jpg" 
-                },
-                { 
-                    id: 25, 
-                    title: "Minecraft", 
-                    description: "Sandbox adventure", 
-                    genre: "Adventure", 
-                    average_rating: 4, 
-                    release_date: "2009-05-17", 
-                    image_path: "/public/minecraft.jpg" 
-                },
-                { 
-                    id: 21, 
-                    title: "Cyberpunk 2077", 
-                    description: "Night city action game", 
-                    genre: "Action", 
-                    average_rating: 5, 
-                    release_date: "2020-12-10", 
-                    image_path: "/public/cyberpunk2077.jpg" 
-                },
-                { 
-                    id: 42, 
-                    title: "Minecraft", 
-                    description: "Sandbox adventure", 
-                    genre: "Adventure", 
-                    average_rating: 4, 
-                    release_date: "2009-05-17", 
-                    image_path: "/public/minecraft.jpg" 
-                },
-
-
-
-            ]
+            games: [],
+            loading: true, // loading state
+            error: false,  // error state
         };
     },
+    created() {
+        this.fetchGames();
+    },
+    methods: {
+        async fetchGames() {
+            try {
+                const response = await api.get('/games'); // Ensure this URL is correct for your backend
+                this.games = response.data;
+            } catch (error) {
+                console.error("Error fetching games:", error);
+                this.error = true; // Set error state if fetching fails
+            } finally {
+                this.loading = false; // End loading state
+            }
+        }
+    }
 }
-
 </script>
-
 
 <style scoped>
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust min-width to match the new card size */
-    gap: 24px; /* Increase the gap between cards */
-    padding: 16px; /* Add padding to the grid container */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 16px;
 }
 </style>

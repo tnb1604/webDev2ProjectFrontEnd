@@ -5,16 +5,6 @@ import GameCardGrid from "@/components/GameCardGrid.vue";
 import SearchBar from "@/components/SearchBar.vue"; // Import SearchBar component
 
 const games = ref([]);
-const searchQuery = ref(""); // Search bar input
-
-onMounted(async () => {
-    try {
-        const response = await axios.get("http://localhost/routes/game.php");
-        games.value = response.data;
-    } catch (error) {
-        console.error("Error fetching games:", error);
-    }
-});
 
 // Filter games based on search query
 const filteredGames = () => {

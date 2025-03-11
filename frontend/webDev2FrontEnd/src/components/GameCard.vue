@@ -1,7 +1,8 @@
 <template>
     <div class="card">
         <!-- Display game image -->
-        <img :src="game.image_path" class="card-img-top" alt="Game Image" />
+        <img :src="`http://localhost${game.image_path}`" class="card-img-top" alt="Game Image" />
+
 
         <!-- Display game title -->
         <div class="card-body">
@@ -16,7 +17,8 @@
 
             <!-- Admin Section: Edit and Delete buttons -->
             <router-link :to="`/modify-game/${game.id}`" class="btn btn-warning ms-2 me-2">Edit</router-link>
-            <DeleteButton :entity-id="game.id" entity-type="game" :delete-action="deleteGame" custom-class="btn btn-danger" />
+            <DeleteButton :entity-id="game.id" entity-type="game" :delete-action="deleteGame"
+                custom-class="btn btn-danger" />
         </div>
     </div>
 </template>
@@ -56,13 +58,14 @@ export default {
 }
 
 .card-img-top {
-    height: 270px;
+    height: 245px;
     object-fit: cover;
 }
 
 .card-text {
     display: flex;
     align-items: center;
-    margin-bottom: 4px; /* Adjust spacing */
+    margin-bottom: 4px;
+    /* Adjust spacing */
 }
 </style>
