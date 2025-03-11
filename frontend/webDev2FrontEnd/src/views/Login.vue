@@ -6,16 +6,20 @@
           <div class="card-body">
             <h3 class="card-title text-center">Login</h3>
 
+            <!-- ✅ Show Success Message -->
+            <div v-if="successMessage" class="alert alert-success">
+              {{ successMessage }}
+            </div>
+
+            <!-- ❌ Show Error Message -->
+            <div v-if="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+
             <form @submit.prevent="handleLogin">
               <div class="mb-3">
-                <label for="usernameOrEmail" class="form-label">Username or Email</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="usernameOrEmail"
-                  v-model="usernameOrEmail"
-                  required
-                />
+                <label for="email" class="form-label">Email Address</label>
+                <input type="text" class="form-control" id="email" v-model="email" required />
               </div>
 
               <div class="mb-3">
@@ -38,19 +42,43 @@
   </div>
 </template>
 
+
 <script>
+import api from '../utils/axios.js'; // Use the configured axios instance
+
 export default {
   data() {
     return {
-      usernameOrEmail: '',
-      password: ''
+      email: '',
+      password: '',
+      errorMessage: '',
+      successMessage: ''
     };
   },
   methods: {
-    handleLogin() {
-      // Handle login logic here
-      console.log('Logging in with', this.usernameOrEmail);
+    async handleLogin() {
+      try {
+        const response = await api.post('http://localhost/auth/login', { // Use 'api' here
+          email: this.email,
+          password: this.password
+        }, {
+          headers: {
+            'Content-Type': 'application/json', // Ensure correct content-type
+          }
+        });
+
+        const token = response.data.token;
+        localStorage.setItem('token', token); // Store token
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Attach token
+
+        // Redirect to home or dashboard
+        this.$router.push('/');
+      } catch (error) {
+        console.error('Login error:', error); // Log the entire error object for debugging
+        this.errorMessage = error.response?.data?.message || 'Invalid credentials'; // Get error message from response
+      }
     }
   }
 };
 </script>
+

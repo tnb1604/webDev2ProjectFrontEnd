@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/Homepage.vue';
 import GameDetail from '../views/GameDetail.vue';
-import LoginPage from '../views/Login.vue'; // Assuming you have a login page
-import RegisterPage from '../views/Register.vue'; // Assuming you have a register page
-import AboutUs from '../views/AboutUs.vue'; // Import the AboutUs component
-import GameModifyForm from '../views/GameModifyForm.vue'; // Import the GameModifyForm component
+import LoginPage from '../views/Login.vue';
+import RegisterPage from '../views/Register.vue';
+import AboutUs from '../views/AboutUs.vue';
+import GameModifyForm from '../views/GameModifyForm.vue';
 
+// Define routes
 const routes = [
   {
     path: '/',
@@ -30,18 +31,30 @@ const routes = [
   {
     path: '/about',
     name: 'AboutUs',
-    component: AboutUs, // Use the imported AboutUs component
+    component: AboutUs,
   },
   {
     path: '/modify-game/:id',
     name: 'GameModifyForm',
     component: GameModifyForm,
+    meta: { requiresAuth: true }, // 🔒 This route requires authentication
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory('/'), // Use '/' directly instead of process.env.BASE_URL
+  history: createWebHistory('/'),
   routes,
+});
+
+// 🌟 **Navigation Guard**
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('token'); // Check if token exists
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login'); // Redirect to login if not authenticated
+  } else {
+    next(); // Proceed to the route
+  }
 });
 
 export default router;
