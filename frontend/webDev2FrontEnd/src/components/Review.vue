@@ -1,9 +1,9 @@
 <template>
     <div class="review">
-        <StarRating class="ms-2 mb-1":rating="review.rating" />
+        <StarRating class="ms-2 mb-1" :rating="review.rating" />
         <h4 class="ms-2">{{ review.review_title }}</h4>
         <p class="ms-2">{{ review.review_text }}</p>
-        <small class="ms-2">{{ review.user_name }} - {{ review.created_at }}</small>
+        <small class="ms-2">{{ review.username }} - {{ review.created_at }}</small>
         <div class="d-flex justify-content-between">
             <div>
                 <LikeButton :initialLikes="10" @likeToggled="handleLike" />
