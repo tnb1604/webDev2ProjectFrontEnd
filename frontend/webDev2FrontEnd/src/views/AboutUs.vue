@@ -35,10 +35,32 @@
 
 
         <!-- Call to Action -->
-        <div class="text-center mt-5">
+        <div v-if="!authStore.user" class="text-center mt-5">
             <h3 class="fw-semibold">Join Our Community</h3>
             <p class="text-muted">Be part of the best gaming review community. Sign up today!</p>
             <a href="/register" class="btn btn-primary mb-5">Get Started</a>
         </div>
     </div>
 </template>
+
+<script>
+import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+
+export default {
+    setup() {
+        const authStore = useAuthStore();
+
+        // Ensure user details are loaded when the component mounts
+        onMounted(() => {
+            authStore.fetchUserDetails().then(() => {
+                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
+            });
+        });
+
+        return {
+            authStore
+        };
+    }
+};
+</script>

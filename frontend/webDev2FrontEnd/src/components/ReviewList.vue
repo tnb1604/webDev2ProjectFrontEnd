@@ -8,17 +8,36 @@
                 {{ averageRating }} / 5
             </span>
         </p>
-        <ReviewForm class="mb-4" :rating="averageRating" />
+        <ReviewForm v-if="authStore.user?.role === 'user'" class="mb-4" :rating="averageRating" />
+
+        <router-link to="/login" class="btn btn-primary shadow-sm mb-3">Log in to place a review</router-link>
+
         <Review v-for="review in reviews" :key="review.id" :review="review" />
     </div>
 </template>
 
 <script>
+import { onMounted } from 'vue';
+import { useAuthStore } from "@/stores/authStore";
 import Review from './Review.vue';
 import StarRating from './StarRating.vue';
 import ReviewForm from '@/components/ReviewForm.vue';
 
 export default {
+    setup() {
+        const authStore = useAuthStore();
+
+        // Ensure user details are loaded when the component mounts
+        onMounted(() => {
+            authStore.fetchUserDetails().then(() => {
+                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
+            });
+        });
+
+        return {
+            authStore
+        };
+    },
     name: "ReviewList",
     components: {
         Review,
@@ -40,6 +59,7 @@ export default {
         }
     }
 };
+
 </script>
 
 <style scoped></style>

@@ -6,7 +6,7 @@
           <div class="card-body p-5">
             <!-- Image above the form -->
             <div class="text-center ">
-              <img src="/lol.webp" alt="Login Image"/>
+              <img src="/lol.webp" alt="Login Image" />
             </div>
 
             <h3 class="card-title text-center text-primary mb-4">Login</h3>
@@ -130,5 +130,4 @@ img {
   max-height: 300px;
   object-fit: contain;
 }
-
 </style>

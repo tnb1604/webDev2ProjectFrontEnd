@@ -31,13 +31,17 @@
                             <i class="bi bi-info-circle me-1"></i>
                             <a href="/about" class="text-white text-decoration-none">About Us</a>
                         </li>
-                        <li>
+                        <li v-if="!authStore.user">
                             <i class="bi bi-person-plus me-1"></i>
                             <a href="/register" class="text-white text-decoration-none">Get Started</a>
                         </li>
-                        <li>
+                        <li v-if="!authStore.user">
                             <i class="bi bi-box-arrow-in-right me-1"></i>
                             <a href="/login" class="text-white text-decoration-none">Log in</a>
+                        </li>
+                        <li v-else>
+                            <i class="bi bi-person-circle me-1"></i>
+                            <a href="/account" class="text-white text-decoration-none">Account</a>
                         </li>
                     </ul>
                 </div>
@@ -51,7 +55,8 @@
                     <a href="https://www.youtube.com/@thainoodleboii" class="text-white me-3 text-decoration-none">
                         <i class="bi bi-youtube" style="font-size: 1.5rem;"></i>
                     </a>
-                    <a href="https://nl.linkedin.com/in/damisa-vooges-14a96b302" class="text-white me-3 text-decoration-none">
+                    <a href="https://nl.linkedin.com/in/damisa-vooges-14a96b302"
+                        class="text-white me-3 text-decoration-none">
                         <i class="bi bi-linkedin" style="font-size: 1.5rem;"></i>
                     </a>
                     <a href="https://www.facebook.com/damisa.vooges" class="text-white me-3 text-decoration-none">
@@ -66,12 +71,30 @@
                     <p class="mt-1 mb-0 small copyright-text">© 2025 The Game Review Platform. All rights reserved.</p>
                 </div>
             </div>
-            
+
         </div>
     </footer>
 </template>
+
+
+<script setup>
+import { useAuthStore } from "@/stores/authStore";
+import { onMounted } from "vue";
+
+const authStore = useAuthStore();
+
+// Ensure user details are loaded when the component mounts
+onMounted(() => {
+    authStore.fetchUserDetails().then(() => {
+        console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
+    });
+});
+</script>
+
+
+
 <style scoped>
-    .copyright-text {
-        color: #a5a5a5;
-    }
+.copyright-text {
+    color: #a5a5a5;
+}
 </style>

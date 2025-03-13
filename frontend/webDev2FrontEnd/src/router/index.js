@@ -5,6 +5,7 @@ import LoginPage from '../views/Login.vue';
 import RegisterPage from '../views/Register.vue';
 import AboutUs from '../views/AboutUs.vue';
 import GameModifyForm from '../views/GameModifyForm.vue';
+import Account from '@/views/Account.vue';
 import { useAuthStore } from '@/stores/authStore';
 
 // Define routes
@@ -42,6 +43,11 @@ const routes = [
     component: GameModifyForm,
     meta: { requiresAuth: true, requiresAdmin: true }, // 🔒 This route requires authentication and admin role
   },
+  {
+    path : '/account',
+    name: 'Account',
+    component: Account,
+  }
 ];
 
 const router = createRouter({

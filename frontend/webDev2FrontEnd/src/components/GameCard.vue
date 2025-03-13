@@ -15,14 +15,17 @@
             <router-link :to="`/game/${game.id}`" class="btn btn-primary">View Details</router-link>
 
             <!-- Admin Section: Edit and Delete buttons -->
-            <router-link :to="`/modify-game/${game.id}`" class="btn btn-warning ms-2 me-2">Edit</router-link>
-            <DeleteButton :entity-id="game.id" entity-type="game" :delete-action="deleteGame"
-                custom-class="btn btn-danger" />
+            <router-link v-if="authStore.user?.role === 'admin'" :to="`/modify-game/${game.id}`"
+                class="btn btn-warning ms-2 me-2">Edit</router-link>
+            <DeleteButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
+                :delete-action="deleteGame" custom-class="btn btn-danger" />
         </div>
     </div>
 </template>
 
 <script>
+import { onMounted } from 'vue';
+import { useAuthStore } from "@/stores/authStore";
 import StarRating from './StarRating.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
@@ -37,6 +40,20 @@ export default {
         StarRating,
         DeleteButton,
         EditButton,
+    },
+    setup() {
+        const authStore = useAuthStore();
+
+        // Ensure user details are loaded when the component mounts
+        onMounted(() => {
+            authStore.fetchUserDetails().then(() => {
+                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
+            });
+        });
+
+        return {
+            authStore
+        };
     },
     computed: {
         roundedAverageRating() {
@@ -72,7 +89,7 @@ export default {
     object-fit: cover;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    
+
 }
 
 .card-text {
