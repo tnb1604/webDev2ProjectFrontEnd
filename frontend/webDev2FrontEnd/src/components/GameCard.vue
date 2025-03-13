@@ -63,14 +63,15 @@ export default {
     height: 450px;
     border-radius: 20px;
     box-shadow: 0 6px 9px rgba(0, 0, 0, 0.2);
-    background-color: rgb(235, 233, 255);
+    background: linear-gradient(71deg, #ff5454, #ffd257);
+
 }
 
 .card-img-top {
     height: 245px;
     object-fit: cover;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     
 }
 

@@ -1,24 +1,3 @@
-<script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import GameCardGrid from "@/components/GameCardGrid.vue";
-import SearchBar from "@/components/SearchBar.vue"; // Import SearchBar component
-
-const games = ref([]);
-
-// Filter games based on search query
-const filteredGames = () => {
-    return games.value.filter(game =>
-        game.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-};
-
-// Handle search event
-const handleSearch = (query) => {
-    searchQuery.value = query;
-};
-</script>
-
 <template>
     <!-- Hero Section -->
     <div class="position-relative text-white text-center" style="height: 490px; overflow: hidden;">
@@ -41,3 +20,25 @@ const handleSearch = (query) => {
     <!-- Game Cards Section -->
     <GameCardGrid :games="filteredGames()" />
 </template>
+
+
+<script setup>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import GameCardGrid from "@/components/GameCardGrid.vue";
+import SearchBar from "@/components/SearchBar.vue"; // Import SearchBar component
+
+const games = ref([]);
+
+// Filter games based on search query
+const filteredGames = () => {
+    return games.value.filter(game =>
+        game.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+};
+
+// Handle search event
+const handleSearch = (query) => {
+    searchQuery.value = query;
+};
+</script>
