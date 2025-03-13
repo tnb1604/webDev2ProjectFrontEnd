@@ -10,34 +10,47 @@
       <!-- Right Section (Login/Logout/Add Game) -->
       <div class="d-flex">
         <!-- Add Game Button (visible only to admins) -->
-        <router-link v-if="isLoggedIn && isAdmin" to="/modify-game/new" class="btn btn-outline-light me-2">Add Game</router-link>
+        <router-link
+          v-if="authStore.user?.role === 'admin'"
+          to="/modify-game/new"
+          class="btn btn-outline-light me-2"
+        >
+          Add Game
+        </router-link>
 
-        <router-link v-if="!isLoggedIn" to="/login" class="btn btn-outline-light me-2">Login</router-link>
-        <router-link v-if="!isLoggedIn" to="/register" class="btn btn-outline-light me-2">Register</router-link>
+        <!-- Show Login/Register only when NOT logged in -->
+        <template v-if="!authStore.token">
+          <router-link to="/login" class="btn btn-outline-light me-2">Login</router-link>
+          <router-link to="/register" class="btn btn-outline-light me-2">Register</router-link>
+        </template>
 
-        <button v-if="isLoggedIn" @click="logout" class="btn btn-outline-light">Logout</button>
+        <!-- Show Logout button when logged in -->
+        <button v-if="authStore.token" @click="logout" class="btn btn-outline-light">Logout</button>
       </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useAuthStore } from "@/stores/authStore";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-// import AddButton from './AddButton.vue';
 
-// State for logged in user and admin status
-const isLoggedIn = ref(false); // Update this based on actual auth logic
-const isAdmin = ref(false); // Update this based on actual admin logic
-
+const authStore = useAuthStore();
 const router = useRouter();
 
-// Mock logout function (you'll replace this with real logic)
+// Ensure user details are loaded when the component mounts
+onMounted(() => {
+  authStore.fetchUserDetails().then(() => {
+    console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
+  });
+});
+
+
+// Logout function
 const logout = () => {
-  // Perform logout logic here (e.g., remove user session/token)
-  isLoggedIn.value = false;
-  isAdmin.value = false;
-  router.push("/"); // Redirect to homepage
+  authStore.logout();
+  router.push("/"); // Redirect to homepage after logout
 };
 </script>
 
@@ -49,6 +62,6 @@ const logout = () => {
 
 .navbar-brand {
   font-family: 'Impact', sans-serif;
-  color: #dddddd; /* Set the text color */
+  color: #dddddd;
 }
 </style>
