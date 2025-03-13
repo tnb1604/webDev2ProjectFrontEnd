@@ -10,11 +10,7 @@
       <!-- Right Section (Login/Logout/Add Game) -->
       <div class="d-flex">
         <!-- Add Game Button (visible only to admins) -->
-        <router-link
-          v-if="authStore.user?.role === 'admin'"
-          to="/modify-game/new"
-          class="btn btn-outline-light me-2"
-        >
+        <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="btn btn-outline-primary me-2">
           Add Game
         </router-link>
 
@@ -25,7 +21,12 @@
         </template>
 
         <!-- Show Logout button when logged in -->
-        <button v-if="authStore.token" @click="logout" class="btn btn-outline-light">Logout</button>
+        <!-- Show Logout button when logged in -->
+        <button v-if="authStore.token" @click="logout" class="btn btn-outline-danger">
+          <i class="bi bi-box-arrow-right"></i> <!-- Bootstrap icon for logout -->
+        </button>
+
+
       </div>
     </div>
   </nav>
