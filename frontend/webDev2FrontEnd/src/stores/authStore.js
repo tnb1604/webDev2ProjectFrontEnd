@@ -1,41 +1,54 @@
 import { defineStore } from "pinia";
+import api from "@/utils/axios.js"; // Axios instance
 
 export const useAuthStore = defineStore("auth", {
-    state: () => ({
-        token: localStorage.getItem("token") || null,
-        user: null,
-    }),
-    actions: {
-        async fetchUserDetails() {
-            if (!this.token) {
-                console.log("🔴 No token found. User not logged in.");
-                return;
-            }
+  state: () => ({
+    token: localStorage.getItem("token") || null,
+    user: null,
+  }),
+  actions: {
+    async login(credentials) {
+      try {
+        const response = await api.post("http://localhost/auth/login", credentials, {
+          headers: { "Content-Type": "application/json" },
+        });
 
-            console.log("🟡 Fetching user details...");
-            try {
-                const response = await fetch("http://localhost/auth/me", { // <-- Fixed URL
-                    headers: { Authorization: `Bearer ${this.token}` },
-                });
+        const token = response.data.token;
+        localStorage.setItem("token", token); // Store token
+        this.token = token;
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Set Authorization header
 
-                const data = await response.json();
-                console.log("🔵 API Response:", data); // Debug API response
+        // Optionally fetch the user details after login
+        await this.fetchUserDetails();
 
-                if (response.ok) {
-                    this.user = data;
-                    console.log("✅ User stored in Pinia:", this.user);
-                } else {
-                    console.error("❌ Failed to fetch user:", data);
-                }
-            } catch (error) {
-                console.error("❌ Error fetching user details:", error);
-            }
-        }
-        ,
-        logout() {
-            this.token = null;
-            this.user = null;
-            localStorage.removeItem("token");
-        },
+        return true;
+      } catch (error) {
+        console.error("Login failed:", error);
+        throw error; // Propagate the error to be handled in the component
+      }
     },
+
+    async fetchUserDetails() {
+      if (!this.token) return;
+
+      try {
+        const response = await api.get("http://localhost/auth/me", {
+          headers: { Authorization: `Bearer ${this.token}` },
+        });
+
+        this.user = response.data;
+        return true;
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+        return false;
+      }
+    },
+
+    logout() {
+      this.token = null;
+      this.user = null;
+      localStorage.removeItem("token");
+      api.defaults.headers.common["Authorization"] = ""; // Remove Authorization header
+    },
+  },
 });

@@ -42,9 +42,8 @@
   </div>
 </template>
 
-
 <script>
-import api from '../utils/axios.js'; // Use the configured axios instance
+import { useAuthStore } from "@/stores/authStore"; // Import the Pinia store
 
 export default {
   data() {
@@ -57,28 +56,29 @@ export default {
   },
   methods: {
     async handleLogin() {
+      // Access the Pinia store here
+      const authStore = useAuthStore();
+
       try {
-        const response = await api.post('http://localhost/auth/login', { // Use 'api' here
+        // Call the store's login action
+        const success = await authStore.login({
           email: this.email,
           password: this.password
-        }, {
-          headers: {
-            'Content-Type': 'application/json', // Ensure correct content-type
-          }
         });
 
-        const token = response.data.token;
-        localStorage.setItem('token', token); // Store token
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Attach token
+        if (success) {
+          // Optionally show success message
+          this.successMessage = 'Login successful!';
 
-        // Redirect to home or dashboard
-        this.$router.push('/');
+          // Redirect to home or dashboard
+          this.$router.push('/');
+        }
       } catch (error) {
-        console.error('Login error:', error); // Log the entire error object for debugging
-        this.errorMessage = error.response?.data?.message || 'Invalid credentials'; // Get error message from response
+        // Handle error
+        console.error('Login error:', error);
+        this.errorMessage = error.response?.data?.message || 'Invalid credentials';
       }
     }
   }
 };
 </script>
-
