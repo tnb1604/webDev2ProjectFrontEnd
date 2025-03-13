@@ -5,6 +5,7 @@ import LoginPage from '../views/Login.vue';
 import RegisterPage from '../views/Register.vue';
 import AboutUs from '../views/AboutUs.vue';
 import GameModifyForm from '../views/GameModifyForm.vue';
+import { useAuthStore } from '@/stores/authStore';
 
 // Define routes
 const routes = [
@@ -37,7 +38,7 @@ const routes = [
     path: '/modify-game/:id',
     name: 'GameModifyForm',
     component: GameModifyForm,
-    meta: { requiresAuth: true }, // 🔒 This route requires authentication
+    meta: { requiresAuth: true, requiresAdmin: true }, // 🔒 This route requires authentication and admin role
   },
 ];
 
@@ -49,10 +50,18 @@ const router = createRouter({
 // 🌟 **Navigation Guard**
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('token'); // Check if token exists
+  const authStore = useAuthStore();
+  const userRole = authStore.user?.role; // Get the role from the store
 
+  // If the route requires authentication and the user is not logged in, redirect to login
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login'); // Redirect to login if not authenticated
-  } else {
+    next('/login');
+  }
+  // If the route requires an admin role and the user is not an admin, redirect to home
+  else if (to.meta.requiresAdmin && userRole !== 'admin') {
+    next('/'); // Redirect to home if not an admin
+  }
+  else {
     next(); // Proceed to the route
   }
 });
