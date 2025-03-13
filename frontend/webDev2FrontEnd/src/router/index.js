@@ -23,11 +23,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginPage,
+    meta: { requiresGuest: true }, // 🔒 This route requires a guest user
   },
   {
     path: '/register',
     name: 'Register',
     component: RegisterPage,
+    meta: { requiresGuest: true }, // 🔒 This route requires a guest user
   },
   {
     path: '/about',
@@ -60,6 +62,9 @@ router.beforeEach((to, from, next) => {
   // If the route requires an admin role and the user is not an admin, redirect to home
   else if (to.meta.requiresAdmin && userRole !== 'admin') {
     next('/'); // Redirect to home if not an admin
+  }
+  else if (to.meta.requiresGuest && isAuthenticated) {
+    next('/'); // Redirect to home or another route if already logged in
   }
   else {
     next(); // Proceed to the route
