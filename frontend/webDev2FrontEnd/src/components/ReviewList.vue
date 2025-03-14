@@ -8,7 +8,13 @@
                 {{ averageRating }} / 5
             </span>
         </p>
-        <ReviewForm v-if="authStore.user?.role === 'user'" class="mb-4" :rating="averageRating" />
+        <ReviewForm 
+            v-if="authStore.user?.role === 'user'" 
+            class="mb-4" 
+            :rating="averageRating" 
+            :gameId="gameId" 
+            :userId="authStore.user.id" 
+        />
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
@@ -29,6 +35,7 @@ import ReviewForm from "@/components/ReviewForm.vue";
 export default {
     setup(props) {
         const authStore = useAuthStore();
+        const gameId = 1; // Replace with the actual game ID
 
         // Ensure user details are loaded when the component mounts
         onMounted(() => {
@@ -50,7 +57,8 @@ export default {
 
         return {
             authStore,
-            sortedReviews
+            sortedReviews,
+            gameId
         };
     },
     name: "ReviewList",

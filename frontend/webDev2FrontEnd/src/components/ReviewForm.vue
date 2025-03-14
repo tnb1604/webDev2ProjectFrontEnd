@@ -13,13 +13,15 @@
         <label for="rating">Rating</label>
         <InteractiveStarRating v-model:rating="rating" /> <!-- Listening for rating change -->
       </div>
-      <button type="submit" class="btn btn-primary">Submit Review</button>
+      <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+      <button type="submit" class="btn btn-primary" :disabled="rating === 0">Submit Review</button>
     </form>
   </div>
 </template>
 
 <script>
 import InteractiveStarRating from './InteractiveStarRating.vue';
+import api from "@/utils/axios.js";
 
 export default {
   components: {
@@ -29,24 +31,44 @@ export default {
     existingReview: {
       type: Object,
       default: null
+    },
+    gameId: {
+      type: Number,
+      required: true
+    },
+    userId: {
+      type: Number,
+      required: true
     }
   },
   data() {
     return {
       title: this.existingReview ? this.existingReview.title : '',
       reviewText: this.existingReview ? this.existingReview.review_text : '',
-      rating: this.existingReview ? this.existingReview.rating : 0
+      rating: this.existingReview ? this.existingReview.rating : 0,
+      errorMessage: ''
     };
   },
   methods: {
-    submitReview() {
+    async submitReview() {
       const review = {
+        gameId: this.gameId,
+        userId: this.userId,
         title: this.title,
-        reviewText: this.reviewText,
+        review_text: this.reviewText,
         rating: this.rating
       };
-      // Handle the review submission logic here
-      console.log('Review submitted:', review);
+      console.log('Review object:', review); // Log the review object for debugging
+      try {
+        const response = await api.post('/reviews', review);
+        console.log('Review submitted:', response.data);
+        this.$emit('reviewSubmitted', response.data);
+        this.errorMessage = ''; // Clear any previous error message
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        console.error('Error response data:', error.response?.data); // Log the error response data
+        this.errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
+      }
     }
   }
 };

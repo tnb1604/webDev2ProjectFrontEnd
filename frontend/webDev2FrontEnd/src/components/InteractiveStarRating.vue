@@ -27,6 +27,11 @@ export default {
       required: true
     }
   },
+  watch: {
+    rating(newRating) {
+      this.$emit('update:rating', newRating);
+    }
+  },
   data() {
     return {
       hoverRating: 0
@@ -34,10 +39,11 @@ export default {
   },
   methods: {
     setRating(star) {
-      this.$emit('update:rating', star); // Emit the updated rating to the parent component
+        console.log('Rating set to:', star); // Temporary log for verification
+        this.$emit('update:rating', star); // Emit the updated rating to the parent component
     },
     setHoverRating(star) {
-      this.hoverRating = star;
+        this.hoverRating = star;
     }
   }
 };
