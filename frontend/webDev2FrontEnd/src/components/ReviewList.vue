@@ -8,13 +8,11 @@
                 {{ averageRating }} / 5
             </span>
         </p>
-        <ReviewForm 
-            v-if="authStore.user?.role === 'user'" 
-            class="mb-4" 
-            :rating="averageRating" 
-            :gameId="gameId" 
-            :userId="authStore.user.id" 
-        />
+
+        <!-- Only show the review form if the user hasn't submitted a review yet -->
+        <ReviewForm v-if="authStore.user?.role === 'user' && !userHasReviewed" class="mb-4" :rating="averageRating"
+            :gameId="gameId" :userId="authStore.user.id" @review-submitted="fetchReviews" />
+        <!-- Listen for the custom event to refresh reviews -->
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
@@ -26,41 +24,14 @@
 </template>
 
 <script>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "@/stores/authStore";
 import Review from "./Review.vue";
 import StarRating from "./StarRating.vue";
 import ReviewForm from "@/components/ReviewForm.vue";
+import api from "@/utils/axios"; // Ensure this is imported for fetching reviews
 
 export default {
-    setup(props) {
-        const authStore = useAuthStore();
-        const gameId = 1; // Replace with the actual game ID
-
-        // Ensure user details are loaded when the component mounts
-        onMounted(() => {
-            authStore.fetchUserDetails().then(() => {
-                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
-            });
-        });
-
-        // Sort reviews: user's own review goes first
-        const sortedReviews = computed(() => {
-            if (!authStore.user) return props.reviews;
-
-            return [...props.reviews].sort((a, b) => {
-                if (a.user_id === authStore.user.id) return -1; // Your review goes on top
-                if (b.user_id === authStore.user.id) return 1;
-                return 0; // Keep others in original order
-            });
-        });
-
-        return {
-            authStore,
-            sortedReviews,
-            gameId
-        };
-    },
     name: "ReviewList",
     components: {
         Review,
@@ -79,7 +50,58 @@ export default {
         roundedAverageRating: {
             type: Number,
             required: true
+        },
+        gameId: {
+            type: Number,
+            required: true
         }
+    },
+    setup(props) {
+        const authStore = useAuthStore();
+        const userHasReviewed = ref(false); // Track if the user has already reviewed this game
+
+        // Check if the user has already submitted a review
+        const checkUserReview = () => {
+            const userReview = props.reviews.find(
+                review => review.user_id === authStore.user.id
+            );
+            userHasReviewed.value = userReview ? true : false;
+        };
+
+        // Fetch reviews from the API
+        const fetchReviews = () => {
+            api.get(`/reviews/game/${props.gameId}`)
+                .then(response => {
+                    props.reviews = response.data; // Update the reviews
+                    checkUserReview(); // Re-check if the user has reviewed
+                })
+                .catch(error => {
+                    console.error("Error fetching reviews:", error);
+                });
+        };
+
+        // Sort reviews: user's own review goes first
+        const sortedReviews = computed(() => {
+            if (!authStore.user) return props.reviews;
+
+            return [...props.reviews].sort((a, b) => {
+                if (a.user_id === authStore.user.id) return -1; // Your review goes on top
+                if (b.user_id === authStore.user.id) return 1;
+                return 0; // Keep others in original order
+            });
+        });
+
+        // Initially check if the user has already submitted a review
+        onMounted(() => {
+            checkUserReview();
+        });
+
+        return {
+            authStore,
+            sortedReviews,
+            userHasReviewed,
+            fetchReviews
+        };
     }
 };
 </script>

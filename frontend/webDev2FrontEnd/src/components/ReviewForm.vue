@@ -62,13 +62,20 @@ export default {
       try {
         const response = await api.post('/reviews', review);
         console.log('Review submitted:', response.data);
-        this.$emit('reviewSubmitted', response.data);
+        this.$emit('review-submitted', response.data); // Emit event to parent component
+        this.resetForm(); // Reset the form after successful submission
         this.errorMessage = ''; // Clear any previous error message
       } catch (error) {
         console.error('Error submitting review:', error);
         console.error('Error response data:', error.response?.data); // Log the error response data
         this.errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
       }
+    },
+    // Reset the form fields
+    resetForm() {
+      this.title = '';
+      this.reviewText = '';
+      this.rating = 0;
     }
   }
 };

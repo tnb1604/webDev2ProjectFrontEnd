@@ -6,13 +6,15 @@
     </div>
 
     <div v-if="game && reviews.length" class="mt-5">
-      <ReviewList :reviews="reviews" :averageRating="averageRating" :roundedAverageRating="roundedAverageRating" />
+      <!-- Pass gameId to ReviewList -->
+      <ReviewList :reviews="reviews" :averageRating="averageRating" :roundedAverageRating="roundedAverageRating"
+        :gameId="gameId" /> <!-- Pass gameId here -->
     </div>
   </div>
 </template>
 
 <script>
-import api from '@/utils/axios'; // Ensure correct import path
+import api from '@/utils/axios';
 import GameDetailsBlock from '@/components/GameDetailsBlock.vue';
 import ReviewList from '@/components/ReviewList.vue';
 
@@ -24,8 +26,9 @@ export default {
   },
   data() {
     return {
-      game: null, // Initially set to null
-      reviews: [] // Initialize as an array
+      game: null,
+      reviews: [],
+      gameId: null // Initialize gameId as null
     };
   },
   computed: {
@@ -39,11 +42,11 @@ export default {
     }
   },
   mounted() {
-    const gameId = this.$route.params.id;
-    console.log('Fetching game ID:', gameId);
+    this.gameId = this.$route.params.id; // Get the gameId from the route
+    console.log('Fetching game ID:', this.gameId);
 
     // Fetch game details
-    api.get(`/games/${gameId}`)
+    api.get(`/games/${this.gameId}`)
       .then(response => {
         this.game = response.data;
       })
@@ -51,8 +54,8 @@ export default {
         console.error('Error fetching game details:', error);
       });
 
-    // Fetch reviews for the game (if needed)
-    api.get(`/reviews/game/${gameId}`)
+    // Fetch reviews for the game
+    api.get(`/reviews/game/${this.gameId}`)
       .then(response => {
         this.reviews = response.data;
       })
