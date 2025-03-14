@@ -67,7 +67,7 @@ export default {
             console.log(`Deleting review with ID: ${reviewId}`);
         },
         editReview(reviewId) {
-            // Implement the edit review logic here
+            this.$emit('editReview', reviewId); // This triggers the event to the parent component
             console.log(`Editing review with ID: ${reviewId}`);
         }
     }
@@ -79,7 +79,7 @@ export default {
     border: 4px solid #ddd;
     padding: 1rem;
     border-radius: 0.5rem;
-    margin-bottom: 1rem;
+    margin-block-end: 0.6rem;
     background-color: #f9f9f9;
 }
 </style>
