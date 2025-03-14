@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="text-center mt-4 mb-5">Games</h1>
+        <h1 class="text-center mt-4 mb-3">Games</h1>
         <!-- Loading state -->
         <div v-if="loading" class="text-center">Loading games...</div>
         

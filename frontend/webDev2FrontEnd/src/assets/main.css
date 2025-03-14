@@ -2,17 +2,21 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 body {
-  margin: 0; /* Remove any default margin */
-  padding: 0; /* Remove any default padding */
-  overflow-x: hidden; /* Prevent horizontal overflow */
+  margin: 0;
+  /* Remove any default margin */
+  padding: 0;
+  /* Remove any default padding */
+  overflow-x: hidden;
+  /* Prevent horizontal overflow */
 }
 
 #app {
-  width: 100%;
-  min-height: 100vh;
+  inline-size: 100%;
+  min-block-size: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: initial; 
-  background: linear-gradient(135deg, #fdcaa1, #c2e9fb);
+  align-items: initial;
+  background: linear-gradient(135deg, #add8e6, #ffffff, #add8e6);
+  /* Changed second color to light blue */
 }
