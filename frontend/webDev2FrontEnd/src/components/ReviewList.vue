@@ -9,16 +9,14 @@
             </span>
         </p>
 
-        <!-- Only show the review form if the user hasn't submitted a review yet -->
         <ReviewForm v-if="authStore.user?.role === 'user' && !userHasReviewed" class="mb-4" :rating="averageRating"
             :gameId="gameId" :userId="authStore.user.id" @review-submitted="fetchReviews" />
-        <!-- Listen for the custom event to refresh reviews -->
+        <!-- Listen for review-submitted event -->
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
         </router-link>
 
-        <!-- Use sortedReviews instead of reviews -->
         <Review v-for="review in sortedReviews" :key="review.id" :review="review" />
     </div>
 </template>
