@@ -15,8 +15,8 @@
 
                 <DeleteButton
                     v-if="authStore.user && (authStore.user.id === review.user_id || authStore.user.role === 'admin')"
-                    :entityType="'review'" :entityId="review.id" :deleteAction="deleteReview" customClass="ms-2" />
-
+                    :entityType="'review'" :entityId="review.id" :deleteAction="deleteReview" customClass="ms-2"
+                    ref="deleteButton" />
             </div>
         </div>
     </div>
@@ -29,6 +29,7 @@ import LikeButton from './LikeButton.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
 import { useAuthStore } from "@/stores/authStore";
+import { useReviewStore } from "@/stores/reviewStore"; // Import the review store
 import { onMounted, ref } from "vue";
 import api from "@/utils/axios.js";
 
@@ -49,6 +50,7 @@ export default {
     },
     setup(props) {
         const authStore = useAuthStore();
+        const reviewStore = useReviewStore(); // Use the review store
         const username = ref('');
         const formattedDate = ref('');
 
@@ -73,10 +75,22 @@ export default {
             formattedDate.value = date.toLocaleDateString();
         };
 
+        // Call the deleteReview action from the reviewStore
+        const deleteReview = async (reviewId) => {
+            try {
+                await reviewStore.deleteReview(reviewId); // Use store's delete action
+                // Optionally notify the user or handle UI updates after deletion
+            } catch (error) {
+                console.error("Error deleting review:", error);
+            }
+        };
+
         return {
             authStore,
+            reviewStore,
             username,
-            formattedDate
+            formattedDate,
+            deleteReview, // Pass the delete action to the template
         };
     },
     methods: {
@@ -92,15 +106,10 @@ export default {
                 this.$refs.likeButton.resetLike();
             }
         },
-        deleteReview(reviewId) {
-            // Implement the delete review logic here
-            console.log(`Deleting review with ID: ${reviewId}`);
-        },
         editReview(reviewId) {
             // Implement the edit review logic here
             console.log(`Editing review with ID: ${reviewId}`);
         }
-
     }
 };
 </script>
