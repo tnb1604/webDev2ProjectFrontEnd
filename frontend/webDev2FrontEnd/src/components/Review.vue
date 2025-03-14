@@ -1,7 +1,7 @@
 <template>
     <div class="review">
         <StarRating class="ms-2 mb-1" :rating="review.rating" />
-        <h4 class="ms-2">{{ review.review_title }}</h4>
+        <h4 class="ms-2">{{ review.title }}</h4>
         <p class="ms-2">{{ review.review_text }}</p>
         <small class="ms-2">{{ review.username }} - {{ review.created_at }}</small>
         <div class="d-flex justify-content-between">
@@ -10,18 +10,13 @@
                 <DislikeButton :initialDislikes="3" @dislikeToggled="handleDislike" />
             </div>
             <div>
-                <EditButton 
-                    entityType="review" 
-                    :entityId="review.id" 
-                    :editAction="editReview" 
-                    customClass="ms-2" 
-                />
-                <DeleteButton 
-                    entityType="review" 
-                    :entityId="review.id" 
-                    :deleteAction="deleteReview" 
-                    customClass="ms-2" 
-                />
+                <EditButton v-if="authStore.user && authStore.user.id === review.user_id" :entityType="'review'"
+                    :entityId="review.id" :editAction="editReview" customClass="ms-2" />
+
+                <DeleteButton
+                    v-if="authStore.user && (authStore.user.id === review.user_id || authStore.user.role === 'admin')"
+                    :entityType="'review'" :entityId="review.id" :deleteAction="deleteReview" customClass="ms-2" />
+
             </div>
         </div>
     </div>
@@ -33,6 +28,8 @@ import DislikeButton from './DislikeButton.vue';
 import LikeButton from './LikeButton.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
+import { useAuthStore } from "@/stores/authStore";
+import { onMounted } from "vue";
 
 export default {
     name: "Review",
@@ -48,6 +45,19 @@ export default {
             type: Object,
             required: true
         }
+    },
+    setup() {
+        const authStore = useAuthStore();
+
+        onMounted(() => {
+            authStore.fetchUserDetails().then(() => {
+                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
+            });
+        });
+
+        return {
+            authStore
+        };
     },
     methods: {
         handleLike(liked) {
@@ -67,9 +77,10 @@ export default {
             console.log(`Deleting review with ID: ${reviewId}`);
         },
         editReview(reviewId) {
-            this.$emit('editReview', reviewId); // This triggers the event to the parent component
+            // Implement the edit review logic here
             console.log(`Editing review with ID: ${reviewId}`);
         }
+
     }
 };
 </script>

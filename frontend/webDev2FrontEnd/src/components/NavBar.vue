@@ -57,8 +57,8 @@ const logout = () => {
 
 <style scoped>
 .logo-img {
-  height: 46px;
-  margin-right: 10px;
+  block-size: 46px;
+  margin-inline-end: 10px;
 }
 
 .navbar-brand {

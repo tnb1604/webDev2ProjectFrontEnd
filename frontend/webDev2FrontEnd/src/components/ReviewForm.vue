@@ -11,7 +11,7 @@
       </div>
       <div class="form-group">
         <label for="rating">Rating</label>
-        <interactive-star-rating v-model="rating"></interactive-star-rating>
+        <InteractiveStarRating v-model:rating="rating" /> <!-- Listening for rating change -->
       </div>
       <button type="submit" class="btn btn-primary">Submit Review</button>
     </form>
@@ -25,11 +25,17 @@ export default {
   components: {
     InteractiveStarRating
   },
+  props: {
+    existingReview: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
-      title: '',
-      reviewText: '',
-      rating: 0
+      title: this.existingReview ? this.existingReview.title : '',
+      reviewText: this.existingReview ? this.existingReview.review_text : '',
+      rating: this.existingReview ? this.existingReview.rating : 0
     };
   },
   methods: {
@@ -48,7 +54,7 @@ export default {
 
 <style scoped>
 .review-form {
-  max-width: 600px;
+  max-inline-size: 600px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -56,7 +62,7 @@ export default {
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-block-end: 15px;
 }
 
 button {

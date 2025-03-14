@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     setRating(star) {
-      this.$emit('input', star); // Emit the selected rating to the parent component
+      this.$emit('update:rating', star); // Emit the updated rating to the parent component
     },
     setHoverRating(star) {
       this.hoverRating = star;
@@ -45,7 +45,8 @@ export default {
 
 <style scoped>
 .star-rating {
-  flex-direction: row-reverse;
+  display: flex;
+  flex-direction: row; /* No reversal here */
 }
 
 .star-rating button {
@@ -58,5 +59,13 @@ export default {
 
 .star-rating button:hover {
   color: #ffd700;
+}
+
+.btn-warning {
+  color: #ffd700;
+}
+
+.btn-outline-warning {
+  color: #ccc;
 }
 </style>

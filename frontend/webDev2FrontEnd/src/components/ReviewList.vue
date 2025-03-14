@@ -10,21 +10,24 @@
         </p>
         <ReviewForm v-if="authStore.user?.role === 'user'" class="mb-4" :rating="averageRating" />
 
-        <router-link to="/login" class="btn btn-primary shadow-sm mb-3">Log in to place a review</router-link>
+        <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
+            Log in to place a review
+        </router-link>
 
-        <Review v-for="review in reviews" :key="review.id" :review="review" />
+        <!-- Use sortedReviews instead of reviews -->
+        <Review v-for="review in sortedReviews" :key="review.id" :review="review" />
     </div>
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { computed, onMounted } from "vue";
 import { useAuthStore } from "@/stores/authStore";
-import Review from './Review.vue';
-import StarRating from './StarRating.vue';
-import ReviewForm from '@/components/ReviewForm.vue';
+import Review from "./Review.vue";
+import StarRating from "./StarRating.vue";
+import ReviewForm from "@/components/ReviewForm.vue";
 
 export default {
-    setup() {
+    setup(props) {
         const authStore = useAuthStore();
 
         // Ensure user details are loaded when the component mounts
@@ -34,8 +37,20 @@ export default {
             });
         });
 
+        // Sort reviews: user's own review goes first
+        const sortedReviews = computed(() => {
+            if (!authStore.user) return props.reviews;
+
+            return [...props.reviews].sort((a, b) => {
+                if (a.user_id === authStore.user.id) return -1; // Your review goes on top
+                if (b.user_id === authStore.user.id) return 1;
+                return 0; // Keep others in original order
+            });
+        });
+
         return {
-            authStore
+            authStore,
+            sortedReviews
         };
     },
     name: "ReviewList",
@@ -59,7 +74,6 @@ export default {
         }
     }
 };
-
 </script>
 
 <style scoped></style>
