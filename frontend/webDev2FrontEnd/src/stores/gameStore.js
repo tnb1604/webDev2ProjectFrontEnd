@@ -29,16 +29,13 @@ export const useGameStore = defineStore('game', {
                 formData.append('title', this.game.title);
                 formData.append('description', this.game.description);
                 formData.append('genre', this.game.genre);
-                formData.append('releaseDate', this.game.release_date);  // Make sure release_date is correct
-
-                // Log formData to inspect what's being sent
-                console.log([...formData]);
-
-                formData.append('trailerUrl', this.game.trailer_url);
-
+                formData.append('release_date', this.game.release_date);  // Correct the field name
+                formData.append('trailer_url', this.game.trailer_url);
                 if (this.game.image) {
                     formData.append('image', this.game.image);
                 }
+                
+                console.log([...formData]);
 
                 const endpoint = this.isEditMode ? `/games/${this.game.id}` : '/games';
                 const method = this.isEditMode ? 'put' : 'post';
