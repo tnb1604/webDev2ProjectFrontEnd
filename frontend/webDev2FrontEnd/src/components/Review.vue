@@ -3,7 +3,7 @@
         <StarRating class="ms-2 mb-1" :rating="review.rating" />
         <h4 class="ms-2">{{ review.title }}</h4>
         <p class="ms-2">{{ review.review_text }}</p>
-        <small class="ms-2">{{ review.username }} - {{ review.created_at }}</small>
+        <small class="ms-2">{{ username }} - {{ review.created_at }}</small>
         <div class="d-flex justify-content-between">
             <div>
                 <LikeButton :initialLikes="10" @likeToggled="handleLike" />
@@ -29,7 +29,8 @@ import LikeButton from './LikeButton.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
 import { useAuthStore } from "@/stores/authStore";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+import api from "@/utils/axios.js";
 
 export default {
     name: "Review",
@@ -46,17 +47,27 @@ export default {
             required: true
         }
     },
-    setup() {
+    setup(props) {
         const authStore = useAuthStore();
+        const username = ref('');
 
         onMounted(() => {
-            authStore.fetchUserDetails().then(() => {
-                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
-            });
+            fetchUsername(props.review.user_id);
         });
 
+        // Fetch the username from the API using the user_id from review
+        const fetchUsername = async (userId) => {
+            try {
+                const response = await api.get(`/users/${userId}`);
+                username.value = response.data.username;
+            } catch (error) {
+                console.error("Error fetching username:", error);
+            }
+        };
+
         return {
-            authStore
+            authStore,
+            username
         };
     },
     methods: {
