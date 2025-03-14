@@ -3,11 +3,11 @@
         <StarRating class="ms-2 mb-1" :rating="review.rating" />
         <h4 class="ms-2">{{ review.title }}</h4>
         <p class="ms-2">{{ review.review_text }}</p>
-        <small class="ms-2">{{ username }} - {{ review.created_at }}</small>
+        <small class="ms-2 muted">Posted by {{ username }} on {{ formattedDate }}</small>
         <div class="d-flex justify-content-between">
             <div>
-                <LikeButton :initialLikes="10" @likeToggled="handleLike" />
-                <DislikeButton :initialDislikes="3" @dislikeToggled="handleDislike" />
+                <LikeButton :initialLikes="0" @likeToggled="handleLike" />
+                <DislikeButton :initialDislikes="0" @dislikeToggled="handleDislike" />
             </div>
             <div>
                 <EditButton v-if="authStore.user && authStore.user.id === review.user_id" :entityType="'review'"
@@ -50,9 +50,11 @@ export default {
     setup(props) {
         const authStore = useAuthStore();
         const username = ref('');
+        const formattedDate = ref('');
 
         onMounted(() => {
             fetchUsername(props.review.user_id);
+            formatReviewDate(props.review.created_at);
         });
 
         // Fetch the username from the API using the user_id from review
@@ -65,9 +67,16 @@ export default {
             }
         };
 
+        // Format the review date to display only the date
+        const formatReviewDate = (dateTime) => {
+            const date = new Date(dateTime);
+            formattedDate.value = date.toLocaleDateString();
+        };
+
         return {
             authStore,
-            username
+            username,
+            formattedDate
         };
     },
     methods: {
