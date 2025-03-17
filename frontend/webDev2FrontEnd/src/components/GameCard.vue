@@ -47,7 +47,6 @@ export default {
         // Ensure user details are loaded when the component mounts
         onMounted(() => {
             authStore.fetchUserDetails().then(() => {
-                console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
             });
         });
 

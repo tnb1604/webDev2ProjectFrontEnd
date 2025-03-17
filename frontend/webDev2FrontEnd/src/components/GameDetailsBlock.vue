@@ -3,8 +3,24 @@
     <!-- Game Image Section -->
     <div class="row justify-content-center">
       <div class="col-12 text-center">
+        <img :src="`http://localhost/${game.image_path}`" class="img-fluid rounded shadow-lg mb-4" alt="Game Image" />
+      </div>
+    </div>
 
-        <img :src="`http://localhost${game.image_path}`" class="img-fluid rounded shadow-lg mb-4" alt="Game Image" />
+    <!-- Game Trailer Section (Clickable Image) -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 text-center">
+        <img :src="`http://localhost${game.image_path}`" class="img-fluid rounded shadow-lg mb-4 game-thumbnail"
+          alt="Game Trailer Thumbnail" @click="showTrailer" />
+      </div>
+    </div>
+
+    <!-- Hidden YouTube Trailer -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 text-center">
+        <iframe v-if="showingTrailer" :src="`https://www.youtube.com/embed/${getVideoId(game.trailer_url)}?autoplay=1`"
+          width="560" height="315" frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
       </div>
     </div>
@@ -32,7 +48,7 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAuthStore } from "@/stores/authStore";
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
@@ -48,16 +64,17 @@ export default {
   },
   setup() {
     const authStore = useAuthStore();
+    const showingTrailer = ref(false); // To control showing the YouTube trailer iframe
 
     // Ensure user details are loaded when the component mounts
     onMounted(() => {
       authStore.fetchUserDetails().then(() => {
-        console.log("User Details:", authStore.user); // ✅ Check if user data is loaded
       });
     });
 
     return {
-      authStore
+      authStore,
+      showingTrailer,
     };
   },
   methods: {
@@ -67,6 +84,19 @@ export default {
     editGame(gameId) {
       this.router.push(`/modify-game/${gameId}`);
     },
+    getVideoId(url) {
+      const urlParams = new URLSearchParams(new URL(url).search);
+      return urlParams.get('v');  // Extract video ID from YouTube URL
+    },
+    showTrailer() {
+      this.showingTrailer = true;
+    }
   }
 };
 </script>
+
+<style scoped>
+.game-thumbnail {
+  cursor: pointer;
+}
+</style>

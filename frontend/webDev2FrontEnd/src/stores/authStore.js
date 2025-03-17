@@ -9,7 +9,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(credentials) {
       try {
-        const response = await api.post("http://localhost/auth/login", credentials, {
+        const response = await api.post("/auth/login", credentials, {
           headers: { "Content-Type": "application/json" },
         });
 
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("auth", {
       if (!this.token) return;
 
       try {
-        const response = await api.get("http://localhost/auth/me", {
+        const response = await api.get("/auth/me", {
           headers: { Authorization: `Bearer ${this.token}` },
         });
 

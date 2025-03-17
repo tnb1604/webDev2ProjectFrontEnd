@@ -34,7 +34,7 @@ export const useGameStore = defineStore('game', {
                 if (this.game.image) {
                     formData.append('image', this.game.image);
                 }
-                
+
                 console.log([...formData]);
 
                 const endpoint = this.isEditMode ? `/games/${this.game.id}` : '/games';

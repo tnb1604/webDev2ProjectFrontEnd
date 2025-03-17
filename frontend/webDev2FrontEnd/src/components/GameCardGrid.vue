@@ -3,10 +3,10 @@
         <h1 class="text-center mt-4 mb-3">Games</h1>
         <!-- Loading state -->
         <div v-if="loading" class="text-center">Loading games...</div>
-        
+
         <!-- Show error message if fetching fails -->
         <div v-if="error" class="text-center text-danger">Error fetching games. Please try again later.</div>
-        
+
         <!-- Show the game cards when data is loaded -->
         <div v-else class="grid-container mb-5 ms-5 me-5">
             <GameCard v-for="game in games" :key="game.id" :game="game" />
