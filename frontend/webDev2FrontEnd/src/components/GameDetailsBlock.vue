@@ -3,25 +3,37 @@
     <!-- Game Trailer Section (Clickable Image) -->
     <div class="row justify-content-center mb-4">
       <div class="col-12 text-center">
-        <img :src="`http://localhost${game.image_path}`" class="img-fluid rounded shadow-lg mb-4 game-thumbnail"
-          alt="Game Trailer Thumbnail" @click="showTrailer" />
-      </div>
-    </div>
+        <div v-if="!showingTrailer">
+          <img :src="`http://localhost${game.image_path}`" class="img-fluid rounded shadow-lg mb-4 game-thumbnail"
+            alt="Game Trailer Thumbnail" @click="showTrailer" />
+        </div>
 
-    <!-- Hidden YouTube Trailer -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-12 text-center">
-        <iframe v-if="showingTrailer" :src="`https://www.youtube.com/embed/${getVideoId(game.trailer_url)}?autoplay=1`"
-          width="560" height="315" frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+        <!-- Show Trailer (Replaces the Thumbnail) -->
+        <div v-else>
+          <iframe :src="`https://www.youtube.com/embed/${getVideoId(game.trailer_url)}?autoplay=1`"
+            class="game-thumbnail" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+          </iframe>
+        </div>
       </div>
     </div>
 
     <!-- Game Details Section -->
     <div class="row justify-content-left mb-5">
+      <div class="col-md-8 text-left d-flex align-items-center">
+        <h1 class="mb-0 me-3">{{ game.title }}</h1>
+
+        <!-- Toggle Button to Show Trailer or Thumbnail -->
+        <button class="btn btn-primary ms-auto" @click="toggleTrailer">
+          <i class="bi" :class="showingTrailer ? 'bi-eye-slash' : 'bi-eye'"></i>
+          {{ showingTrailer ? 'Hide Trailer' : 'Show Trailer' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Additional Game Information -->
+    <div class="row justify-content-left mb-5">
       <div class="col-md-8 text-left">
-        <h1 class="mb-3">{{ game.title }}</h1>
         <p class="lead">{{ game.description }}</p>
         <div class="mb-3">
           <p><strong>Release Date:</strong> <span class="text-muted">{{ game.release_date }}</span></p>
@@ -83,6 +95,9 @@ export default {
     },
     showTrailer() {
       this.showingTrailer = true;
+    },
+    toggleTrailer() {
+      this.showingTrailer = !this.showingTrailer; // Toggle between trailer and thumbnail
     }
   }
 };
@@ -90,7 +105,10 @@ export default {
 
 <style scoped>
 .game-thumbnail {
-  min-width: 100%;
   cursor: pointer;
+  width: 100%;
+  min-height: 729px;
+  max-height: 800px;
+  margin: 0 auto;
 }
 </style>

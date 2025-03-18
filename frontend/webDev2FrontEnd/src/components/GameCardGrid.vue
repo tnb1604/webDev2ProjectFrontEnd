@@ -14,11 +14,16 @@
         </div>
 
         <!-- Pagination controls -->
-        <div v-if="!loading && !error" class="pagination-controls text-center mt-4">
-            <button @click="prevPage" :disabled="page === 1" class="btn btn-primary me-2">Previous</button>
-            <span>Page {{ page }}</span>
-            <button @click="nextPage" :disabled="noMoreGames" class="btn btn-primary ms-2">Next</button>
+        <div v-if="!loading && !error" class="pagination-controls mb-4">
+            <button @click="prevPage" :disabled="page === 1" class="btn btn-primary pagination-btn start-btn">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <span class="page-number">Page {{ page }}</span>
+            <button @click="nextPage" :disabled="noMoreGames" class="btn btn-primary pagination-btn end-btn">
+                <i class="bi bi-arrow-right"></i>
+            </button>
         </div>
+
     </div>
 </template>
 
@@ -90,6 +95,29 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.pagination-btn {
+    border-radius: 0;
+    padding: 10px 16px;
+}
+
+.start-btn {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.end-btn {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.page-number {
+    background: #f8f9fa;
+    padding: 10px 16px;
+    border: 1px solid #ffffff;
+    min-width: 80px;
+    text-align: center;
 }
 
 button:disabled {
