@@ -1,12 +1,5 @@
 <template>
   <div v-if="game">
-    <!-- Game Image Section -->
-    <div class="row justify-content-center">
-      <div class="col-12 text-center">
-        <img :src="`http://localhost/${game.image_path}`" class="img-fluid rounded shadow-lg mb-4" alt="Game Image" />
-      </div>
-    </div>
-
     <!-- Game Trailer Section (Clickable Image) -->
     <div class="row justify-content-center mb-4">
       <div class="col-12 text-center">
@@ -97,6 +90,7 @@ export default {
 
 <style scoped>
 .game-thumbnail {
+  min-width: 100%;
   cursor: pointer;
 }
 </style>
