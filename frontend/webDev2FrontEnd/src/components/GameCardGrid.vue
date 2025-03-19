@@ -7,13 +7,21 @@
         <!-- Show error message if fetching fails -->
         <div v-if="error" class="text-center text-danger">Error fetching games. Please try again later.</div>
 
+        <div v-if="showSpinner" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+
         <!-- Show the game cards when data is loaded -->
         <div v-else class="grid-container mb-5 ms-5 me-5">
-            <GameCard v-for="game in filteredGames" :key="game.id" :game="game" />
+            <GameCard v-for="game in games" :key="game.id" :game="game" />
+
         </div>
 
         <!-- Pagination controls -->
-        <div v-if="!loading && !error && filteredGames.length > 0" class="pagination-controls mb-4">
+        <div v-if="!loading && !error && games.length > 0" class="pagination-controls mb-4">
             <button @click="prevPage" :disabled="page === 1" class="btn btn-primary pagination-btn start-btn">
                 <i class="bi bi-arrow-left"></i>
             </button>
@@ -28,7 +36,7 @@
         </div>
 
         <!-- Show message if no games are found -->
-        <div v-else-if="!loading && filteredGames.length === 0" class="text-center">
+        <div v-else-if="!loading && filteredGames.length === 0 && !error" class="text-center">
             <p>No games found for your search.</p>
         </div>
     </div>
@@ -51,11 +59,12 @@ export default {
     },
     data() {
         return {
-            games: [],            // Array of games to display
-            loading: true,        // Loading state
-            error: false,         // Error state
-            page: 1,              // Current page
-            noMoreGames: false,   // Flag to disable the Next button if no more games
+            games: [],
+            loading: true,
+            error: false,
+            page: 1,
+            noMoreGames: false,
+            showSpinner: null
         };
     },
     watch: {
@@ -76,21 +85,28 @@ export default {
         async fetchGames() {
             this.loading = true;
             this.error = false;
-            this.noMoreGames = false;
+
+            // Start een timer om showSpinner pas na 300ms true te zetten
+            this.spinnerTimeout = setTimeout(() => {
+                this.showSpinner = true;
+            }, 300);
+
             try {
                 const response = await api.get(`/games?page=${this.page}&search=${this.searchQuery}`);
                 this.games = response.data;
-
-                if (this.games.length < 10) {
-                    this.noMoreGames = true;
-                }
+                this.noMoreGames = response.data.length < 10; // Zet direct na data ophalen
             } catch (error) {
                 console.error("Error fetching games:", error);
                 this.error = true;
             } finally {
                 this.loading = false;
             }
-        },
+
+            // Stop de timer en verberg de spinner als het laden klaar is
+            clearTimeout(this.spinnerTimeout);
+            this.showSpinner = false;
+        }
+        ,
         nextPage() {
             this.page++;
             this.fetchGames();
@@ -170,9 +186,11 @@ export default {
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.03);
     }
+
     100% {
         transform: scale(1);
     }
