@@ -12,32 +12,24 @@
             <h1 class="fw-bold mb-3">Find and share trustworthy reviews</h1>
             <h3 class="fw-light mb-5">Real reviews from gamers of all kinds</h3>
             <div class="container">
+                <!-- Search Bar -->
                 <SearchBar :placeholder="'Search games...'" @search="handleSearch" />
             </div>
         </div>
     </div>
 
     <!-- Game Cards Section -->
-    <GameCardGrid :games="filteredGames()" />
+    <GameCardGrid :searchQuery="searchQuery" />
 </template>
-
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import GameCardGrid from "@/components/GameCardGrid.vue";
 import SearchBar from "@/components/SearchBar.vue"; // Import SearchBar component
 
-const games = ref([]);
+const searchQuery = ref(""); // Track the search query
 
-// Filter games based on search query
-const filteredGames = () => {
-    return games.value.filter(game =>
-        game.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-};
-
-// Handle search event
+// Handle search event from the SearchBar
 const handleSearch = (query) => {
     searchQuery.value = query;
 };

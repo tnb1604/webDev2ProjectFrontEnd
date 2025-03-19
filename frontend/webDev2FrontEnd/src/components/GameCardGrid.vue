@@ -3,23 +3,21 @@
         <h1 class="text-center mt-4 mb-3">Games</h1>
 
         <!-- Loading state -->
-        <div v-if="loading" class="text-center">Loading games...</div>
 
         <!-- Show error message if fetching fails -->
         <div v-if="error" class="text-center text-danger">Error fetching games. Please try again later.</div>
 
         <!-- Show the game cards when data is loaded -->
         <div v-else class="grid-container mb-5 ms-5 me-5">
-            <GameCard v-for="game in games" :key="game.id" :game="game" />
+            <GameCard v-for="game in filteredGames" :key="game.id" :game="game" />
         </div>
 
         <!-- Pagination controls -->
-        <div v-if="!loading && !error" class="pagination-controls mb-4">
+        <div v-if="!loading && !error && filteredGames.length > 0" class="pagination-controls mb-4">
             <button @click="prevPage" :disabled="page === 1" class="btn btn-primary pagination-btn start-btn">
                 <i class="bi bi-arrow-left"></i>
             </button>
 
-            <!-- Page Number styled as game level -->
             <span class="page-number">
                 <span class="game-level">Level {{ page }}</span>
             </span>
@@ -29,6 +27,10 @@
             </button>
         </div>
 
+        <!-- Show message if no games are found -->
+        <div v-else-if="!loading && filteredGames.length === 0" class="text-center">
+            <p>No games found for your search.</p>
+        </div>
     </div>
 </template>
 
@@ -41,30 +43,46 @@ export default {
     components: {
         GameCard
     },
+    props: {
+        searchQuery: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
-            games: [],        // Array of games to display
-            loading: true,    // Loading state
-            error: false,     // Error state
-            page: 1,          // Current page
-            noMoreGames: false, // Flag to disable the Next button if no more games
+            games: [],            // Array of games to display
+            loading: true,        // Loading state
+            error: false,         // Error state
+            page: 1,              // Current page
+            noMoreGames: false,   // Flag to disable the Next button if no more games
         };
     },
-    created() {
-        this.fetchGames();
+    watch: {
+        // Watch for searchQuery change and reset the page to 1
+        searchQuery(newQuery) {
+            this.page = 1;  // Reset to the first page
+            this.fetchGames();  // Fetch the games again with the updated search query
+        }
+    },
+    computed: {
+        filteredGames() {
+            return this.games.filter(game =>
+                game.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+            );
+        }
     },
     methods: {
         async fetchGames() {
             this.loading = true;
             this.error = false;
-            this.noMoreGames = false; // Reset "no more games" flag before each fetch
+            this.noMoreGames = false;
             try {
-                const response = await api.get(`/games?page=${this.page}`);
+                const response = await api.get(`/games?page=${this.page}&search=${this.searchQuery}`);
                 this.games = response.data;
 
-                // If the number of games is less than the page size, there are no more games
                 if (this.games.length < 10) {
-                    this.noMoreGames = true;  // Disable "Next" button if no more data is available
+                    this.noMoreGames = true;
                 }
             } catch (error) {
                 console.error("Error fetching games:", error);
@@ -83,6 +101,9 @@ export default {
                 this.fetchGames();
             }
         }
+    },
+    created() {
+        this.fetchGames();
     }
 }
 </script>
@@ -133,33 +154,25 @@ export default {
 
 .page-number {
     font-family: 'Press Start 2P', cursive;
-    /* Retro arcade font */
     font-size: 1.5rem;
     color: #00ff00;
-    /* Neon green like classic game fonts */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    /* Adds a glowing effect */
     padding: 5px 10px;
     background: linear-gradient(45deg, #000000, #979797);
-    /* Gradient background like a game interface */
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(65, 65, 65, 0.8);
-    /* Glow effect */
     animation: pulse 1.5s ease-in-out infinite;
     margin-left: 6px;
     margin-right: 6px;
 }
 
-/* Animation to make the text "pulse" like a game score or level indicator */
 @keyframes pulse {
     0% {
         transform: scale(1);
     }
-
     50% {
         transform: scale(1.03);
     }
-
     100% {
         transform: scale(1);
     }
