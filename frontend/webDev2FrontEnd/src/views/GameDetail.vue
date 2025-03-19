@@ -5,10 +5,10 @@
       <p>Loading game details...</p>
     </div>
 
-    <div v-if="game && reviews.length" class="mt-5">
-      <!-- Pass gameId to ReviewList -->
+    <!-- Always render ReviewList -->
+    <div v-if="game" class="mt-5">
       <ReviewList :reviews="reviews" :averageRating="averageRating" :roundedAverageRating="roundedAverageRating"
-        :gameId="gameId" /> <!-- Pass gameId here -->
+        :gameId="gameId" />
     </div>
   </div>
 </template>

@@ -73,28 +73,111 @@ export default {
 </script>
 
 <style scoped>
+/* Card Container */
 .card {
     margin: 10px;
     width: 300px;
     height: 450px;
     border-radius: 20px;
-    box-shadow: 0 6px 9px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
     background: linear-gradient(71deg, #ff5454, #ffd257);
-
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden;
+    border: none;
+    /* Remove any unwanted border */
 }
 
+.card:hover {
+    transform: translateY(-3px);
+    /* Lift effect on hover */
+    box-shadow: 0 16px 25px rgba(0, 0, 0, 0.2);
+    /* Softer shadow */
+}
+
+/* Card Image */
 .card-img-top {
     height: 245px;
     object-fit: cover;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-
 }
 
+/* Game Title */
+.card-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    transition: color 0.2s ease;
+}
+
+/* Card Text (Game Genre, Release Date, Rating) */
 .card-text {
     display: flex;
     align-items: center;
     margin-bottom: 4px;
-    /* Adjust spacing */
+    font-size: 1rem;
+    color: #555;
+}
+
+.card-text span {
+    font-weight: 700;
+}
+
+/* Star Rating */
+.star-rating {
+    font-size: 1.2rem;
+    color: #ffbc00;
+}
+
+/* Buttons */
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+/* Align and Style Admin Edit/Delete Buttons */
+.btn-warning.ms-2,
+.btn-danger {
+    margin-top: 10px;
+}
+
+/* For responsive layout */
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+        /* Ensure cards are responsive on smaller screens */
+    }
 }
 </style>

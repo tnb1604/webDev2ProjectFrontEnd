@@ -11,7 +11,7 @@
             <div class="col-md-6">
                 <h2 class="fw-semibold">Our Mission</h2>
                 <p class="text-muted">
-                    Welcome to <strong>The Game Review Platform</strong>, your go-to place for honest and insightful
+                    Welcome to <strong>PixelCritic</strong>, your go-to place for honest and insightful
                     game reviews.
                     Our mission is to provide gamers with in-depth and unbiased reviews, helping them make informed
                     decisions before purchasing or playing games.

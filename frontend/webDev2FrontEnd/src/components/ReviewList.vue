@@ -11,23 +11,30 @@
 
         <ReviewForm v-if="authStore.user?.role === 'user' && !userHasReviewed" class="mb-4" :rating="averageRating"
             :gameId="gameId" :userId="authStore.user.id" @review-submitted="fetchReviews" />
-        <!-- Listen for review-submitted event -->
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
         </router-link>
 
-        <Review v-for="review in sortedReviews" :key="review.id" :review="review" />
+        <!-- Always render reviews section -->
+        <div>
+            <div v-if="sortedReviews.length > 0">
+                <Review v-for="review in sortedReviews" :key="review.id" :review="review" />
+            </div>
+            <div v-else>
+                <p>No reviews have been placed yet.</p> <!-- Updated message -->
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "@/stores/authStore";
+import { useReviewStore } from "@/stores/reviewStore"; // Import the reviewStore
 import Review from "./Review.vue";
 import StarRating from "./StarRating.vue";
 import ReviewForm from "@/components/ReviewForm.vue";
-import api from "@/utils/axios"; // Ensure this is imported for fetching reviews
 
 export default {
     name: "ReviewList",
@@ -56,6 +63,7 @@ export default {
     },
     setup(props) {
         const authStore = useAuthStore();
+        const reviewStore = useReviewStore(); // Use the reviewStore
         const userHasReviewed = ref(false); // Track if the user has already reviewed this game
 
         // Check if the user has already submitted a review
@@ -66,23 +74,22 @@ export default {
             userHasReviewed.value = userReview ? true : false;
         };
 
-        // Fetch reviews from the API
-        const fetchReviews = () => {
-            api.get(`/reviews/game/${props.gameId}`)
-                .then(response => {
-                    props.reviews = response.data; // Update the reviews
-                    checkUserReview(); // Re-check if the user has reviewed
-                })
-                .catch(error => {
-                    console.error("Error fetching reviews:", error);
-                });
+        // Fetch reviews from the store
+        const fetchReviews = async () => {
+            try {
+                await reviewStore.fetchReviews(props.gameId); // Fetch reviews using the store
+                console.log("Fetched Reviews:", reviewStore.reviews); // Debugging line
+                checkUserReview(); // Re-check if the user has reviewed
+            } catch (error) {
+                console.error("Error fetching reviews:", error);
+            }
         };
 
         // Sort reviews: user's own review goes first
         const sortedReviews = computed(() => {
-            if (!authStore.user) return props.reviews;
+            if (!authStore.user) return reviewStore.reviews;
 
-            return [...props.reviews].sort((a, b) => {
+            return [...reviewStore.reviews].sort((a, b) => {
                 if (a.user_id === authStore.user.id) return -1; // Your review goes on top
                 if (b.user_id === authStore.user.id) return 1;
                 return 0; // Keep others in original order
@@ -90,7 +97,8 @@ export default {
         });
 
         // Initially check if the user has already submitted a review
-        onMounted(() => {
+        onMounted(async () => {
+            await fetchReviews();
             checkUserReview();
         });
 

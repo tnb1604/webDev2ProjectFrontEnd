@@ -4,7 +4,7 @@
       <!-- Logo and Homepage Link -->
       <router-link to="/" class="navbar-brand fw-normal ms-1">
         <img src="/public/controllerlogo.png" alt="Logo" class="logo-img" />
-        The Game Review Platform
+        PixelCritic
       </router-link>
 
       <!-- Right Section (Login/Logout/Add Game) -->
@@ -16,11 +16,13 @@
 
         <!-- Show Login/Register only when NOT logged in -->
         <template v-if="!authStore.token">
-          <router-link to="/login" class="btn btn-outline-light me-2">Login</router-link>
-          <router-link to="/register" class="btn btn-outline-light me-2">Register</router-link>
+          <router-link v-if="!authStore.token" to="/login" class="btn btn-outline-light me-2"
+            @click.prevent="router.push('/login')">Login</router-link>
+          <router-link v-if="!authStore.token" to="/register" class="btn btn-outline-light me-2"
+            @click.prevent="router.push('/register')">Register</router-link>
+
         </template>
 
-        <!-- Show Logout button when logged in -->
         <!-- Show Logout button when logged in -->
         <button v-if="authStore.token" @click="logout" class="btn btn-outline-danger">
           <i class="bi bi-box-arrow-right"></i> <!-- Bootstrap icon for logout -->

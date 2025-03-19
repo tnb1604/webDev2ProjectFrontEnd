@@ -6,13 +6,14 @@ export const useReviewStore = defineStore('reviewStore', {
         reviews: [], // This will store all the reviews
     }),
     actions: {
-        // Fetch reviews from the backend
-        async fetchReviews() {
+        // Fetch reviews from the backend for a specific game
+        async fetchReviews(gameId) {
             try {
-                const response = await api.get('/reviews');
+                const response = await api.get(`/reviews/game/${gameId}`);
                 this.reviews = response.data;
             } catch (error) {
                 console.error("Error fetching reviews:", error);
+                throw error; // Re-throw error for handling in the component
             }
         },
 

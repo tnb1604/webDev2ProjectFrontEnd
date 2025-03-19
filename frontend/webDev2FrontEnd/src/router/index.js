@@ -7,6 +7,7 @@ import AboutUs from '../views/AboutUs.vue';
 import GameModifyForm from '../views/GameModifyForm.vue';
 import Account from '@/views/Account.vue';
 import { useAuthStore } from '@/stores/authStore';
+import Contact from '@/views/Contact.vue';
 
 // Define routes
 const routes = [
@@ -44,9 +45,14 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }, // 🔒 This route requires authentication and admin role
   },
   {
-    path : '/account',
+    path: '/account',
     name: 'Account',
     component: Account,
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: Contact,
   }
 ];
 
