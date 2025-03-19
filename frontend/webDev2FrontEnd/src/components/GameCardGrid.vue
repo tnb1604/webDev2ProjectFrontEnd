@@ -94,7 +94,7 @@ export default {
             try {
                 const response = await api.get(`/games?page=${this.page}&search=${this.searchQuery}`);
                 this.games = response.data;
-                this.noMoreGames = response.data.length < 10; // Zet direct na data ophalen
+                this.noMoreGames = response.data.length < 20; // Zet direct na data ophalen
             } catch (error) {
                 console.error("Error fetching games:", error);
                 this.error = true;

@@ -26,6 +26,8 @@
 <script>
 import { onMounted } from 'vue';
 import { useAuthStore } from "@/stores/authStore";
+import { useGameStore } from '@/stores/gameStore';
+import api from "@/utils/axios";
 import StarRating from './StarRating.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
@@ -63,7 +65,11 @@ export default {
     },
     methods: {
         deleteGame(gameId) {
-            console.log(`Deleting game with ID: ${gameId}`);
+            api.delete(`/games/${gameId}`).then(() => {
+                console.log(`Game with ID: ${gameId} deleted successfully`);
+            }).catch((error) => {
+                console.error('Error deleting game:', error);
+            });
         },
         editGame(gameId) {
             console.log(`Editing game with ID: ${gameId}`);
