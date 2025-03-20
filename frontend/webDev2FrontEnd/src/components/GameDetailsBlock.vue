@@ -1,48 +1,43 @@
 <template>
   <div v-if="game">
-    <!-- Game Trailer Section (Clickable Image) -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-12 text-center">
-        <div v-if="!showingTrailer">
-          <img :src="`http://localhost${game.image_path}`" class="img-fluid rounded shadow-lg mb-4 game-thumbnail"
-            alt="Game Trailer Thumbnail" @click="showTrailer" />
-        </div>
+    <div class="row mb-5">
 
-        <!-- Show Trailer (Replaces the Thumbnail) -->
+      <!-- Game Image (Left Side) -->
+      <div class="col-md-6 text-center">
+        <div v-if="!showingTrailer">
+          <img :src="`http://localhost${game.image_path}`"
+            class=" game-thumbnail img-fluid img-thumbnail rounded shadow-lg" alt="Game Thumbnail"
+            @click="showTrailer" />
+        </div>
         <div v-else>
           <iframe :src="`https://www.youtube.com/embed/${getVideoId(game.trailer_url)}?autoplay=1`"
-            class="game-thumbnail" frameborder="0"
+            class="game-youtube-video" frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
           </iframe>
         </div>
-      </div>
-    </div>
 
-    <!-- Game Details Section -->
-    <div class="row justify-content-left mb-5">
-      <div class="col-md-8 text-left d-flex align-items-center">
-        <h1 class="mb-0 me-3">{{ game.title }}</h1>
-
-        <!-- Toggle Button to Show Trailer or Thumbnail -->
-        <button class="btn btn-primary ms-auto" @click="toggleTrailer">
+        <!-- Toggle Trailer Button -->
+        <button class="btn btn-dark mt-3" @click="toggleTrailer">
           <i class="bi" :class="showingTrailer ? 'bi-eye-slash' : 'bi-eye'"></i>
           {{ showingTrailer ? 'Hide Trailer' : 'Show Trailer' }}
         </button>
       </div>
-    </div>
 
-    <!-- Additional Game Information -->
-    <div class="row justify-content-left mb-5">
-      <div class="col-md-8 text-left">
+      <!-- Game Details (Right Side) -->
+      <div class="col-md-6">
+        <h1 class="mb-3">{{ game.title }}</h1>
         <p class="lead">{{ game.description }}</p>
         <div class="mb-3">
           <p><strong>Release Date:</strong> <span class="text-muted">{{ game.release_date }}</span></p>
           <p><strong>Genre:</strong> <span class="badge bg-secondary">{{ game.genre }}</span></p>
         </div>
+
+        <!-- Admin Buttons -->
         <EditButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
           :edit-action="editGame" custom-class="btn btn-warning me-2" />
         <DeleteButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
           :delete-action="deleteGame" custom-class="btn btn-danger" />
+
       </div>
     </div>
   </div>
@@ -69,12 +64,10 @@ export default {
   },
   setup() {
     const authStore = useAuthStore();
-    const showingTrailer = ref(false); // To control showing the YouTube trailer iframe
+    const showingTrailer = ref(false);
 
-    // Ensure user details are loaded when the component mounts
     onMounted(() => {
-      authStore.fetchUserDetails().then(() => {
-      });
+      authStore.fetchUserDetails();
     });
 
     return {
@@ -91,13 +84,13 @@ export default {
     },
     getVideoId(url) {
       const urlParams = new URLSearchParams(new URL(url).search);
-      return urlParams.get('v');  // Extract video ID from YouTube URL
+      return urlParams.get('v');
     },
     showTrailer() {
       this.showingTrailer = true;
     },
     toggleTrailer() {
-      this.showingTrailer = !this.showingTrailer; // Toggle between trailer and thumbnail
+      this.showingTrailer = !this.showingTrailer;
     }
   }
 };
@@ -106,9 +99,27 @@ export default {
 <style scoped>
 .game-thumbnail {
   cursor: pointer;
-  width: 100%;
-  min-height: 729px;
-  max-height: 800px;
-  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  min-width: 450px;
+  min-height: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  background: rgb(34, 34, 34);
+  border: none;
+}
+
+.game-youtube-video {
+  cursor: pointer;
+  max-width: 100%;
+  height: auto;
+  min-width: 100%;
+  min-height: 356px;
+  max-height: 600px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  background: rgb(34, 34, 34);
+  border: none;
 }
 </style>

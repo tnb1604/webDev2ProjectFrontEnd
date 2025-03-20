@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5 ">
     <GameDetailsBlock v-if="game" :game="game" />
     <div v-else class="text-center">
       <p>Loading game details...</p>
@@ -65,3 +65,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.container {
+  width: 100%;
+}
+</style>
