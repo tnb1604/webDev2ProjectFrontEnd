@@ -1,5 +1,7 @@
 <template>
   <div class="review-form">
+    <!-- Add heading to indicate action -->
+    <h2>{{ existingReview ? "Edit Your Review" : "Write a Review" }}</h2>
     <form @submit.prevent="submitReview">
       <div class="form-group">
         <label for="title">Title</label>
@@ -100,13 +102,18 @@ export default {
   background-color: #f9f9f9;
 }
 
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .form-group {
   margin-block-end: 15px;
 }
 
 button {
   padding: 10px 15px;
-  background-color: #007bff;
+  background-color: #007bff;  
   color: #fff;
   border: none;
   border-radius: 5px;
