@@ -7,24 +7,31 @@
         PixelCritic
       </router-link>
 
-      <!-- Right Section (Login/Logout/Add Game) -->
-      <div class="d-flex">
+      <!-- Right Section (Login/Logout/Add Game/Account) -->
+      <div class="d-flex align-items-center">
         <!-- Add Game Button (visible only to admins) -->
         <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="btn btn-outline-primary me-2">
           Add Game
         </router-link>
 
+
         <!-- Show Login/Register only when NOT logged in -->
         <template v-if="!authStore.token">
-          <router-link v-if="!authStore.token" to="/register" class="btn btn-outline-light me-2"
-            @click.prevent="router.push('/register')">
+          <router-link to="/register" class="btn btn-outline-light me-2" @click.prevent="router.push('/register')">
             <i class="bi bi-person-plus"></i> Register
           </router-link>
-          <router-link v-if="!authStore.token" to="/login" class="btn btn-outline-light me-2"
-            @click.prevent="router.push('/login')">
+          <router-link to="/login" class="btn btn-outline-light me-2" @click.prevent="router.push('/login')">
             <i class="bi bi-box-arrow-in-right"></i> Login
           </router-link>
         </template>
+
+        <!-- Account button and username (visible when logged in) -->
+        <div v-if="authStore.token" class="d-flex align-items-center me-3">
+          <span class="text-light me-2">Hello, {{ authStore.user?.username }}!</span>
+          <router-link to="/account" class="btn btn-outline-info me-2">
+            <i class="bi bi-person-circle"></i> Account
+          </router-link>
+        </div>
 
         <!-- Show Logout button when logged in -->
         <button v-if="authStore.token" @click="logout" class="btn btn-outline-danger">
@@ -45,10 +52,8 @@ const router = useRouter();
 
 // Ensure user details are loaded when the component mounts
 onMounted(() => {
-  authStore.fetchUserDetails().then(() => {
-  });
+  authStore.fetchUserDetails();
 });
-
 
 // Logout function
 const logout = () => {

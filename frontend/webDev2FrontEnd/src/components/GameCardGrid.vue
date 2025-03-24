@@ -150,7 +150,7 @@ export default {
     height: 450px;
     border-radius: 20px;
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(71deg, #d8d8d8, #e0e0e0);
+    background: linear-gradient(71deg, #ffffff, #ececec);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     overflow: hidden;
     border: none;
