@@ -9,8 +9,19 @@
             </span>
         </p>
 
-        <ReviewForm v-if="authStore.user?.role === 'user' && !userHasReviewed" class="mb-4" :rating="averageRating"
-            :gameId="gameId" :userId="authStore.user.id" @review-submitted="fetchReviews" />
+        <!-- Write a Review Button -->
+        <button v-if="authStore.user?.role === 'user' && !userHasReviewed && !showReviewForm" 
+                class="btn btn-primary shadow-sm mb-3" 
+                @click="showReviewForm = true">
+            Write a Review
+        </button>
+
+        <!-- Review Form -->
+        <div v-if="showReviewForm" class="mb-4">
+            <ReviewForm :rating="averageRating" :gameId="gameId" :userId="authStore.user.id" 
+                        @review-submitted="handleReviewSubmitted" />
+            <button class="btn btn-red shadow-sm mt-2" @click="showReviewForm = false">Cancel</button>
+        </div>
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
@@ -29,7 +40,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore"; // Import the reviewStore
 import Review from "./Review.vue";
@@ -65,25 +76,34 @@ export default {
         const authStore = useAuthStore();
         const reviewStore = useReviewStore(); // Use the reviewStore
         const userHasReviewed = ref(false); // Track if the user has already reviewed this game
+        const showReviewForm = ref(false); // Track visibility of the review form
 
         // Check if the user has already submitted a review
         const checkUserReview = () => {
-            const userReview = props.reviews.find(
-                review => review.user_id === authStore.user.id
+            const userReview = reviewStore.reviews.find(
+                review => review.user_id === authStore.user?.id
             );
-            userHasReviewed.value = userReview ? true : false;
+            userHasReviewed.value = !!userReview;
         };
 
         // Fetch reviews from the store
         const fetchReviews = async () => {
             try {
                 await reviewStore.fetchReviews(props.gameId); // Fetch reviews using the store
-                console.log("Fetched Reviews:", reviewStore.reviews); // Debugging line
                 checkUserReview(); // Re-check if the user has reviewed
             } catch (error) {
                 console.error("Error fetching reviews:", error);
             }
         };
+
+        // Handle review submission
+        const handleReviewSubmitted = async () => {
+            await fetchReviews();
+            showReviewForm.value = false; // Hide the form after submission
+        };
+
+        // Watch for changes in reviews and re-check if the user has reviewed
+        watch(() => reviewStore.reviews, checkUserReview, { deep: true });
 
         // Sort reviews: user's own review goes first
         const sortedReviews = computed(() => {
@@ -99,17 +119,36 @@ export default {
         // Initially check if the user has already submitted a review
         onMounted(async () => {
             await fetchReviews();
-            checkUserReview();
         });
 
         return {
             authStore,
             sortedReviews,
             userHasReviewed,
-            fetchReviews
+            showReviewForm,
+            fetchReviews,
+            handleReviewSubmitted
         };
     }
 };
 </script>
+     
+<style scoped>
+.btn-white {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
 
-<style scoped></style>
+.btn-gray {
+    background-color: #f0f0f0;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.btn-red {
+    background-color: red;
+    color: white;
+    border: 1px solid #cc0000;
+}
+</style>
