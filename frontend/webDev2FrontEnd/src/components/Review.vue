@@ -12,7 +12,8 @@
             </div>
             <div>
                 <EditButton v-if="authStore.user && authStore.user.id === review.user_id" 
-                            :entityType="'review'" :entityId="review.id" :editAction="editReview" customClass="ms-2" />
+                            :entityType="'review'" :entityId="review.id" 
+                            :editAction="() => $emit('edit-review', review)" customClass="ms-2" />
 
                 <DeleteButton v-if="authStore.user && (authStore.user.id === review.user_id || authStore.user.role === 'admin')" 
                               :entityType="'review'" :entityId="review.id" :deleteAction="openConfirmModal" customClass="ms-2" />
@@ -22,6 +23,11 @@
                               message="Are you sure you want to delete this review?" 
                               @confirmed="deleteReview" />
             </div>
+        </div>
+        <div v-if="showEditForm" class="mb-4">
+            <ReviewForm :existingReview="review" :gameId="review.game_id" :userId="review.user_id" 
+                        @review-submitted="handleReviewSubmitted" />
+            <button class="btn btn-red shadow-sm mt-2" @click="cancelEdit">Cancel</button>
         </div>
     </div>
 </template>
@@ -34,6 +40,7 @@ import LikeButton from './LikeButton.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
 import ConfirmModal from './ConfirmModal.vue'; // Import the modal
+import ReviewForm from './ReviewForm.vue'; // Import the review form
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import api from "@/utils/axios.js";
@@ -46,7 +53,8 @@ export default {
         DislikeButton,
         DeleteButton,
         EditButton,
-        ConfirmModal
+        ConfirmModal,
+        ReviewForm
     },
     props: {
         review: {
@@ -54,6 +62,7 @@ export default {
             required: true
         }
     },
+    emits: ["edit-review"], // Declare the emitted event
     setup(props) {
         const authStore = useAuthStore();
         const reviewStore = useReviewStore();
@@ -61,6 +70,7 @@ export default {
         const formattedDate = ref('');
         const confirmModal = ref(null);
         const reviewToDelete = ref(null);
+        const showEditForm = ref(false); // Track visibility of the edit form
 
         const openConfirmModal = (reviewId) => {
             reviewToDelete.value = reviewId;
@@ -77,13 +87,30 @@ export default {
             }
         };
 
+        const handleEdit = () => {
+            showEditForm.value = true; // Show the form for editing
+        };
+
+        const cancelEdit = () => {
+            showEditForm.value = false; // Hide the form when canceled
+        };
+
+        const handleReviewSubmitted = async () => {
+            await reviewStore.fetchReviews(props.review.game_id); // Refresh reviews after editing
+            showEditForm.value = false; // Hide the form after submission
+        };
+
         return {
             authStore,
             username,
             formattedDate,
             confirmModal,
             openConfirmModal,
-            deleteReview
+            deleteReview,
+            showEditForm,
+            handleEdit,
+            cancelEdit,
+            handleReviewSubmitted
         };
     }
 };

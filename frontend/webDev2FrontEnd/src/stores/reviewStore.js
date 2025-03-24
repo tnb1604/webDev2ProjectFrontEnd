@@ -29,5 +29,22 @@ export const useReviewStore = defineStore('reviewStore', {
                 console.error("Error deleting review:", error);
             }
         },
+
+        // Edit a review and update the state
+        async editReview(reviewId, updatedReview) {
+            try {
+                const response = await api.put(`/reviews/${reviewId}`, updatedReview);
+                console.log("Review updated successfully", response);
+
+                // Update the state by replacing the edited review
+                const index = this.reviews.findIndex(review => review.id === reviewId);
+                if (index !== -1) {
+                    this.reviews[index] = response.data;
+                }
+            } catch (error) {
+                console.error("Error editing review:", error);
+                throw error; // Re-throw error for handling in the component
+            }
+        },
     },
 });

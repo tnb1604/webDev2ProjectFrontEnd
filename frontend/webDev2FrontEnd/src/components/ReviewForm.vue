@@ -14,7 +14,9 @@
         <InteractiveStarRating v-model:rating="rating" /> <!-- Listening for rating change -->
       </div>
       <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-      <button type="submit" class="btn btn-primary" :disabled="rating === 0">Submit Review</button>
+      <button type="submit" class="btn btn-primary" :disabled="rating === 0">
+        {{ existingReview ? "Confirm Edit" : "Submit Review" }}
+      </button>
     </form>
   </div>
 </template>
@@ -60,9 +62,17 @@ export default {
       };
       console.log('Review object:', review); // Log the review object for debugging
       try {
-        const response = await api.post('/reviews', review);
-        console.log('Review submitted:', response.data);
-        this.$emit('review-submitted', response.data); // Emit event to parent component
+        if (this.existingReview) {
+          // Editing an existing review
+          const response = await api.put(`/reviews/${this.existingReview.id}`, review);
+          console.log('Review edited:', response.data);
+          this.$emit('review-submitted', response.data); // Emit event to parent component
+        } else {
+          // Adding a new review
+          const response = await api.post('/reviews', review);
+          console.log('Review submitted:', response.data);
+          this.$emit('review-submitted', response.data); // Emit event to parent component
+        }
         this.resetForm(); // Reset the form after successful submission
         this.errorMessage = ''; // Clear any previous error message
       } catch (error) {

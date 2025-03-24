@@ -16,11 +16,11 @@
             Write a Review
         </button>
 
-        <!-- Review Form -->
-        <div v-if="showReviewForm" class="mb-4">
-            <ReviewForm :rating="averageRating" :gameId="gameId" :userId="authStore.user.id" 
+        <!-- Review Form for Adding or Editing -->
+        <div v-if="showReviewForm || editingReview" class="mb-4">
+            <ReviewForm :existingReview="editingReview" :gameId="gameId" :userId="authStore.user.id" 
                         @review-submitted="handleReviewSubmitted" />
-            <button class="btn btn-red shadow-sm mt-2" @click="showReviewForm = false">Cancel</button>
+            <button class="btn btn-red shadow-sm mt-2" @click="cancelForm">Cancel</button>
         </div>
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
@@ -30,7 +30,8 @@
         <!-- Always render reviews section -->
         <div>
             <div v-if="sortedReviews.length > 0">
-                <Review v-for="review in sortedReviews" :key="review.id" :review="review" />
+                <Review v-for="review in sortedReviews" :key="review.id" :review="review" 
+                        @edit-review="handleEditReview" />
             </div>
             <div v-else>
                 <p>No reviews have been placed yet.</p> <!-- Updated message -->
@@ -77,6 +78,7 @@ export default {
         const reviewStore = useReviewStore(); // Use the reviewStore
         const userHasReviewed = ref(false); // Track if the user has already reviewed this game
         const showReviewForm = ref(false); // Track visibility of the review form
+        const editingReview = ref(null); // Track the review being edited
 
         // Check if the user has already submitted a review
         const checkUserReview = () => {
@@ -98,8 +100,21 @@ export default {
 
         // Handle review submission
         const handleReviewSubmitted = async () => {
-            await fetchReviews();
+            await fetchReviews(); // Refresh reviews after submission or edit
             showReviewForm.value = false; // Hide the form after submission
+            editingReview.value = null; // Reset editing state
+        };
+
+        // Handle review editing
+        const handleEditReview = (review) => {
+            editingReview.value = review; // Set the review to be edited
+            showReviewForm.value = false; // Ensure add form is hidden
+        };
+
+        // Cancel form
+        const cancelForm = () => {
+            showReviewForm.value = false;
+            editingReview.value = null; // Reset editing state
         };
 
         // Watch for changes in reviews and re-check if the user has reviewed
@@ -126,8 +141,11 @@ export default {
             sortedReviews,
             userHasReviewed,
             showReviewForm,
+            editingReview,
             fetchReviews,
-            handleReviewSubmitted
+            handleReviewSubmitted,
+            handleEditReview,
+            cancelForm
         };
     }
 };
