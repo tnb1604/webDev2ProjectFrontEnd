@@ -16,6 +16,20 @@
 
         <!-- Show the game cards when data is loaded -->
         <div v-else class="grid-container mb-5 ms-5 me-5">
+            <!-- Add Game Card (visible only to admins) -->
+            <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="text-decoration-none">
+                <div class="card add-game-card">
+                    <div class="card-img-container">
+                        <img src="/public/addgame.png" class="card-img-top" alt="Add Game" />
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-name">Add New Game</h5>
+                        <p class="card-text text-center">Click here to add a new game to the collection.</p>
+                    </div>
+                </div>
+            </router-link>
+
+            <!-- Game Cards -->
             <GameCard v-for="game in games" :key="game.id" :game="game" />
 
         </div>
@@ -45,6 +59,7 @@
 <script>
 import GameCard from "./GameCard.vue";
 import api from '../utils/axios.js'; // Ensure this path is correct
+import { useAuthStore } from "@/stores/authStore";
 
 export default {
     name: "GameCardGrid",
@@ -67,14 +82,10 @@ export default {
             showSpinner: null
         };
     },
-    watch: {
-        // Watch for searchQuery change and reset the page to 1
-        searchQuery(newQuery) {
-            this.page = 1;  // Reset to the first page
-            this.fetchGames();  // Fetch the games again with the updated search query
-        }
-    },
     computed: {
+        authStore() {
+            return useAuthStore();
+        },
         filteredGames() {
             return this.games.filter(game =>
                 game.title.toLowerCase().includes(this.searchQuery.toLowerCase())
@@ -130,6 +141,57 @@ export default {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
     padding: 16px;
+}
+
+/* Add Game Card */
+.add-game-card {
+    margin: 10px;
+    width: 300px;
+    height: 450px;
+    border-radius: 20px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(71deg, #d8d8d8, #e0e0e0);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+}
+
+.add-game-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 16px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Add Game Card Image Container */
+.card-img-container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+/* Add Game Card Image */
+.add-game-card .card-img-top {
+    height: 264px;
+    object-fit: contain;
+    width: 100%;
+}
+
+/* Add Game Card Title */
+.add-game-card .card-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+
+/* Add Game Card Text */
+.add-game-card .card-text {
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
 }
 
 .pagination-controls {
