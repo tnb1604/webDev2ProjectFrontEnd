@@ -16,19 +16,20 @@
 
         <!-- Show Login/Register only when NOT logged in -->
         <template v-if="!authStore.token">
-          <router-link v-if="!authStore.token" to="/login" class="btn btn-outline-light me-2"
-            @click.prevent="router.push('/login')">Login</router-link>
           <router-link v-if="!authStore.token" to="/register" class="btn btn-outline-light me-2"
-            @click.prevent="router.push('/register')">Register</router-link>
-
+            @click.prevent="router.push('/register')">
+            <i class="bi bi-person-plus"></i> Register
+          </router-link>
+          <router-link v-if="!authStore.token" to="/login" class="btn btn-outline-light me-2"
+            @click.prevent="router.push('/login')">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </router-link>
         </template>
 
         <!-- Show Logout button when logged in -->
         <button v-if="authStore.token" @click="logout" class="btn btn-outline-danger">
-          <i class="bi bi-box-arrow-right"></i> <!-- Bootstrap icon for logout -->
+          <i class="bi bi-box-arrow-right"></i> Logout
         </button>
-
-
       </div>
     </div>
   </nav>
