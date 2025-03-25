@@ -1,18 +1,18 @@
 <template>
     <div>
         <h2 class="text-center mt-4     mb-4">{{ isEditMode ? 'Edit Game' : 'Add New Game' }}</h2>
-        <AddGameForm :game-id="gameId" />
+        <GameForm :game-id="gameId" />
     </div>
 </template>
 
 <script>
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import AddGameForm from '@/components/AddGameForm.vue';
+import GameForm from '@/components/GameForm.vue';
 
 export default {
     components: {
-        AddGameForm
+        GameForm
     },
     setup() {
         const route = useRoute();
