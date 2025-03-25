@@ -45,13 +45,23 @@
   <div v-else class="text-center">
     <p>Loading game details...</p>
   </div>
+
+  <!-- Confirm Deletion Modal -->
+  <ConfirmModal
+    ref="confirmModal"
+    title="Delete Game"
+    message="Are you sure you want to delete this game? This action cannot be undone."
+    @confirmed="confirmDelete"
+  />
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from "@/stores/authStore";
+import { useGameStore } from "@/stores/gameStore";
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
+import ConfirmModal from './ConfirmModal.vue';
 
 export default {
   name: 'GameDetailsBlock',
@@ -61,10 +71,13 @@ export default {
   components: {
     EditButton,
     DeleteButton,
+    ConfirmModal,
   },
   setup() {
     const authStore = useAuthStore();
+    const gameStore = useGameStore();
     const showingTrailer = ref(false);
+    const gameToDelete = ref(null);
 
     onMounted(() => {
       authStore.fetchUserDetails();
@@ -72,15 +85,27 @@ export default {
 
     return {
       authStore,
+      gameStore,
       showingTrailer,
+      gameToDelete,
     };
   },
   methods: {
     deleteGame(gameId) {
-      console.log(`Deleting game with ID: ${gameId}`);
+      this.gameToDelete = gameId;
+      this.$refs.confirmModal.show(); // Show the confirmation modal
+    },
+    async confirmDelete() {
+      try {
+        await this.gameStore.deleteGame(this.gameToDelete);
+        this.$emit('gameDeleted');
+        this.$router.push('/'); // Redirect to the homepage after deletion
+      } catch (error) {
+        console.error('Error deleting game:', error);
+      }
     },
     editGame(gameId) {
-      this.router.push(`/modify-game/${gameId}`);
+      this.$router.push(`/modify-game/${gameId}`);
     },
     getVideoId(url) {
       const urlParams = new URLSearchParams(new URL(url).search);

@@ -4,29 +4,28 @@
         <h4 class="ms-2">{{ review.title }}</h4>
         <p class="ms-2">{{ review.review_text }}</p>
         <small class="ms-2 text-muted">Posted by {{ username }} on {{ formattedDate }}</small>
-        
+
         <div class="d-flex justify-content-between">
             <div>
                 <LikeButton :initialLikes="0" @likeToggled="handleLike" />
                 <DislikeButton :initialDislikes="0" @dislikeToggled="handleDislike" />
             </div>
             <div>
-                <EditButton v-if="authStore.user && authStore.user.id === review.user_id" 
-                            :entityType="'review'" :entityId="review.id" 
-                            :editAction="() => $emit('edit-review', review)" customClass="ms-2" />
+                <EditButton v-if="authStore.user && authStore.user.id === review.user_id" :entityType="'review'"
+                    :entityId="review.id" :editAction="() => $emit('edit-review', review)" customClass="ms-2" />
 
-                <DeleteButton v-if="authStore.user && (authStore.user.id === review.user_id || authStore.user.role === 'admin')" 
-                              :entityType="'review'" :entityId="review.id" :deleteAction="openConfirmModal" customClass="ms-2" />
+                <DeleteButton
+                    v-if="authStore.user && (authStore.user.id === review.user_id || authStore.user.role === 'admin')"
+                    :entityType="'review'" :entityId="review.id" :deleteAction="openConfirmModal" customClass="ms-2" />
 
                 <!-- Confirm Delete Modal -->
-                <ConfirmModal ref="confirmModal" title="Delete Review" 
-                              message="Are you sure you want to delete this review?" 
-                              @confirmed="deleteReview" />
+                <ConfirmModal ref="confirmModal" title="Delete Review"
+                    message="Are you sure you want to delete this review?" @confirmed="deleteReview" />
             </div>
         </div>
         <div v-if="showEditForm" class="mb-4">
-            <ReviewForm :existingReview="review" :gameId="review.game_id" :userId="review.user_id" 
-                        @review-submitted="handleReviewSubmitted" />
+            <ReviewForm :existingReview="review" :gameId="review.game_id" :userId="review.user_id"
+                @review-submitted="handleReviewSubmitted" />
             <button class="btn btn-red shadow-sm mt-2" @click="cancelEdit">Cancel</button>
         </div>
     </div>

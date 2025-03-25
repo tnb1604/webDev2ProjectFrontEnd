@@ -49,7 +49,16 @@ export const useGameStore = defineStore('game', {
             } catch (error) {
                 console.error('Error submitting game:', error);
             }
-        }
-
+        },
+        async deleteGame(gameId) {
+            try {
+                const response = await axios.delete(`/games/${gameId}`);
+                console.log('Game deleted:', response.data);
+                this.game = {};
+                this.isEditMode = false;
+            } catch (error) {
+                console.error('Error deleting game:', error);
+            }
+        },
     },
-});
+},);
