@@ -3,7 +3,7 @@
     <div class="card shadow-sm">
       <div class="card-body">
         <form @submit.prevent="submitForm">
-          <ImageUpload @image-selected="setImage" />
+          <ImageUpload :current-image="game.image_path" @image-selected="setImage" />
 
           <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
@@ -88,7 +88,6 @@ export default {
     const submitForm = async () => {
       try {
         await gameStore.submitGame();
-        console.log('Game submitted successfully');
 
         gameStore.game = {
           image: null,
@@ -100,7 +99,7 @@ export default {
         };
 
         // Redirect to homepage
-        router.push('/');
+        router.push(`/game/${props.gameId}`);
       } catch (error) {
         console.error('Error submitting game:', error);
       }

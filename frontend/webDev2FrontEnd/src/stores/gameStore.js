@@ -29,23 +29,31 @@ export const useGameStore = defineStore('game', {
                 formData.append('title', this.game.title);
                 formData.append('description', this.game.description);
                 formData.append('genre', this.game.genre);
-                formData.append('release_date', this.game.release_date);  // Correct the field name
+                formData.append('release_date', this.game.release_date);
                 formData.append('trailer_url', this.game.trailer_url);
-                if (this.game.image) {
-                    formData.append('image', this.game.image);
-                }
+
+                console.log('Image before appending:', this.game.image); // Debug log
+
+                formData.append('image', this.game.image); // Ensure the image is appended correctly
 
                 console.log([...formData]);
 
                 const endpoint = this.isEditMode ? `/games/${this.game.id}` : '/games';
-                const method = this.isEditMode ? 'put' : 'post';
 
-                const response = await axios[method](endpoint, formData, {
+                const response = await axios.post(endpoint, formData, { // Fix: Use endpoint as the first argument
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-                console.log('Game submitted:', response.data);
+
+                if (this.isEditMode) {
+                    console.log('Game edited successfully:', response.data);
+                } else {
+                    console.log('Game added successfully:', response.data);
+                }
+
+                this.game = response.data; // Update the game state with the response
+                this.isEditMode = false; // Reset edit mode after submission
             } catch (error) {
                 console.error('Error submitting game:', error);
             }
