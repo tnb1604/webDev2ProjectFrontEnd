@@ -12,7 +12,10 @@
 
         <span class="text-light me-2">Hello, {{ authStore.user?.username }}!</span>
 
-        <button v-if="authStore.user?.role === 'admin'" class="btn btn-outline-primary me-3"> Add Game </button>
+        <!-- Add Game Button -->
+        <button v-if="authStore.user?.role === 'admin'" class="btn btn-outline-primary me-3" @click="showAddGameModal = true">
+          Add Game
+        </button>
 
         <!-- Show Login/Register only when NOT logged in -->
         <template v-if="!authStore.token">
@@ -38,15 +41,23 @@
       </div>
     </div>
   </nav>
+
+  <!-- Add Game Modal -->
+  <ShowModal v-if="showAddGameModal" title="Add Game" @close="showAddGameModal = false">
+    <GameForm :gameId="'new'" />
+  </ShowModal>
 </template>
 
 <script setup>
 import { useAuthStore } from "@/stores/authStore";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import GameForm from "./GameForm.vue";
+import ShowModal from "./ShowModal.vue";
 
 const authStore = useAuthStore();
 const router = useRouter();
+const showAddGameModal = ref(false);
 
 // Ensure user details are loaded when the component mounts
 onMounted(() => {
@@ -69,5 +80,11 @@ const logout = () => {
 .navbar-brand {
   font-family: 'Impact', sans-serif;
   color: #dddddd;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

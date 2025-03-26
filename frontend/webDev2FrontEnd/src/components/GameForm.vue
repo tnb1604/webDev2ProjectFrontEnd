@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router'; // Import Vue Router
 import { useGameStore } from '../stores/gameStore';
 import ImageUpload from './ImageUpload.vue';
