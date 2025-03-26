@@ -11,8 +11,12 @@
                 <DislikeButton :initialDislikes="0" @dislikeToggled="handleDislike" />
             </div>
             <div>
-                <EditButton v-if="authStore.user && authStore.user.id === review.user_id" :entityType="'review'"
-                    :entityId="review.id" :editAction="() => $emit('edit-review', review)" customClass="ms-2" />
+
+                <button v-if="authStore.user && authStore.user.id === review.user_id"
+                    @click="$emit('edit-review', review)" class="ms-2 btn btn-warning">
+                    Edit Review
+                </button>
+
 
                 <DeleteButton
                     v-if="authStore.user && (authStore.user.id === review.user_id || authStore.user.role === 'admin')"
@@ -37,12 +41,10 @@ import StarRating from './StarRating.vue';
 import DislikeButton from './DislikeButton.vue';
 import LikeButton from './LikeButton.vue';
 import DeleteButton from './DeleteButton.vue';
-import EditButton from './EditButton.vue';
 import ConfirmModal from './ConfirmModal.vue'; // Import the modal
 import ReviewForm from './ReviewForm.vue'; // Import the review form
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
-import api from "@/utils/axios.js";
 
 export default {
     name: "Review",
@@ -51,7 +53,6 @@ export default {
         LikeButton,
         DislikeButton,
         DeleteButton,
-        EditButton,
         ConfirmModal,
         ReviewForm
     },

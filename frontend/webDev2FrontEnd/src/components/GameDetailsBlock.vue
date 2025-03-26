@@ -33,8 +33,8 @@
         </div>
 
         <!-- Admin Buttons -->
-        <EditButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
-          :edit-action="editGame" custom-class="btn btn-warning me-2" />
+        <button v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game" @click="openGameForm"
+          class="btn btn-warning me-2"> Edit </button>
         <DeleteButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
           :delete-action="deleteGame" custom-class="btn btn-danger" />
 
@@ -47,12 +47,9 @@
   </div>
 
   <!-- Confirm Deletion Modal -->
-  <ConfirmModal
-    ref="confirmModal"
-    title="Delete Game"
-    message="Are you sure you want to delete this game? This action cannot be undone."
-    @confirmed="confirmDelete"
-  />
+  <ConfirmModal ref="confirmModal" title="Delete Game"
+    message="Are you sure you want to delete this game? This action cannot be undone." @confirmed="confirmDelete" />
+
 </template>
 
 <script>
@@ -60,8 +57,8 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from "@/stores/authStore";
 import { useGameStore } from "@/stores/gameStore";
 import DeleteButton from './DeleteButton.vue';
-import EditButton from './EditButton.vue';
 import ConfirmModal from './ConfirmModal.vue';
+import GameForm from './GameForm.vue';
 
 export default {
   name: 'GameDetailsBlock',
@@ -69,15 +66,16 @@ export default {
     game: Object,
   },
   components: {
-    EditButton,
     DeleteButton,
     ConfirmModal,
+    GameForm,
   },
   setup() {
     const authStore = useAuthStore();
     const gameStore = useGameStore();
     const showingTrailer = ref(false);
     const gameToDelete = ref(null);
+    const showGameForm = ref(false);
 
     onMounted(() => {
       authStore.fetchUserDetails();
@@ -88,6 +86,7 @@ export default {
       gameStore,
       showingTrailer,
       gameToDelete,
+      showGameForm,
     };
   },
   methods: {
@@ -104,8 +103,8 @@ export default {
         console.error('Error deleting game:', error);
       }
     },
-    editGame(gameId) {
-      this.$router.push(`/modify-game/${gameId}`);
+    editGame() {
+      //edit game
     },
     getVideoId(url) {
       const urlParams = new URLSearchParams(new URL(url).search);

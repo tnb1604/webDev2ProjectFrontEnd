@@ -4,7 +4,6 @@ import GameDetail from '../views/GameDetail.vue';
 import LoginPage from '../views/Login.vue';
 import RegisterPage from '../views/Register.vue';
 import AboutUs from '../views/AboutUs.vue';
-import GameModifyForm from '../views/GameModifyForm.vue';
 import Account from '@/views/Account.vue';
 import { useAuthStore } from '@/stores/authStore';
 import Contact from '@/views/Contact.vue';
@@ -37,12 +36,6 @@ const routes = [
     path: '/about',
     name: 'AboutUs',
     component: AboutUs,
-  },
-  {
-    path: '/modify-game/:id',
-    name: 'GameModifyForm',
-    component: GameModifyForm,
-    meta: { requiresAuth: true, requiresAdmin: true }, // 🔒 This route requires authentication and admin role
   },
   {
     path: '/account',

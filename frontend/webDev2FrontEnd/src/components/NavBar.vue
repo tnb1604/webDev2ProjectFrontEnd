@@ -9,11 +9,10 @@
 
       <!-- Right Section (Login/Logout/Add Game/Account) -->
       <div class="d-flex align-items-center">
-        <!-- Add Game Button (visible only to admins) -->
-        <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="btn btn-outline-primary me-2">
-          Add Game
-        </router-link>
 
+        <span class="text-light me-2">Hello, {{ authStore.user?.username }}!</span>
+
+        <button v-if="authStore.user?.role === 'admin'" class="btn btn-outline-primary me-3"> Add Game </button>
 
         <!-- Show Login/Register only when NOT logged in -->
         <template v-if="!authStore.token">
@@ -27,7 +26,6 @@
 
         <!-- Account button and username (visible when logged in) -->
         <div v-if="authStore.token" class="d-flex align-items-center me-3">
-          <span class="text-light me-2">Hello, {{ authStore.user?.username }}!</span>
           <router-link to="/account" class="btn btn-outline-info me-2">
             <i class="bi bi-person-circle"></i> Account
           </router-link>

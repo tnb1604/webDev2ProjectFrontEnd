@@ -16,7 +16,7 @@
 
         <!-- Show the game cards when data is loaded -->
         <div v-else class="grid-container mb-5 ms-5 me-5">
-            <!-- Add Game Card (visible only to admins) -->
+
             <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="text-decoration-none">
                 <div class="card add-game-card">
                     <div class="card-img-container">
@@ -143,7 +143,6 @@ export default {
     padding: 16px;
 }
 
-/* Add Game Card */
 .add-game-card {
     margin: 10px;
     width: 300px;
@@ -162,7 +161,6 @@ export default {
     box-shadow: 0 16px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Add Game Card Image Container */
 .card-img-container {
     padding: 10px;
     display: flex;
@@ -172,14 +170,12 @@ export default {
     border-top-right-radius: 20px;
 }
 
-/* Add Game Card Image */
 .add-game-card .card-img-top {
     height: 264px;
     object-fit: contain;
     width: 100%;
 }
 
-/* Add Game Card Title */
 .add-game-card .card-name {
     font-size: 1.2rem;
     font-weight: 600;
@@ -187,7 +183,6 @@ export default {
     text-align: center;
 }
 
-/* Add Game Card Text */
 .add-game-card .card-text {
     font-size: 1rem;
     color: #555;
