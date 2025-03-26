@@ -33,11 +33,14 @@
         </div>
 
         <!-- Admin Buttons -->
-        <button v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game" @click="openGameForm"
-          class="btn btn-warning me-2"> Edit </button>
+        <button v-if="authStore.user?.role === 'admin'" @click="editGame" class="btn btn-warning me-2"> Edit </button>
         <DeleteButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
           :delete-action="deleteGame" custom-class="btn btn-danger" />
 
+        <!-- Edit Game Modal -->
+        <ShowModal v-if="showGameForm" title="Update Game" @close="closeGameForm">
+          <GameForm :game-id="game.id" />
+        </ShowModal>
       </div>
     </div>
   </div>
@@ -59,6 +62,7 @@ import { useGameStore } from "@/stores/gameStore";
 import DeleteButton from './DeleteButton.vue';
 import ConfirmModal from './ConfirmModal.vue';
 import GameForm from './GameForm.vue';
+import ShowModal from './ShowModal.vue';
 
 export default {
   name: 'GameDetailsBlock',
@@ -69,6 +73,7 @@ export default {
     DeleteButton,
     ConfirmModal,
     GameForm,
+    ShowModal,
   },
   setup() {
     const authStore = useAuthStore();
@@ -104,7 +109,13 @@ export default {
       }
     },
     editGame() {
-      //edit game
+      this.gameStore.game = { ...this.game }; // Prefill the game data
+      this.gameStore.isEditMode = true; // Set to "Update Game" mode
+      this.showGameForm = true; // Show the modal
+    },
+    closeGameForm() {
+      this.showGameForm = false;
+      this.gameStore.resetGame(); // Reset the game data when the form is closed
     },
     getVideoId(url) {
       const urlParams = new URLSearchParams(new URL(url).search);

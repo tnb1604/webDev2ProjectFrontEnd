@@ -60,5 +60,16 @@ export const useGameStore = defineStore('game', {
                 console.error('Error deleting game:', error);
             }
         },
+        resetGame() {
+            this.game = {
+                image: null,
+                title: '',
+                description: '',
+                genre: '',
+                release_date: '',
+                trailer_url: '',
+            };
+            this.isEditMode = false;
+        },
     },
 },);

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router'; // Import Vue Router
 import { useGameStore } from '../stores/gameStore';
 import ImageUpload from './ImageUpload.vue';
@@ -52,13 +52,26 @@ export default {
   },
   props: {
     gameId: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
   },
   setup(props) {
     const gameStore = useGameStore();
     const router = useRouter(); // Initialize router
+
+    // Watch for changes in gameId to reset the form
+    watch(
+      () => props.gameId,
+      (newGameId) => {
+        if (newGameId === 'new') {
+          gameStore.resetGame(); // Reset the game data for a new game
+        } else {
+          gameStore.fetchGameDetails(newGameId); // Fetch details for editing
+        }
+      },
+      { immediate: true }
+    );
 
     onMounted(() => {
       if (props.gameId !== 'new') {
