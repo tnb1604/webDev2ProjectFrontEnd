@@ -3,31 +3,31 @@
     <div class="card shadow-sm">
       <div class="card-body">
         <form @submit.prevent="submitForm">
-          <ImageUpload :current-image="game.image_path" @image-selected="setImage" />
+          <ImageUpload :current-image="gameStore.game.image_path" :is-edit-mode="isEditMode" @image-selected="setImage" />
 
           <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
-            <input type="text" id="title" v-model="game.title" class="form-control" required />
+            <input type="text" id="title" v-model="gameStore.game.title" class="form-control" required />
           </div>
 
           <div class="mb-3">
             <label for="description" class="form-label">Description:</label>
-            <textarea id="description" v-model="game.description" class="form-control" required></textarea>
+            <textarea id="description" v-model="gameStore.game.description" class="form-control" required></textarea>
           </div>
 
           <div class="mb-3">
             <label for="genre" class="form-label">Genre:</label>
-            <input type="text" id="genre" v-model="game.genre" class="form-control" required />
+            <input type="text" id="genre" v-model="gameStore.game.genre" class="form-control" required />
           </div>
 
           <div class="mb-3">
             <label for="release_date" class="form-label">Release Date:</label>
-            <input type="date" id="release_date" v-model="game.release_date" class="form-control" required />
+            <input type="date" id="release_date" v-model="gameStore.game.release_date" class="form-control" required />
           </div>
 
           <div class="mb-3">
             <label for="trailerUrl" class="form-label">Trailer URL:</label>
-            <input type="url" id="trailerUrl" v-model="game.trailer_url" class="form-control"
+            <input type="url" id="trailerUrl" v-model="gameStore.game.trailer_url" class="form-control"
               placeholder="https://www.youtube.com/watch?v=..." required />
           </div>
 
@@ -56,7 +56,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const gameStore = useGameStore();
     const router = useRouter(); // Initialize router
 
@@ -89,24 +89,20 @@ export default {
       try {
         await gameStore.submitGame();
 
-        gameStore.game = {
-          image: null,
-          title: '',
-          description: '',
-          genre: '',
-          release_date: '',
-          trailer_url: '',
-        };
+        // Emit event with updated game data
+        emit('formSubmitted');
 
-        // Redirect to homepage
-        router.push(`/game/${props.gameId}`);
+        // Redirect to homepage if adding a new game
+        if (!gameStore.isEditMode) {
+          router.push('/');
+        }
       } catch (error) {
         console.error('Error submitting game:', error);
       }
     };
 
     return {
-      game: gameStore.game,
+      gameStore, // Use gameStore directly in the template
       isEditMode: gameStore.isEditMode,
       setImage,
       submitForm,

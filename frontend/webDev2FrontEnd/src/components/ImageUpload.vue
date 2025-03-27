@@ -1,7 +1,7 @@
 <template>
     <div class="mb-3">
       <label for="image" class="form-label">Select Image:</label>
-      <input type="file" id="image" @change="handleImageChange" class="form-control" accept="image/*" />
+      <input type="file" id="image" @change="handleImageChange" class="form-control" accept="image/*" :required="!isEditMode && !currentImage" />
       <div v-if="imagePreview || currentImage" class="mt-3">
         <label class="form-label">Image Preview:</label>
         <img :src="imagePreview || `http://localhost${currentImage}`" class="img-fluid" alt="Selected Game Image" />
@@ -15,6 +15,10 @@ export default {
     currentImage: {
       type: String,
       default: null,
+    },
+    isEditMode: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

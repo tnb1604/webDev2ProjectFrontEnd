@@ -14,10 +14,9 @@
         </div>
 
 
-        <!-- Show the game cards when data is loaded -->
-        <div v-else class="grid-container mb-5 ms-5 me-5">
-
-            <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="text-decoration-none">
+        <!-- Show the game cards when data is loaded
+         
+         <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="text-decoration-none">
                 <div class="card add-game-card">
                     <div class="card-img-container">
                         <img src="/public/addgame.png" class="card-img-top" alt="Add Game" />
@@ -28,6 +27,12 @@
                     </div>
                 </div>
             </router-link>
+        
+         -->
+
+        <div v-else class="grid-container mb-5 ms-5 me-5">
+
+
 
             <!-- Game Cards -->
             <GameCard v-for="game in games" :key="game.id" :game="game" />

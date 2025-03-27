@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia';
+import { reactive } from 'vue'; // Import reactive
 import axios from '../utils/axios'; // Import the API configuration
 
 export const useGameStore = defineStore('game', {
     state: () => ({
-        game: {
+        game: reactive({ // Make game reactive
             image: null,
             title: '',
             description: '',
             genre: '',
             release_date: '',
             trailer_url: '',
-        },
+        }),
         isEditMode: false,
     }),
     actions: {
@@ -80,4 +81,4 @@ export const useGameStore = defineStore('game', {
             this.isEditMode = false;
         },
     },
-},);
+});

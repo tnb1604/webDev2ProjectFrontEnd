@@ -39,7 +39,7 @@
 
         <!-- Edit Game Modal -->
         <ShowModal v-if="showGameForm" title="Update Game" @close="closeGameForm">
-          <GameForm :game-id="game.id" />
+          <GameForm :game-id="game.id" @formSubmitted="closeGameForm" />
         </ShowModal>
       </div>
     </div>
