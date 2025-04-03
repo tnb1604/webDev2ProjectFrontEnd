@@ -2,9 +2,9 @@
     <div class="mb-4">
         <h3 class="mb-2">Reviews</h3>
         <p class="d-flex align-items-center">
-            <strong class="me-1">Average Rating:</strong>
-            <span>{{ roundedAverageRating }}</span> <!-- Display rounded average rating -->
-            <StarRating class="ms-2 mb-0" :rating="roundedAverageRating" />
+            <span class="me-2">Average Rating:</span>
+            <StarRating class="me-2 mb-0" :rating="formattedAverageRating" />
+            <span>{{ formattedAverageRating }} out of 5</span>
         </p>
 
         <!-- Write a Review Button -->
@@ -88,11 +88,11 @@ export default {
             }
         };
 
-        // Compute the rounded average rating
-        const roundedAverageRating = computed(() => {
-            if (!props.reviews.length) return 0;
+        // Compute the formatted average rating
+        const formattedAverageRating = computed(() => {
+            if (!props.reviews.length) return "0.0";
             const totalRating = props.reviews.reduce((sum, review) => sum + review.rating, 0);
-            return Math.ceil(totalRating / props.reviews.length);
+            return (totalRating / props.reviews.length).toFixed(1); // Format to 1 decimal place
         });
 
         // Handle review submission
@@ -142,7 +142,7 @@ export default {
             handleReviewSubmitted,
             handleEditReview,
             cancelForm,
-            roundedAverageRating
+            formattedAverageRating
         };
     }
 };

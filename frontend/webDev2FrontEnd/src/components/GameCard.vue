@@ -10,8 +10,7 @@
                 <p class="card-text">{{ game.genre }}</p>
                 <p class="card-text">Released: {{ game.release_date }}</p>
                 <p class="card-text">
-                    <span>{{ game.average_rating }}</span>
-                    <StarRating class="ms-2 mb-0" :rating="roundedAverageRating" />
+                    <StarRating class="ms-2 mb-0" :rating="game.average_rating || 0" />
                 </p>
             </div>
         </div>

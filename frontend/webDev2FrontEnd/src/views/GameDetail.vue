@@ -30,6 +30,13 @@ export default {
       gameId: null
     };
   },
+  computed: {
+    formattedAverageRating() {
+      if (!this.reviews.length) return "0.0";
+      const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
+      return (totalRating / this.reviews.length).toFixed(1); // Format to 1 decimal place
+    }
+  },
   mounted() {
     this.gameId = this.$route.params.id; // Get the gameId from the route
     console.log('Fetching game ID:', this.gameId);
