@@ -10,8 +10,6 @@
       <!-- Right Section (Login/Logout/Add Game/Account) -->
       <div class="d-flex align-items-center">
 
-        <span class="text-light me-2">Hello, {{ authStore.user?.username }}!</span>
-
         <!-- Add Game Button -->
         <button v-if="authStore.user?.role === 'admin'" class="btn btn-outline-primary me-3" @click="showAddGameModal = true">
           Add Game
