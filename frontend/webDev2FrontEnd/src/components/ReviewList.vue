@@ -3,10 +3,8 @@
         <h3 class="mb-2">Reviews</h3>
         <p class="d-flex align-items-center">
             <strong class="me-1">Average Rating:</strong>
-            <StarRating class="me-2" :rating="roundedAverageRating" size="small" />
-            <span class="d-flex align-items-center average-rating">
-                {{ averageRating }} / 5
-            </span>
+            <span>{{ roundedAverageRating }}</span> <!-- Display rounded average rating -->
+            <StarRating class="ms-2 mb-0" :rating="roundedAverageRating" />
         </p>
 
         <!-- Write a Review Button -->
@@ -60,14 +58,6 @@ export default {
             type: Array,
             required: true
         },
-        averageRating: {
-            type: Number,
-            required: true
-        },
-        roundedAverageRating: {
-            type: Number,
-            required: true
-        },
         gameId: {
             type: Number,
             required: true
@@ -97,6 +87,13 @@ export default {
                 console.error("Error fetching reviews:", error);
             }
         };
+
+        // Compute the rounded average rating
+        const roundedAverageRating = computed(() => {
+            if (!props.reviews.length) return 0;
+            const totalRating = props.reviews.reduce((sum, review) => sum + review.rating, 0);
+            return Math.ceil(totalRating / props.reviews.length);
+        });
 
         // Handle review submission
         const handleReviewSubmitted = async () => {
@@ -130,7 +127,6 @@ export default {
                 return 0; // Keep others in original order
             });
         });
-
         // Initially check if the user has already submitted a review
         onMounted(async () => {
             await fetchReviews();
@@ -145,7 +141,8 @@ export default {
             fetchReviews,
             handleReviewSubmitted,
             handleEditReview,
-            cancelForm
+            cancelForm,
+            roundedAverageRating
         };
     }
 };

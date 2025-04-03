@@ -7,8 +7,7 @@
 
     <!-- Always render ReviewList -->
     <div v-if="game" class="mt-5">
-      <ReviewList :reviews="reviews" :averageRating="Number(averageRating)" :roundedAverageRating="Number(roundedAverageRating)"
-        :gameId="Number(gameId)" />
+      <ReviewList :reviews="reviews" :gameId="Number(gameId)" />
     </div>
   </div>
 </template>
@@ -28,18 +27,8 @@ export default {
     return {
       game: null,
       reviews: [],
-      gameId: null // Initialize gameId as null
+      gameId: null
     };
-  },
-  computed: {
-    averageRating() {
-      if (this.reviews.length === 0) return 0;
-      const total = this.reviews.reduce((sum, review) => sum + review.rating, 0);
-      return (total / this.reviews.length).toFixed(1);
-    },
-    roundedAverageRating() {
-      return Math.ceil(this.averageRating);
-    }
   },
   mounted() {
     this.gameId = this.$route.params.id; // Get the gameId from the route
