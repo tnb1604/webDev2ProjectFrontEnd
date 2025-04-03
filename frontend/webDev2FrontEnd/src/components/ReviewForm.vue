@@ -5,11 +5,11 @@
     <form @submit.prevent="submitReview">
       <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" id="title" v-model="title" class="form-control" required />
+        <input maxlength="30" type="text" id="title" v-model="title" class="form-control" required />
       </div>
       <div class="form-group">
         <label for="review">Review</label>
-        <textarea id="review" v-model="reviewText" class="form-control" required></textarea>
+        <textarea maxlength="1000" id="review" v-model="reviewText" class="form-control" required></textarea>
       </div>
       <div class="form-group">
         <label for="rating">Rating</label>

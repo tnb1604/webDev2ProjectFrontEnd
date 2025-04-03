@@ -8,6 +8,7 @@ export const useReviewStore = defineStore('reviewStore', {
     actions: {
         // Fetch reviews from the backend for a specific game
         async fetchReviews(gameId) {
+            this.reviews = []; // Reset reviews before fetching new ones
             try {
                 const response = await api.get(`/reviews/game/${gameId}`);
                 this.reviews = response.data;
