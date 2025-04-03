@@ -14,8 +14,7 @@
         </div>
 
 
-        <!-- Show the game cards when data is loaded
-         
+        <!-- Add Game Card (Admin only)
          <router-link v-if="authStore.user?.role === 'admin'" to="/modify-game/new" class="text-decoration-none">
                 <div class="card add-game-card">
                     <div class="card-img-container">
@@ -26,15 +25,10 @@
                         <p class="card-text text-center">Click here to add a new game to the collection.</p>
                     </div>
                 </div>
-            </router-link>
-        
-         -->
+            </router-link> -->
+
 
         <div v-else class="grid-container mb-5 ms-5 me-5">
-
-
-
-            <!-- Game Cards -->
             <GameCard v-for="game in filteredGames" :key="game.id" :game="game" />
 
         </div>
