@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import StarRating from './StarRating.vue';
 import DislikeButton from './DislikeButton.vue';
 import LikeButton from './LikeButton.vue';
@@ -45,6 +45,7 @@ import ConfirmModal from './ConfirmModal.vue'; // Import the modal
 import ReviewForm from './ReviewForm.vue'; // Import the review form
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
+import api from "@/utils/axios.js"; // Import the Axios instance
 
 export default {
     name: "Review",
@@ -71,6 +72,30 @@ export default {
         const confirmModal = ref(null);
         const reviewToDelete = ref(null);
         const showEditForm = ref(false); // Track visibility of the edit form
+
+        const populateReviewDetails = async () => {
+            if (props.review.user?.name) {
+                username.value = props.review.user.name;
+            } else {
+                try {
+                    const response = await api.get(`/users/${props.review.user_id}`);
+                    username.value = response.data.username || "Unknown User";
+                } catch (error) {
+                    username.value = "Unknown User"; 
+                }
+            }
+
+            try {
+                const date = new Date(props.review.created_at);
+                formattedDate.value = date.toLocaleDateString(); 
+            } catch (error) {
+                formattedDate.value = "Invalid Date"; 
+            }
+        };
+
+        onMounted(populateReviewDetails);
+
+        watch(() => props.review, populateReviewDetails, { immediate: true });
 
         const openConfirmModal = (reviewId) => {
             reviewToDelete.value = reviewId;
