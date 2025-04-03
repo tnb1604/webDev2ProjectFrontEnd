@@ -47,18 +47,31 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { useAuthStore } from "@/stores/authStore";
 import axios from '../utils/axios';
 
 const authStore = useAuthStore();
 
-const logout = () => {
-  authStore.logout();
-  alert("You have been logged out.");
+const fetchUserDataById = async () => {
+  try {
+    const response = await axios.get(`/users/${authStore.user.id}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
+    authStore.setUser(response.data);
+  } catch (error) {
+    console.error("Error fetching user data by ID:", error);
+  }
 };
 
-const showPasswordChange = () => {
-  alert("Password change functionality not implemented yet.");
+onMounted(() => {
+  fetchUserDataById();
+});
+
+const logout = () => {
+  authStore.logout();
 };
 </script>
 
