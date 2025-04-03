@@ -41,6 +41,7 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: Account,
+    meta: { requiresAuth: true }, // 🔒 Requires authentication
   },
   {
     path: '/contact',

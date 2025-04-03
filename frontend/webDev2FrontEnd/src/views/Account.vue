@@ -9,13 +9,6 @@
     </div>
 
     <div class="row">
-      <!-- User ID Section -->
-      <div class="col-12 text-center mb-4">
-        <p class="text-muted">Your User ID: <strong>{{ authStore.user.id }}</strong></p>
-      </div>
-    </div>
-
-    <div class="row">
       <!-- Username Card -->
       <div class="col-md-6">
         <div class="card account-card">
