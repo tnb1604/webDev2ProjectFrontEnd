@@ -35,7 +35,7 @@
 
 
             <!-- Game Cards -->
-            <GameCard v-for="game in games" :key="game.id" :game="game" />
+            <GameCard v-for="game in filteredGames" :key="game.id" :game="game" />
 
         </div>
 
@@ -102,15 +102,20 @@ export default {
             this.loading = true;
             this.error = false;
 
-            // Start een timer om showSpinner pas na 300ms true te zetten
+            // Start a timer to show the spinner after 300ms
             this.spinnerTimeout = setTimeout(() => {
                 this.showSpinner = true;
             }, 300);
 
             try {
-                const response = await api.get(`/games?page=${this.page}&search=${this.searchQuery}`);
+                const response = await api.get(`/games`, {
+                    params: {
+                        page: this.page,
+                        search: this.searchQuery
+                    }
+                });
                 this.games = response.data;
-                this.noMoreGames = response.data.length < 10; // Zet direct na data ophalen
+                this.noMoreGames = response.data.length < 10; // Set directly after fetching data
             } catch (error) {
                 console.error("Error fetching games:", error);
                 this.error = true;
@@ -118,11 +123,10 @@ export default {
                 this.loading = false;
             }
 
-            // Stop de timer en verberg de spinner als het laden klaar is
+            // Stop the timer and hide the spinner when loading is complete
             clearTimeout(this.spinnerTimeout);
             this.showSpinner = false;
-        }
-        ,
+        },
         nextPage() {
             this.page++;
             this.fetchGames();
@@ -132,6 +136,14 @@ export default {
                 this.page--;
                 this.fetchGames();
             }
+        }
+    },
+    watch: {
+        searchQuery: {
+            handler() {
+                this.page = 1; // Reset to the first page
+                this.fetchGames();
+            },
         }
     },
     created() {
