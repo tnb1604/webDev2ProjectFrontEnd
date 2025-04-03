@@ -7,8 +7,8 @@
 
         <div class="d-flex justify-content-between">
             <div>
-                <LikeButton :initialLikes="0" @likeToggled="handleLike" />
-                <DislikeButton :initialDislikes="0" @dislikeToggled="handleDislike" />
+                <LikeButton :initialLikes="0"/>
+                <DislikeButton :initialDislikes="0"/>
             </div>
             <div>
 

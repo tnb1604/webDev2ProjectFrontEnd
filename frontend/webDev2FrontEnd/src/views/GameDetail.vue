@@ -7,8 +7,8 @@
 
     <!-- Always render ReviewList -->
     <div v-if="game" class="mt-5">
-      <ReviewList :reviews="reviews" :averageRating="averageRating" :roundedAverageRating="roundedAverageRating"
-        :gameId="gameId" />
+      <ReviewList :reviews="reviews" :averageRating="Number(averageRating)" :roundedAverageRating="Number(roundedAverageRating)"
+        :gameId="Number(gameId)" />
     </div>
   </div>
 </template>
