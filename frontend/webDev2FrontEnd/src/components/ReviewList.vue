@@ -3,7 +3,7 @@
         <h3 class="mb-2">Reviews</h3>
         <p class="d-flex align-items-center">
             <span class="me-2">Average Rating:</span>
-            <StarRating class="me-2 mb-0" :rating="formattedAverageRating" />
+            <StarRating class="me-2 mb-0" :rating="parseFloat(formattedAverageRating) || 0" />
             <span>{{ formattedAverageRating }} out of 5</span>
         </p>
 
@@ -91,7 +91,7 @@ export default {
         // Compute the formatted average rating
         const formattedAverageRating = computed(() => {
             if (!props.reviews.length) return "0.0";
-            const totalRating = props.reviews.reduce((sum, review) => sum + review.rating, 0);
+            const totalRating = props.reviews.reduce((sum, review) => sum + parseFloat(review.rating), 0);
             return (totalRating / props.reviews.length).toFixed(1); // Format to 1 decimal place
         });
 
