@@ -37,6 +37,33 @@ export default {
       return (totalRating / this.reviews.length).toFixed(1); // Format to 1 decimal place
     }
   },
+  watch: { // for reactivity on route change
+    '$route.params.id': {
+      immediate: true,
+      handler(newGameId) {
+        this.gameId = newGameId;
+        console.log('Fetching game ID:', this.gameId);
+
+        // Fetch game details
+        api.get(`/games/${this.gameId}`)
+          .then(response => {
+            this.game = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching game details:', error);
+          });
+
+        // Fetch reviews for the game
+        api.get(`/reviews/game/${this.gameId}`)
+          .then(response => {
+            this.reviews = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching reviews:', error);
+          });
+      }
+    }
+  },
   mounted() {
     this.gameId = this.$route.params.id; // Get the gameId from the route
     console.log('Fetching game ID:', this.gameId);
