@@ -8,17 +8,16 @@
         </p>
 
         <!-- Write a Review Button -->
-        <button v-if="authStore.user?.role === 'user' && !userHasReviewed && !showReviewForm" 
-                class="btn btn-primary shadow-sm mb-3" 
-                @click="showReviewForm = true">
+        <button v-if="authStore.user?.role === 'user' && !userHasReviewed && !showReviewForm"
+            class="btn btn-primary shadow-sm mb-3" @click="showReviewForm = true">
             Write a Review
         </button>
 
         <!-- Review Form for Adding or Editing -->
         <div v-if="showReviewForm || editingReview" class="mb-4">
-            <ReviewForm :existingReview="editingReview" :gameId="gameId" :userId="authStore.user.id" 
-                        @review-submitted="handleReviewSubmitted" />
-            <button class="btn btn-red shadow-sm mt-2" @click="cancelForm">Cancel</button>
+            <ReviewForm :existingReview="editingReview" :gameId="gameId" :userId="authStore.user.id"
+                @review-submitted="handleReviewSubmitted" />
+            <button class="btn btn-gray shadow-sm mt-2" @click="cancelForm">Cancel</button>
         </div>
 
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
@@ -28,8 +27,8 @@
         <!-- Always render reviews section -->
         <div>
             <div v-if="sortedReviews.length > 0">
-                <Review v-for="review in sortedReviews" :key="review.id" :review="review" 
-                        @edit-review="handleEditReview" />
+                <Review v-for="review in sortedReviews" :key="review.id" :review="review"
+                    @edit-review="handleEditReview" />
             </div>
             <div v-else>
                 <p>No reviews have been placed yet.</p> <!-- Updated message -->
@@ -147,7 +146,7 @@ export default {
     }
 };
 </script>
-     
+
 <style scoped>
 .btn-white {
     background-color: white;
@@ -157,8 +156,16 @@ export default {
 
 .btn-gray {
     background-color: #f0f0f0;
-    color: black;
-    border: 1px solid #ccc;
+    color: #333;
+    border: 1px solid #b1b1b1;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s, border 0.3s;
+}
+
+.btn-gray:hover {
+    background-color: #e0e0e0;
+    border-color: #555;
 }
 
 .btn-red {
