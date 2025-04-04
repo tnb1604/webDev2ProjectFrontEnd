@@ -117,6 +117,7 @@ export default {
         if (!isEditMode.value) {
           router.push(`/game/${response.game_id}`); // Navigate to the new game's page
         }
+        emit('closeModal'); // Emit an event to close the modal
       } catch (error) {
         console.error('Error submitting game:', error);
       }

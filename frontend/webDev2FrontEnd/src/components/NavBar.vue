@@ -41,8 +41,13 @@
   </nav>
 
   <!-- Add Game Modal -->
-  <ShowModal v-if="showAddGameModal" title="Add Game" @close="showAddGameModal = false">
-    <GameForm :gameId="'new'" />
+  <ShowModal
+    v-if="showAddGameModal"
+    title="Add Game"
+    @close="showAddGameModal = false"
+    @closeModal="showAddGameModal = false"
+  >
+    <GameForm :gameId="'new'" @formSubmitted="showAddGameModal = false" />
   </ShowModal>
 </template>
 
