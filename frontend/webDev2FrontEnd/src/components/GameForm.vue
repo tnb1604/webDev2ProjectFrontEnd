@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { onMounted, watch } from 'vue';
+import { onMounted, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useGameStore } from '../stores/gameStore';
 import ImageUpload from './ImageUpload.vue';
@@ -84,6 +84,8 @@ export default {
   setup(props, { emit }) {
     const gameStore = useGameStore();
     const router = useRouter();
+
+    const isEditMode = computed(() => props.gameId !== 'new'); // Derive isEditMode from gameId
 
     watch(
       () => props.gameId,
@@ -109,10 +111,12 @@ export default {
 
     const submitForm = async () => {
       try {
-        await gameStore.submitGame();
+        const response = await gameStore.submitGame(); // Ensure this returns the API response
         emit('formSubmitted');
-        if (!gameStore.isEditMode) {
-          router.push('/');
+        if (!isEditMode.value) {
+          router.push(`/game/${response.game_id}`); // Use the game_id from the response
+        } else {
+          router.push(`/game/${props.gameId}`);
         }
       } catch (error) {
         console.error('Error submitting game:', error);
@@ -121,7 +125,7 @@ export default {
 
     return {
       gameStore,
-      isEditMode: gameStore.isEditMode,
+      isEditMode,
       setImage,
       submitForm,
     };

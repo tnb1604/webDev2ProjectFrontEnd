@@ -110,7 +110,7 @@ export default {
     },
     editGame() {
       this.gameStore.game = { ...this.game }; // Prefill the game data
-      this.gameStore.isEditMode = true; // Set to "Update Game" mode
+      this.gameStore.isEditMode = true; // Ensure isEditMode is set to true
       this.showGameForm = true; // Show the modal
     },
     closeGameForm() {

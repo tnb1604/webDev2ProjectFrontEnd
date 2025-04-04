@@ -32,31 +32,28 @@ export const useGameStore = defineStore('game', {
                 formData.append('genre', this.game.genre);
                 formData.append('release_date', this.game.release_date);
                 formData.append('trailer_url', this.game.trailer_url);
-
-                console.log('Image before appending:', this.game.image); // Debug log
-
-                formData.append('image', this.game.image); // Ensure the image is appended correctly
-
-                console.log([...formData]);
+                formData.append('image', this.game.image);
 
                 const endpoint = this.isEditMode ? `/games/${this.game.id}` : '/games';
 
-                const response = await axios.post(endpoint, formData, { // Fix: Use endpoint as the first argument
+                const response = await axios.post(endpoint, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
 
-                if (this.isEditMode) {
-                    console.log('Game edited successfully:', response.data);
-                } else {
+                if (!this.isEditMode) {
                     console.log('Game added successfully:', response.data);
+                    this.game.id = response.data.game_id; // Explicitly set the game ID
+                } else {
+                    console.log('Game edited successfully:', response.data);
                 }
 
-                this.game = response.data; // Update the game state with the response
                 this.isEditMode = false; // Reset edit mode after submission
+                return response.data; // Return the full response for further use
             } catch (error) {
                 console.error('Error submitting game:', error);
+                throw error;
             }
         },
         async deleteGame(gameId) {
