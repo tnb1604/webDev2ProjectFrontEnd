@@ -1,16 +1,16 @@
 <template>
-  <div v-if="game">
+  <div v-if="localGame">
     <div class="row mb-5">
 
       <!-- Game Image (Left Side) -->
       <div class="col-md-6 text-center">
         <div v-if="!showingTrailer">
-          <img :src="`http://localhost${game.image_path}`"
+          <img :src="`http://localhost${localGame.image_path}`"
             class=" game-thumbnail img-fluid img-thumbnail rounded shadow-lg" alt="Game Thumbnail"
             @click="showTrailer" />
         </div>
         <div v-else>
-          <iframe :src="`https://www.youtube.com/embed/${getVideoId(game.trailer_url)}?autoplay=1`"
+          <iframe :src="`https://www.youtube.com/embed/${getVideoId(localGame.trailer_url)}?autoplay=1`"
             class="game-youtube-video" frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
           </iframe>
@@ -25,21 +25,21 @@
 
       <!-- Game Details (Right Side) -->
       <div class="col-md-6">
-        <h1 class="mb-3">{{ game.title }}</h1>
-        <p class="lead">{{ game.description }}</p>
+        <h1 class="mb-3">{{ localGame.title }}</h1>
+        <p class="lead">{{ localGame.description }}</p>
         <div class="mb-3">
-          <p><strong>Release Date:</strong> <span class="text-muted">{{ game.release_date }}</span></p>
-          <p><strong>Genre:</strong> <span class="badge bg-secondary">{{ game.genre }}</span></p>
+          <p><strong>Release Date:</strong> <span class="text-muted">{{ localGame.release_date }}</span></p>
+          <p><strong>Genre:</strong> <span class="badge bg-secondary">{{ localGame.genre }}</span></p>
         </div>
 
         <!-- Admin Buttons -->
         <button v-if="authStore.user?.role === 'admin'" @click="editGame" class="btn btn-warning me-2"> Edit </button>
-        <DeleteButton v-if="authStore.user?.role === 'admin'" :entity-id="game.id" entity-type="game"
+        <DeleteButton v-if="authStore.user?.role === 'admin'" :entity-id="localGame.id" entity-type="game"
           :delete-action="deleteGame" custom-class="btn btn-danger" />
 
         <!-- Edit Game Modal -->
         <ShowModal v-if="showGameForm" title="Update Game" @close="closeGameForm">
-          <GameForm :game-id="game.id" @formSubmitted="closeGameForm" />
+          <GameForm :game-id="localGame.id" @formSubmitted="handleFormSubmitted" />
         </ShowModal>
       </div>
     </div>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive, watch } from 'vue';
 import { useAuthStore } from "@/stores/authStore";
 import { useGameStore } from "@/stores/gameStore";
 import DeleteButton from './DeleteButton.vue';
@@ -75,12 +75,23 @@ export default {
     GameForm,
     ShowModal,
   },
-  setup() {
+  setup(props) {
     const authStore = useAuthStore();
     const gameStore = useGameStore();
     const showingTrailer = ref(false);
     const gameToDelete = ref(null);
     const showGameForm = ref(false);
+
+    // Create a local reactive copy of the game prop
+    const localGame = reactive({ ...props.game });
+
+    // Watch for changes in the game prop and update the local copy
+    watch(
+      () => props.game,
+      (newGame) => {
+        Object.assign(localGame, newGame);
+      }
+    );
 
     onMounted(() => {
       authStore.fetchUserDetails();
@@ -92,6 +103,7 @@ export default {
       showingTrailer,
       gameToDelete,
       showGameForm,
+      localGame, // Use localGame instead of props.game
     };
   },
   methods: {
@@ -109,7 +121,8 @@ export default {
       }
     },
     editGame() {
-      this.gameStore.game = { ...this.game }; // Prefill the game data
+      console.log('Editing game with ID:', this.localGame.id); // Debug log
+      this.gameStore.game = { ...this.localGame }; // Prefill the game data
       this.gameStore.isEditMode = true; // Ensure isEditMode is set to true
       this.showGameForm = true; // Show the modal
     },
@@ -126,6 +139,16 @@ export default {
     },
     toggleTrailer() {
       this.showingTrailer = !this.showingTrailer;
+    },
+    async handleFormSubmitted(updatedGame) {
+      try {
+        const gameId = updatedGame.game_id || this.localGame.id; // Use the returned game_id or fallback to localGame.id
+        await this.gameStore.fetchGameDetails(gameId); // Re-fetch the game details
+        Object.assign(this.localGame, this.gameStore.game); // Update the local copy of the game
+        this.showGameForm = false; // Close the form modal
+      } catch (error) {
+        console.error('Error updating game details:', error);
+      }
     }
   }
 };

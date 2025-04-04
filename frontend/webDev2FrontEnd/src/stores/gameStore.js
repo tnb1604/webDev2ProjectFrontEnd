@@ -47,6 +47,7 @@ export const useGameStore = defineStore('game', {
                     this.game.id = response.data.game_id; // Explicitly set the game ID
                 } else {
                     console.log('Game edited successfully:', response.data);
+                    response.data.game_id = this.game.id; // Include the existing game ID in the response
                 }
 
                 this.isEditMode = false; // Reset edit mode after submission

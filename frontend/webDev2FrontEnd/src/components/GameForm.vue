@@ -100,6 +100,7 @@ export default {
     );
 
     onMounted(() => {
+      console.log('Game ID:', props.gameId); // Debug log
       if (props.gameId !== 'new') {
         gameStore.fetchGameDetails(props.gameId);
       }
@@ -112,11 +113,9 @@ export default {
     const submitForm = async () => {
       try {
         const response = await gameStore.submitGame(); // Ensure this returns the API response
-        emit('formSubmitted');
+        emit('formSubmitted', response); // Emit the response to the parent component
         if (!isEditMode.value) {
-          router.push(`/game/${response.game_id}`); // Use the game_id from the response
-        } else {
-          router.push(`/game/${props.gameId}`);
+          router.push(`/game/${response.game_id}`); // Navigate to the new game's page
         }
       } catch (error) {
         console.error('Error submitting game:', error);
