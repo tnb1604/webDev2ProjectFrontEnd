@@ -7,6 +7,7 @@ import AboutUs from '../views/AboutUs.vue';
 import Account from '@/views/Account.vue';
 import { useAuthStore } from '@/stores/authStore';
 import Contact from '@/views/Contact.vue';
+import Users from '@/views/Users.vue'; // Import the Users component
 
 // Define routes
 const routes = [
@@ -47,6 +48,12 @@ const routes = [
     path: '/contact',
     name: 'Contact',
     component: Contact,
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Users,
+    meta: { requiresAdmin: true }, // 🔒 Requires admin role
   }
 ];
 
@@ -56,9 +63,21 @@ const router = createRouter({
 });
 
 // 🌟 **Navigation Guard**
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const isAuthenticated = localStorage.getItem('token'); // Check if token exists
   const authStore = useAuthStore();
+
+  // Ensure the user's role is loaded before proceeding
+  if (!authStore.user && isAuthenticated) {
+    try {
+      await authStore.fetchUserDetails(); // Fetch user data from the server
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      next('/login'); // Redirect to login if fetching user data fails
+      return;
+    }
+  }
+
   const userRole = authStore.user?.role; // Get the role from the store
 
   // If the route requires authentication and the user is not logged in, redirect to login

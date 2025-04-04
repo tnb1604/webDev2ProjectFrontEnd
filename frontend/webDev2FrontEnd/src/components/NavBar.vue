@@ -11,9 +11,14 @@
       <div class="d-flex align-items-center">
 
         <!-- Add Game Button -->
-        <button v-if="authStore.user?.role === 'admin'" class="btn btn-outline-primary me-3" @click="showAddGameModal = true">
-          Add Game
+        <button v-if="authStore.user?.role === 'admin'" class="btn btn-outline-primary me-3"
+          @click="showAddGameModal = true">
+          <i class="bi bi-controller bi-plus-circle"></i> Add Game
         </button>
+
+        <!-- Admin Users Button -->
+        <router-link v-if="authStore.user?.role === 'admin'" to="/users" class="btn btn-outline-warning me-3"> <i
+            class="bi bi-people"></i> Manage Users </router-link>
 
         <!-- Show Login/Register only when NOT logged in -->
         <template v-if="!authStore.token">
@@ -41,12 +46,8 @@
   </nav>
 
   <!-- Add Game Modal -->
-  <ShowModal
-    v-if="showAddGameModal"
-    title="Add Game"
-    @close="showAddGameModal = false"
-    @closeModal="showAddGameModal = false"
-  >
+  <ShowModal v-if="showAddGameModal" title="Add Game" @close="showAddGameModal = false"
+    @closeModal="showAddGameModal = false">
     <GameForm :gameId="'new'" @formSubmitted="showAddGameModal = false" />
   </ShowModal>
 </template>
