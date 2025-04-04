@@ -23,15 +23,17 @@
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
         </router-link>
+        <AlertMessage v-if="showAlert" type="danger" message="You need to be logged in to like or dislike reviews." 
+            @close="showAlert = false" />
 
         <!-- Always render reviews section -->
         <div>
             <div v-if="sortedReviews.length > 0">
                 <Review v-for="review in sortedReviews" :key="review.id" :review="review"
-                    @edit-review="handleEditReview" />
+                    @edit-review="handleEditReview" @like-or-dislike="handleLikeOrDislike" />
             </div>
             <div v-else>
-                <p>No reviews have been placed yet.</p> <!-- Updated message -->
+                <p>No reviews have been placed yet.</p>
             </div>
         </div>
     </div>
@@ -44,13 +46,15 @@ import { useReviewStore } from "@/stores/reviewStore"; // Import the reviewStore
 import Review from "./Review.vue";
 import StarRating from "./StarRating.vue";
 import ReviewForm from "@/components/ReviewForm.vue";
+import AlertMessage from './AlertMessage.vue';
 
 export default {
     name: "ReviewList",
     components: {
         Review,
         StarRating,
-        ReviewForm
+        ReviewForm,
+        AlertMessage
     },
     props: {
         reviews: {
@@ -68,6 +72,7 @@ export default {
         const userHasReviewed = ref(false); // Track if the user has already reviewed this game
         const showReviewForm = ref(false); // Track visibility of the review form
         const editingReview = ref(null); // Track the review being edited
+        const showAlert = ref(false);
 
         // Check if the user has already submitted a review
         const checkUserReview = () => {
@@ -113,6 +118,15 @@ export default {
             editingReview.value = null; // Reset editing state
         };
 
+        const handleLikeOrDislike = () => {
+            if (!authStore.user) {
+                showAlert.value = false; // Reset visibility
+                setTimeout(() => showAlert.value = true, 0); // Trigger reappearance
+                return;
+            }
+            // Handle like or dislike logic here
+        };
+
         // Watch for changes in reviews and re-check if the user has reviewed
         watch(() => reviewStore.reviews, checkUserReview, { deep: true });
 
@@ -141,7 +155,9 @@ export default {
             handleReviewSubmitted,
             handleEditReview,
             cancelForm,
-            formattedAverageRating
+            formattedAverageRating,
+            showAlert,
+            handleLikeOrDislike
         };
     }
 };

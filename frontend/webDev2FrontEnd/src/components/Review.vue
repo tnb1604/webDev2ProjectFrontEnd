@@ -70,8 +70,8 @@ export default {
             required: true
         }
     },
-    emits: ["edit-review"],
-    setup(props) {
+    emits: ["edit-review", "like-or-dislike"],
+    setup(props, { emit }) {
         const authStore = useAuthStore();
         const reviewStore = useReviewStore();
         const username = ref('');
@@ -104,7 +104,10 @@ export default {
 
 
         const handleLike = async () => {
-            if (!authStore.user) return;
+            if (!authStore.user) {
+                emit("like-or-dislike");
+                return;
+            }
 
             try {
                 if (userVote.value === 'like') {
@@ -124,7 +127,10 @@ export default {
 
 
         const handleDislike = async () => {
-            if (!authStore.user) return;
+            if (!authStore.user) {
+                emit("like-or-dislike");
+                return;
+            }
 
             try {
                 if (userVote.value === 'dislike') {
@@ -244,5 +250,14 @@ export default {
 .animated-icon {
     transition: color 0.2s ease, transform 0.3s ease;
     margin-right: 0.3rem;
+}
+
+/* Add styles for floating alert */
+.alert-message-floating {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    max-width: 300px;
 }
 </style>
