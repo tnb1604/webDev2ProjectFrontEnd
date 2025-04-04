@@ -9,8 +9,8 @@
 
         <!-- Text Content -->
         <div class="position-absolute top-50 start-50 translate-middle w-100">
-            <h1 class="fw-bold mb-3">Find and share trustworthy reviews</h1>
-            <h3 class="fw-light mb-5">Real reviews from gamers of all kinds</h3>
+            <h1 class="fw-bold mb-3">Share and compare, see what others declare!</h1>
+            <h3 class="fw-light mb-5">Reviews from all types of gamers</h3>
             <div class="container">
                 <!-- Search Bar -->
                 <SearchBar :placeholder="'Search games...'" @search="handleSearch" />
