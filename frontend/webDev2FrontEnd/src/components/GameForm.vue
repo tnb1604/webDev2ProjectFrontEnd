@@ -66,10 +66,11 @@
 </template>
 
 <script>
-import { onMounted, watch, computed } from 'vue';
+import { onMounted, watch, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useGameStore } from '../stores/gameStore';
 import ImageUpload from './ImageUpload.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -84,6 +85,7 @@ export default {
   setup(props, { emit }) {
     const gameStore = useGameStore();
     const router = useRouter();
+    const maxSizeInBytes = ref(0);  // Variable to hold the maximum allowed file size in bytes
 
     const isEditMode = computed(() => props.gameId !== 'new'); // Derive isEditMode from gameId
 
@@ -99,8 +101,15 @@ export default {
       { immediate: true }
     );
 
-    onMounted(() => {
-      console.log('Game ID:', props.gameId); // Debug log
+    onMounted(async () => {
+      // Fetch the maximum allowed file size from the backend
+      try {
+        const response = await axios.get('/get_max_upload_size');  // Adjust the endpoint accordingly
+        maxSizeInBytes.value = parseInt(response.data.maxSize) * 1024 * 1024; // Convert max size from MB to bytes
+      } catch (error) {
+        console.error('Error fetching max upload size:', error);
+      }
+
       if (props.gameId !== 'new') {
         gameStore.fetchGameDetails(props.gameId);
       }
@@ -120,6 +129,13 @@ export default {
     };
 
     const submitForm = async () => {
+      // Check if the selected image's size exceeds the max size
+      const imageFile = gameStore.game.image;
+      if (imageFile && imageFile.size > maxSizeInBytes.value) {
+        alert(`File size is too large. Please upload a file smaller than ${maxSizeInBytes.value / 1024 / 1024} MB.`);
+        return;
+      }
+
       try {
         const response = await gameStore.submitGame(); // Ensure this returns the API response
         emit('formSubmitted', response); // Emit the response to the parent component
@@ -138,6 +154,7 @@ export default {
       setImage,
       validateYear,
       submitForm,
+      maxSizeInBytes,
     };
   },
 };
