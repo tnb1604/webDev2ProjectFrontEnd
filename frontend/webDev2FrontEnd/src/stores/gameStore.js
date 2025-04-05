@@ -53,7 +53,10 @@ export const useGameStore = defineStore('game', {
                 this.isEditMode = false; // Reset edit mode after submission
                 return response.data; // Return the full response for further use
             } catch (error) {
-                console.error('Error submitting game:', error);
+                if (error.response) {
+                    const errorMessage = error.response.data.error || 'An error occurred while submitting the game. Please try again!';
+                    throw new Error(errorMessage);
+                }
                 throw error;
             }
         },

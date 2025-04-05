@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { computed } from 'vue'; // Import computed from Vue
 import api from '@/utils/axios.js'; // Axios instance
 
 export const useReviewStore = defineStore('reviewStore', {
@@ -46,6 +47,13 @@ export const useReviewStore = defineStore('reviewStore', {
                 console.error("Error editing review:", error);
                 throw error; // Re-throw error for handling in the component
             }
+        },
+    },
+    getters: {
+        averageRating: (state) => {
+            if (state.reviews.length === 0) return 0;
+            const totalRating = state.reviews.reduce((sum, review) => sum + review.rating, 0);
+            return (totalRating / state.reviews.length).toFixed(1); // Return average rating to 1 decimal place
         },
     },
 });

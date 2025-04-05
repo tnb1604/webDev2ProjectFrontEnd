@@ -71,7 +71,7 @@ export default {
             required: true
         }
     },
-    emits: ["edit-review", "like-or-dislike"],
+    emits: ["edit-review", "like-or-dislike", "review-updated"],
     setup(props, { emit }) {
         const authStore = useAuthStore();
         const reviewStore = useReviewStore();
@@ -201,7 +201,8 @@ export default {
             try {
                 await reviewStore.deleteReview(reviewToDelete.value);
                 reviewToDelete.value = null;
-                notification.show('Review deleted.', 'primary')
+                notification.show('Review deleted.', 'primary');
+                emit('review-updated'); // Emit event after deleting
             } catch (error) {
                 console.error("Error deleting review:", error);
             }

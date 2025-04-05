@@ -51,10 +51,12 @@
 import { ref, onMounted } from 'vue';
 import axios from '../utils/axios';
 import ConfirmModal from '../components/ConfirmModal.vue';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 const users = ref([]);
 const selectedUserId = ref(null);
 const confirmModal = ref(null);
+const notification = useNotificationStore();
 
 const fetchUsers = async () => {
   try {
@@ -74,8 +76,9 @@ const confirmDelete = async () => {
   try {
     await axios.delete(`/users/${selectedUserId.value}`);
     users.value = users.value.filter(user => user.id !== selectedUserId.value);
+    notification.show('User deleted successfully.', 'success');
   } catch (error) {
-    console.error('Error deleting user:', error);
+    notification.show('Error deleting user: ' + error, 'danger');
   }
 };
 

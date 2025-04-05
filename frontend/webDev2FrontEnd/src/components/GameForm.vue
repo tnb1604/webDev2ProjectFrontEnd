@@ -55,6 +55,9 @@
             </div>
           </div>
 
+          <!-- Error message display (because notification doesnt overlap the modal) -->
+          <div v-if="errorMessage" class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+
           <button type="submit" class="btn btn-primary w-100 mt-3">
             <i :class="isEditMode ? 'bi bi-save' : 'bi bi-plus-circle'" class="me-2"></i>
             {{ isEditMode ? 'Update Game' : 'Add Game' }}
@@ -87,7 +90,7 @@ export default {
     const gameStore = useGameStore();
     const router = useRouter();
     const maxSizeInBytes = ref(0);  // Variable to hold the maximum allowed file size in bytes
-
+    const notification = useNotificationStore();
     const isEditMode = computed(() => props.gameId !== 'new'); // Derive isEditMode from gameId
 
     watch(
@@ -130,7 +133,6 @@ export default {
     };
 
     const submitForm = async () => {
-      const notification = useNotificationStore();
       const imageFile = gameStore.game.image;
       if (imageFile && imageFile.size > maxSizeInBytes.value) {
         notification.show(
@@ -152,7 +154,8 @@ export default {
         }
         emit('closeModal');
       } catch (error) {
-        console.error('Error submitting game:', error);
+        errorMessage.value = error.message || 'An unexpected error occurred.';
+        console.error('Error submitting form:', error.message);
       }
     };
 

@@ -3,8 +3,8 @@
         <h3 class="mb-2">Reviews</h3>
         <p class="d-flex align-items-center average-rating">
             <span class="me-2">Average Rating:</span>
-            <StarRating class="me-2 mb-0" :rating="parseFloat(formattedAverageRating) || 0" />
-            <span>{{ formattedAverageRating }} out of 5</span>
+            <StarRating class="me-2 mb-0" :rating="parseFloat(reviewStore.averageRating) || 0" />
+            <span>{{ reviewStore.averageRating }} out of 5</span>
         </p>
 
         <!-- Write a Review Button -->
@@ -28,7 +28,7 @@
         <div>
             <div v-if="sortedReviews.length > 0">
                 <Review v-for="review in sortedReviews" :key="review.id" :review="review"
-                    @edit-review="handleEditReview" @like-or-dislike="handleLikeOrDislike" />
+                    @edit-review="handleEditReview" @like-or-dislike="handleLikeOrDislike" @review-updated="fetchReviews" />
             </div>
             <div v-else>
                 <p>No reviews have been placed yet.</p>
@@ -88,13 +88,6 @@ export default {
             }
         };
 
-        // Compute the formatted average rating
-        const formattedAverageRating = computed(() => {
-            if (!props.reviews.length) return "0.0";
-            const totalRating = props.reviews.reduce((sum, review) => sum + parseFloat(review.rating), 0);
-            return (totalRating / props.reviews.length).toFixed(1); // Format to 1 decimal place
-        });
-
         // Handle review submission
         const handleReviewSubmitted = async () => {
             await fetchReviews(); // Refresh reviews after submission or edit
@@ -143,6 +136,7 @@ export default {
 
         return {
             authStore,
+            reviewStore,
             sortedReviews,
             userHasReviewed,
             showReviewForm,
@@ -151,7 +145,6 @@ export default {
             handleReviewSubmitted,
             handleEditReview,
             cancelForm,
-            formattedAverageRating,
             showAlert,
             handleLikeOrDislike
         };

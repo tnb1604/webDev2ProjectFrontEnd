@@ -65,27 +65,21 @@ export default {
         rating: this.rating
       };
       try {
-        // Editing Review
         if (this.existingReview) {
           const response = await api.put(`/reviews/${this.existingReview.id}`, review);
-          notification.show('Review Edited.', 'primary')
-
-          console.log('Review edited:', response.data);
+          notification.show('Review Edited.', 'primary');
+          this.$emit('review-updated'); // Emit event after editing
           this.$emit('review-submitted', response.data);
         } else {
-          // Adding a new review
           const response = await api.post('/reviews', review);
-          notification.show('Review Added.', 'primary')
-
-          console.log('Review submitted:', response.data);
+          notification.show('Review Added.', 'primary');
+          this.$emit('review-updated'); // Emit event after adding
           this.$emit('review-submitted', response.data);
         }
         this.resetForm();
-        this.errorMessage = ''; 
+        this.errorMessage = '';
       } catch (error) {
-        notification.show('Something went wrong.', 'error')
-        console.error('Error submitting review:', error);
-        console.error('Error response data:', error.response?.data);
+        notification.show('Something went wrong.', 'error');
         this.errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
       }
     },
