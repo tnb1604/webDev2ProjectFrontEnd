@@ -269,4 +269,29 @@ export default {
     color: rgb(255, 255, 255);
     font-weight: bold;
 }
+
+@media (max-width: 410px) {
+    .grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    .add-game-card {
+        width: 200px;
+        height: 300px;
+    }
+
+    .add-game-card .card-img-top {
+        height: 180px;
+    }
+
+    .add-game-card .card-name {
+        font-size: 1rem;
+    }
+
+    .add-game-card .card-text {
+        font-size: 0.9rem;
+    }
+}
+
 </style>
