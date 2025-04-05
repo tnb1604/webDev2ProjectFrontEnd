@@ -69,6 +69,7 @@ import DeleteButton from './DeleteButton.vue';
 import ConfirmModal from './ConfirmModal.vue';
 import GameForm from './GameForm.vue';
 import ShowModal from './ShowModal.vue';
+import { useNotificationStore } from '@/stores/notificationStore'
 
 export default {
   name: 'GameDetailsBlock',
@@ -88,6 +89,7 @@ export default {
     const gameToDelete = ref(null);
     const showGameForm = ref(false);
     const showImageModalFlag = ref(false);
+    const notificationStore = useNotificationStore();
 
     // Create a local reactive copy of the game prop
     const localGame = reactive({ ...props.game });
@@ -111,7 +113,7 @@ export default {
       gameToDelete,
       showGameForm,
       showImageModalFlag,
-      localGame, // Use localGame instead of props.game
+      localGame,
     };
   },
   methods: {
@@ -120,10 +122,12 @@ export default {
       this.$refs.confirmModal.show(); // Show the confirmation modal
     },
     async confirmDelete() {
+      const notification = useNotificationStore()
       try {
         await this.gameStore.deleteGame(this.gameToDelete);
         this.$emit('gameDeleted');
-        this.$router.push('/'); // Redirect to the homepage after deletion
+        this.$router.push('/');
+        notification.show('Game deleted successfully!', 'success')
       } catch (error) {
         console.error('Error deleting game:', error);
       }

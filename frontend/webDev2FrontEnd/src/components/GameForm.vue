@@ -34,7 +34,7 @@
               <i class="bi bi-file-text me-2"></i> Description:
             </label>
             <textarea maxlength="600" id="description" v-model="gameStore.game.description" class="form-control"
-              rows="7" style="resize: vertical; min-height: 100px; max-height: 300px;"></textarea>
+              rows="7" style="resize: vertical; min-height: 100px; max-height: 300px;" required></textarea>
           </div>
 
           <div class="row">
@@ -42,8 +42,8 @@
               <label for="release_date" class="form-label">
                 <i class="bi bi-calendar-event me-2"></i> Release Date:
               </label>
-              <input type="date" id="release_date" v-model="gameStore.game.release_date" class="form-control"
-                required @input="validateYear" />
+              <input type="date" id="release_date" v-model="gameStore.game.release_date" class="form-control" required
+                @input="validateYear" />
             </div>
 
             <div class="col-md-6 mb-3">
@@ -71,6 +71,7 @@ import { useRouter } from 'vue-router';
 import { useGameStore } from '../stores/gameStore';
 import ImageUpload from './ImageUpload.vue';
 import axios from 'axios';
+import { useNotificationStore } from '@/stores/notificationStore' // 👈 or import { useNotifier } if using helper
 
 export default {
   components: {
@@ -129,20 +130,27 @@ export default {
     };
 
     const submitForm = async () => {
-      // Check if the selected image's size exceeds the max size
+      const notification = useNotificationStore();
       const imageFile = gameStore.game.image;
       if (imageFile && imageFile.size > maxSizeInBytes.value) {
-        alert(`File size is too large. Please upload a file smaller than ${maxSizeInBytes.value / 1024 / 1024} MB.`);
+        notification.show(
+          `File size is too large. Please upload a file smaller than ${(maxSizeInBytes.value / 1024 / 1024).toFixed(2)} MB.`,
+          'error'
+        )
         return;
       }
 
       try {
-        const response = await gameStore.submitGame(); // Ensure this returns the API response
+        const response = await gameStore.submitGame();
         emit('formSubmitted', response); // Emit the response to the parent component
+        notification.show(
+          isEditMode.value ? 'Game updated successfully!' : 'Game added successfully!',
+          'success'
+        )
         if (!isEditMode.value) {
           router.push(`/game/${response.game_id}`); // Navigate to the new game's page
         }
-        emit('closeModal'); // Emit an event to close the modal
+        emit('closeModal');
       } catch (error) {
         console.error('Error submitting game:', error);
       }

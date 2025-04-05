@@ -23,8 +23,6 @@
         <router-link v-if="!authStore.user" to="/login" class="btn btn-primary shadow-sm mb-3">
             Log in to place a review
         </router-link>
-        <AlertMessage v-if="showAlert" type="danger" message="You need to be logged in to like or dislike reviews." 
-            @close="showAlert = false" />
 
         <!-- Always render reviews section -->
         <div>
@@ -46,7 +44,6 @@ import { useReviewStore } from "@/stores/reviewStore"; // Import the reviewStore
 import Review from "./Review.vue";
 import StarRating from "./StarRating.vue";
 import ReviewForm from "@/components/ReviewForm.vue";
-import AlertMessage from './AlertMessage.vue';
 
 export default {
     name: "ReviewList",
@@ -54,7 +51,6 @@ export default {
         Review,
         StarRating,
         ReviewForm,
-        AlertMessage
     },
     props: {
         reviews: {
