@@ -43,7 +43,7 @@
                 <i class="bi bi-calendar-event me-2"></i> Release Date:
               </label>
               <input type="date" id="release_date" v-model="gameStore.game.release_date" class="form-control"
-                required />
+                required @input="validateYear" />
             </div>
 
             <div class="col-md-6 mb-3">
@@ -110,6 +110,15 @@ export default {
       gameStore.game.image = image;
     };
 
+    const validateYear = (event) => {
+      const input = event.target.value;
+      const year = input.split('-')[0]; // Extract the year part
+      if (year.length > 4) {
+        event.target.value = input.slice(0, 4) + input.slice(5); // Trim to 4 digits
+        gameStore.game.release_date = event.target.value; // Update the model
+      }
+    };
+
     const submitForm = async () => {
       try {
         const response = await gameStore.submitGame(); // Ensure this returns the API response
@@ -127,6 +136,7 @@ export default {
       gameStore,
       isEditMode,
       setImage,
+      validateYear,
       submitForm,
     };
   },
