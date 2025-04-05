@@ -13,7 +13,7 @@
             <!-- Contact Details Section -->
             <div class="row mt-5">
                 <div class="col-md-4">
-                    <div class="card contact-card text-center shadow-sm">
+                    <div class="card contact-card text-center shadow-sm mb-2 mt-2">
                         <div class="card-body">
                             <i class="bi bi-telephone-fill contact-icon text-primary"></i>
                             <h4 class="mt-3">Phone</h4>
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card contact-card text-center shadow-sm">
+                    <div class="card contact-card text-center shadow-sm  mb-2 mt-2">
                         <div class="card-body">
                             <i class="bi bi-envelope-fill contact-icon text-success"></i>
                             <h4 class="mt-3">Email</h4>
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card contact-card text-center shadow-sm">
+                    <div class="card contact-card text-center shadow-sm mb-2 mt-2">
                         <div class="card-body">
                             <i class="bi bi-geo-alt-fill contact-icon text-danger"></i>
                             <h4 class="mt-3">Address</h4>
@@ -47,19 +47,19 @@
             <div class="text-center mt-5">
                 <h5 class="fw-bold text-dark">Follow Us</h5>
                 <div class="social-links">
-                    <a href="https://www.instagram.com/damisavg/" class="btn btn-outline-dark mx-2 social-btn"
+                    <a href="https://www.instagram.com/damisavg/" class="btn btn-outline-dark mx-2 social-btn mb-2 mt-2"
                         target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-instagram"></i> Instagram
                     </a>
-                    <a href="https://www.youtube.com/@thainoodleboii" class="btn btn-outline-danger mx-2 social-btn"
+                    <a href="https://www.youtube.com/@thainoodleboii" class="btn btn-outline-danger mx-2 social-btn mb-2 mt-2"
                         target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-youtube"></i> YouTube
                     </a>
                     <a href="https://nl.linkedin.com/in/damisa-vooges-14a96b302"
-                        class="btn btn-outline-info mx-2 social-btn" target="_blank" rel="noopener noreferrer">
+                        class="btn btn-outline-info mx-2 social-btn mb-2 mt-2" target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-linkedin"></i> LinkedIn
                     </a>
-                    <a href="https://www.facebook.com/damisa.vooges" class="btn btn-outline-primary mx-2 social-btn"
+                    <a href="https://www.facebook.com/damisa.vooges" class="btn btn-outline-primary mx-2 social-btn mb-2 mt-2"
                         target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-facebook"></i> Facebook
                     </a>

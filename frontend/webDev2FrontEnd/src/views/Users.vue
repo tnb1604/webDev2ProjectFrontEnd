@@ -4,13 +4,15 @@
       <i class="bi bi-people-fill me-2"></i>User Accounts
     </h2>
 
+    <!-- No users found message -->
     <div v-if="users.length === 0" class="alert alert-info text-center">
       <i class="bi bi-info-circle me-2"></i>No users found.
     </div>
 
+    <!-- User Table -->
     <div v-else class="table-responsive">
-      <table class="table table-hover align-middle shadow-sm rounded">
-        <thead class="table-primary">
+      <table class="table table-hover align-middle shadow-sm rounded table-striped">
+        <thead class="table-dark">
           <tr>
             <th scope="col"><i class="bi bi-hash"></i> ID</th>
             <th scope="col"><i class="bi bi-person"></i> Username</th>
@@ -40,6 +42,7 @@
     </div>
   </div>
 
+  <!-- Confirm Deletion Modal -->
   <ConfirmModal ref="confirmModal" title="Delete User"
     :message="`Are you sure you want to delete user with ID ${selectedUserId}?`" @confirmed="confirmDelete" />
 </template>
@@ -93,5 +96,44 @@ th {
 
 td {
   vertical-align: middle;
+}
+
+/* Improved table row hover effect */
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Make the badge more distinct */
+.badge {
+  font-size: 0.9rem;
+}
+
+/* Add padding and shadow to buttons */
+.btn-outline-danger {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-danger:hover {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Add padding to the user account container */
+.container {
+  padding: 2rem;
+}
+
+/* Improved modal button */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.table-responsive {
+  margin-top: 2rem;
 }
 </style>

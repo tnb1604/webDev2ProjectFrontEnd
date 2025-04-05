@@ -7,7 +7,7 @@
             <!-- Display game title -->
             <div class="card-body">
                 <h5 class="card-name">{{ game.title }}</h5>
-                <p class="card-text">{{ game.genre }}</p>
+                <p class="card-text genre">{{ game.genre }}</p>
                 <p class="card-text">Released: {{ game.release_date }}</p>
                 <p class="card-text">
                     <StarRating class="ms-2 mb-0" :rating="parseFloat(game.average_rating) || 0" />
@@ -89,6 +89,14 @@ export default {
     font-weight: 600;
     color: #333;
     transition: color 0.2s ease;
+}
+
+/* Game Genre */
+.card-text.genre {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 /* Card Text (Game Genre, Release Date, Rating) */

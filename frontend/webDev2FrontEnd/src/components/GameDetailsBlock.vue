@@ -2,12 +2,12 @@
   <div v-if="localGame">
     <div class="row mb-5">
 
-      <!-- Game Image (Left Side) -->
+      <!-- Game Image or Trailer (Left Side) -->
       <div class="col-md-6 text-center">
         <div v-if="!showingTrailer">
           <img :src="`http://localhost${localGame.image_path}`"
-            class=" game-thumbnail img-fluid img-thumbnail rounded shadow-lg" alt="Game Thumbnail"
-            @click="showTrailer" />
+            class="game-thumbnail img-fluid img-thumbnail rounded shadow-lg" alt="Game Thumbnail"
+            @click="showImageModal" />
         </div>
         <div v-else>
           <iframe :src="`https://www.youtube.com/embed/${getVideoId(localGame.trailer_url)}?autoplay=1`"
@@ -17,7 +17,7 @@
         </div>
 
         <!-- Toggle Trailer Button -->
-        <button class="btn btn-dark mt-3" @click="toggleTrailer">
+        <button class="btn btn-dark mt-3 mb-4" @click="toggleTrailer">
           <i class="bi" :class="showingTrailer ? 'bi-eye-slash' : 'bi-eye'"></i>
           {{ showingTrailer ? 'Hide Trailer' : 'Show Trailer' }}
         </button>
@@ -53,6 +53,12 @@
   <ConfirmModal ref="confirmModal" title="Delete Game"
     message="Are you sure you want to delete this game? This action cannot be undone." @confirmed="confirmDelete" />
 
+  <!-- Image Modal -->
+  <ShowModal v-if="showImageModalFlag" title="Game Image" @close="closeImageModal">
+    <img :src="`http://localhost${localGame.image_path}`" class="img-fluid" alt="Game Thumbnail" />
+  </ShowModal>
+
+
 </template>
 
 <script>
@@ -81,6 +87,7 @@ export default {
     const showingTrailer = ref(false);
     const gameToDelete = ref(null);
     const showGameForm = ref(false);
+    const showImageModalFlag = ref(false);
 
     // Create a local reactive copy of the game prop
     const localGame = reactive({ ...props.game });
@@ -103,6 +110,7 @@ export default {
       showingTrailer,
       gameToDelete,
       showGameForm,
+      showImageModalFlag,
       localGame, // Use localGame instead of props.game
     };
   },
@@ -149,6 +157,12 @@ export default {
       } catch (error) {
         console.error('Error updating game details:', error);
       }
+    },
+    showImageModal() {
+      this.showImageModalFlag = true;
+    },
+    closeImageModal() {
+      this.showImageModalFlag = false;
     }
   }
 };
@@ -159,7 +173,6 @@ export default {
   cursor: pointer;
   max-width: 100%;
   height: auto;
-  min-width: 450px;
   min-height: 100%;
   max-height: 600px;
   object-fit: contain;
@@ -167,6 +180,9 @@ export default {
   background: rgb(34, 34, 34);
   border: none;
 }
+
+
+/* Global fix for all text elements */
 
 .game-youtube-video {
   cursor: pointer;
@@ -179,5 +195,25 @@ export default {
   margin-bottom: 15px;
   background: rgb(34, 34, 34);
   border: none;
+}
+
+/* Ensure the genre spans across available space */
+.badge.bg-secondary {
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  display: inline-block;
+}
+
+/* Adjust layout for smaller screens */
+@media (max-width: 992px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col-md-6 {
+    width: 100%;
+    text-align: center;
+  }
 }
 </style>

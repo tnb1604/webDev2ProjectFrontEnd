@@ -27,7 +27,7 @@
                 </p>
             </div>
             <div class="col-md-6 text-center">
-                <img src="/public/aboutusimage.jpg" alt="About Us" class="img-fluid rounded shadow-lg"
+                <img src="/public/aboutusimage.jpg" alt="About Us" class="img-fluid rounded shadow-lg mb-5"
                     style="max-width: 100%; height: auto;">
             </div>
         </div>

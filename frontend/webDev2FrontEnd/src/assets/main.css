@@ -20,3 +20,10 @@ body {
   background: linear-gradient(135deg, #add8e6, #ffffff, #add8e6);
   /* Changed second color to light blue */
 }
+
+p,
+span,
+div {
+  word-wrap: break-word;
+  word-break: break-word;
+}

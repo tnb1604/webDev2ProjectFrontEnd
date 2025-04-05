@@ -91,4 +91,34 @@ const logout = () => {
   align-items: center;
   justify-content: center;
 }
+
+/* Add media query for stacking buttons and centering content */
+@media (max-width: 478px) {
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .navbar-brand {
+    margin-bottom: 20px;
+  }
+
+  .d-flex.align-items-center {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .d-flex.align-items-center > * {
+    margin-bottom: 10px;
+    width: auto;
+  }
+
+  .d-flex.align-items-center > *:last-child {
+    margin-bottom: 0;
+  }
+}
 </style>

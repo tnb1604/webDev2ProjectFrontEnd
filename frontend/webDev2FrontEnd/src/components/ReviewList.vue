@@ -1,7 +1,7 @@
 <template>
     <div class="mb-4">
         <h3 class="mb-2">Reviews</h3>
-        <p class="d-flex align-items-center">
+        <p class="d-flex align-items-center average-rating">
             <span class="me-2">Average Rating:</span>
             <StarRating class="me-2 mb-0" :rating="parseFloat(formattedAverageRating) || 0" />
             <span>{{ formattedAverageRating }} out of 5</span>
@@ -188,5 +188,23 @@ export default {
     background-color: red;
     color: white;
     border: 1px solid #cc0000;
+}
+
+.average-rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media (max-width: 354px) {
+    .average-rating {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .average-rating span,
+    .average-rating .StarRating {
+        margin-bottom: 0.5rem;
+    }
 }
 </style>
