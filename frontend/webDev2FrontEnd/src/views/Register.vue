@@ -6,16 +6,6 @@
           <div class="card-body p-5">
             <h3 class="card-title text-center text-primary mb-4">Register</h3>
 
-            <!-- Success Message -->
-            <div v-if="successMessage" class="alert alert-success">
-              {{ successMessage }}
-            </div>
-
-            <!-- Error Message -->
-            <div v-if="errorMessage" class="alert alert-danger">
-              {{ errorMessage }}
-            </div>
-
             <form @submit.prevent="handleRegister">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
@@ -68,14 +58,11 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
-      successMessage: '',
-      errorMessage: ''
     };
   },
   methods: {
     async handleRegister() {
       if (this.password !== this.confirmPassword) {
-        this.errorMessage = 'Passwords do not match';
         return;
       }
 
@@ -90,7 +77,6 @@ export default {
         });
 
         notification.show('Registration successful! You can now log in.');
-        this.errorMessage = '';
 
         this.$router.push('/login');
 

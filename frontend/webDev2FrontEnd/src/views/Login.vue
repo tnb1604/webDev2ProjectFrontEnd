@@ -11,16 +11,6 @@
 
             <h3 class="card-title text-center text-primary mb-4">Login</h3>
 
-            <!-- Success Message -->
-            <div v-if="successMessage" class="alert alert-success">
-              {{ successMessage }}
-            </div>
-
-            <!-- Error Message -->
-            <div v-if="errorMessage" class="alert alert-danger">
-              {{ errorMessage }}
-            </div>
-
             <form @submit.prevent="handleLogin">
               <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
@@ -56,8 +46,6 @@ export default {
     return {
       email: '',
       password: '',
-      errorMessage: '',
-      successMessage: ''
     };
   },
   methods: {
