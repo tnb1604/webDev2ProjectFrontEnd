@@ -92,6 +92,7 @@ export default {
     const maxSizeInBytes = ref(0);  // Variable to hold the maximum allowed file size in bytes
     const notification = useNotificationStore();
     const isEditMode = computed(() => props.gameId !== 'new'); // Derive isEditMode from gameId
+    const errorMessage = ref(''); // Initialize errorMessage as a reactive property
 
     watch(
       () => props.gameId,
@@ -166,6 +167,7 @@ export default {
       validateYear,
       submitForm,
       maxSizeInBytes,
+      errorMessage, // Ensure errorMessage is returned to the template
     };
   },
 };
