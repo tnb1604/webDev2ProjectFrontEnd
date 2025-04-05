@@ -66,7 +66,6 @@ export default {
   },
   mounted() {
     this.gameId = this.$route.params.id; // Get the gameId from the route
-    console.log('Fetching game ID:', this.gameId);
 
     // Fetch game details
     api.get(`/games/${this.gameId}`)

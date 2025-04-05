@@ -16,7 +16,7 @@
               <label for="title" class="form-label">
                 <i class="bi bi-controller me-2"></i> Title:
               </label>
-              <input maxlength="50" type="text" id="title" v-model="gameStore.game.title" class="form-control"
+              <input maxlength="100" type="text" id="title" v-model="gameStore.game.title" class="form-control"
                 required />
             </div>
 
@@ -50,7 +50,7 @@
               <label for="trailerUrl" class="form-label">
                 <i class="bi bi-film me-2"></i> Trailer URL:
               </label>
-              <input maxlength="200" type="url" id="trailerUrl" v-model="gameStore.game.trailer_url"
+              <input maxlength="255" type="url" id="trailerUrl" v-model="gameStore.game.trailer_url"
                 class="form-control" placeholder="https://www.youtube.com/watch?v=..." required />
             </div>
           </div>

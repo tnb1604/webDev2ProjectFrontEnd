@@ -5,7 +5,7 @@
     <form @submit.prevent="submitReview">
       <div class="form-group">
         <label for="title">Title</label>
-        <input maxlength="30" type="text" id="title" v-model="title" class="form-control" required />
+        <input maxlength="50" type="text" id="title" v-model="title" class="form-control" required />
       </div>
       <div class="form-group">
         <label for="review">Review</label>
