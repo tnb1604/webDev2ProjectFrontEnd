@@ -19,22 +19,23 @@
             <form @submit.prevent="handleRegister">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" v-model="username" required />
+                <input maxlength="50" type="text" class="form-control" id="username" v-model="username" required />
               </div>
 
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email" required />
+                <input maxlength="100" type="email" class="form-control" id="email" v-model="email" required />
               </div>
 
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" v-model="password" required />
+                <input maxlength="64" type="password" class="form-control" id="password" v-model="password" required />
               </div>
 
               <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required
+                <input maxlength="64" type="password" class="form-control" id="confirmPassword"
+                  v-model="confirmPassword" required
                   :class="{ 'is-invalid': confirmPassword && confirmPassword !== password }" />
                 <div v-if="confirmPassword && confirmPassword !== password" class="invalid-feedback">
                   Passwords do not match.
@@ -57,7 +58,8 @@
 </template>
 
 <script>
-import api from '../utils/axios.js'; // Import your axios instance
+import { useAuthStore } from '@/stores/authStore';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 export default {
   data() {
@@ -72,40 +74,32 @@ export default {
   },
   methods: {
     async handleRegister() {
-      // Check if passwords match
       if (this.password !== this.confirmPassword) {
         this.errorMessage = 'Passwords do not match';
         return;
       }
 
+      const authStore = useAuthStore();
+      const notification = useNotificationStore();
+
       try {
-        // Sending a POST request using the api instance
-        const response = await api.post('/auth/register', {
+        await authStore.register({
           username: this.username,
           email: this.email,
           password: this.password
         });
 
-        // Handle success
-        this.successMessage = 'Registration successful! You can now log in.';
-        this.errorMessage = ''; // Clear any error message
+        notification.show('Registration successful! You can now log in.');
+        this.errorMessage = '';
 
-        // Optionally, redirect the user to login page after successful registration
-        setTimeout(() => {
-          this.$router.push('/login');
-        }, 2000);
+        this.$router.push('/login');
+
       } catch (error) {
-        // Handle error (e.g., email already exists, server error, etc.)
-        if (error.response && error.response.data && error.response.data.message) {
-          this.errorMessage = error.response.data.message;
-        } else {
-          this.errorMessage = 'An error occurred during registration. Please try again!';
-        }
-        this.successMessage = ''; // Clear success message
-        console.error('Registration error:', error.response?.data);
+        notification.show(error.message, 'error');
       }
     }
-  }
+
+  },
 };
 </script>
 

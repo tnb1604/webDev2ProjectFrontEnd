@@ -24,12 +24,12 @@
             <form @submit.prevent="handleLogin">
               <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" v-model="email" required />
+                <input maxlength="100" type="email" class="form-control" id="email" v-model="email" required />
               </div>
 
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" v-model="password" required />
+                <input maxlength="64" type="password" class="form-control" id="password" v-model="password" required />
               </div>
 
               <div class="d-grid gap-2">
@@ -49,6 +49,7 @@
 
 <script>
 import { useAuthStore } from "@/stores/authStore"; // Import the Pinia store
+import { useNotificationStore } from "@/stores/notificationStore"; // Import the notification store
 
 export default {
   data() {
@@ -61,8 +62,8 @@ export default {
   },
   methods: {
     async handleLogin() {
-      // Access the Pinia store here
       const authStore = useAuthStore();
+      const notification = useNotificationStore(); // Access the notification store
 
       try {
         // Call the store's login action
@@ -73,17 +74,15 @@ export default {
 
         if (success) {
           // Optionally show success message
-          this.successMessage = 'Login successful!';
-
-          // Redirect to home or dashboard
-          this.$router.push('/');
+          notification.show('Logged in successfully!', 'success');
+          this.$router.push('/'); // Redirect to home or dashboard
         }
       } catch (error) {
-        // Handle error
-        console.error('Login error:', error);
-        this.errorMessage = error.response?.data?.message || 'Invalid credentials';
+        // Handle error: display the error message from the backend
+        notification.show(error.message, 'error');
       }
     }
+
   }
 };
 </script>

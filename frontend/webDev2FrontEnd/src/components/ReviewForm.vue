@@ -26,6 +26,7 @@
 <script>
 import InteractiveStarRating from './InteractiveStarRating.vue';
 import api from "@/utils/axios.js";
+import { useNotificationStore } from '@/stores/notificationStore'
 
 export default {
   components: {
@@ -55,6 +56,7 @@ export default {
   },
   methods: {
     async submitReview() {
+      const notification = useNotificationStore();
       const review = {
         gameId: this.gameId,
         userId: this.userId,
@@ -62,24 +64,28 @@ export default {
         review_text: this.reviewText,
         rating: this.rating
       };
-      console.log('Review object:', review); // Log the review object for debugging
       try {
+        // Editing Review
         if (this.existingReview) {
-          // Editing an existing review
           const response = await api.put(`/reviews/${this.existingReview.id}`, review);
+          notification.show('Review Edited.', 'primary')
+
           console.log('Review edited:', response.data);
-          this.$emit('review-submitted', response.data); // Emit event to parent component
+          this.$emit('review-submitted', response.data);
         } else {
           // Adding a new review
           const response = await api.post('/reviews', review);
+          notification.show('Review Added.', 'primary')
+
           console.log('Review submitted:', response.data);
-          this.$emit('review-submitted', response.data); // Emit event to parent component
+          this.$emit('review-submitted', response.data);
         }
-        this.resetForm(); // Reset the form after successful submission
-        this.errorMessage = ''; // Clear any previous error message
+        this.resetForm();
+        this.errorMessage = ''; 
       } catch (error) {
+        notification.show('Something went wrong.', 'error')
         console.error('Error submitting review:', error);
-        console.error('Error response data:', error.response?.data); // Log the error response data
+        console.error('Error response data:', error.response?.data);
         this.errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
       }
     },

@@ -23,8 +23,26 @@ export const useAuthStore = defineStore("auth", {
 
         return true;
       } catch (error) {
-        console.error("Login failed:", error);
-        throw error; // Propagate the error to be handled in the component
+        if (error.response) {
+          const errorMessage = error.response.data.error || 'An error occurred during login. Please try again!';
+          throw new Error(errorMessage);
+        }
+        throw error;
+      }
+    },
+    async register(userData) {
+      try {
+        const response = await api.post("/auth/register", userData, {
+          headers: { "Content-Type": "application/json" },
+        });
+
+        return response.data;
+      } catch (error) {
+        if (error.response) {
+          const errorMessage = error.response.data.error || 'An error occurred during registration. Please try again!';
+          throw new Error(errorMessage);
+        }
+        throw error;
       }
     },
 

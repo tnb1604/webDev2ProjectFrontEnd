@@ -127,7 +127,7 @@ export default {
         await this.gameStore.deleteGame(this.gameToDelete);
         this.$emit('gameDeleted');
         this.$router.push('/');
-        notification.show('Game deleted successfully!', 'success')
+        notification.show('Game deleted successfully!', 'primary')
       } catch (error) {
         console.error('Error deleting game:', error);
       }

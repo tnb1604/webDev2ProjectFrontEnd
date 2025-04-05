@@ -55,6 +55,7 @@ import ReviewForm from './ReviewForm.vue';
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import api from "@/utils/axios.js";
+import { useNotificationStore } from '@/stores/notificationStore'
 
 export default {
     name: "Review",
@@ -79,6 +80,7 @@ export default {
         const confirmModal = ref(null);
         const reviewToDelete = ref(null);
         const showEditForm = ref(false);
+        const notification = useNotificationStore();
 
         // Like/Dislike Data
         const likes = ref(0);
@@ -105,7 +107,12 @@ export default {
 
         const handleLike = async () => {
             if (!authStore.user) {
-                emit("like-or-dislike");
+                notification.show("You must be logged in to like reviews.", "secondary");
+                return;
+            }
+
+            if (authStore.user.role === 'admin') {
+                notification.show("Only user accounts can like reviews.", "secondary");
                 return;
             }
 
@@ -114,11 +121,13 @@ export default {
                     await api.post(`/reviews/${props.review.id}/like/${authStore.user.id}`);
                     likes.value--;
                     userVote.value = null;
+                    notification.show('Like Removed.', 'primary')
                 } else {
                     await api.post(`/reviews/${props.review.id}/like/${authStore.user.id}`);
                     likes.value++;
                     if (userVote.value === 'dislike') dislikes.value--;
                     userVote.value = 'like';
+                    notification.show('Like Added.', 'primary')
                 }
             } catch (error) {
                 console.error("Error liking review:", error);
@@ -128,7 +137,12 @@ export default {
 
         const handleDislike = async () => {
             if (!authStore.user) {
-                emit("like-or-dislike");
+                notification.show("You must be logged in to dislike reviews.", "secondary");
+                return;
+            }
+
+            if (authStore.user.role === 'admin') {
+                notification.show("Only user accounts can dislike reviews.", "secondary");
                 return;
             }
 
@@ -137,11 +151,13 @@ export default {
                     await api.post(`/reviews/${props.review.id}/dislike/${authStore.user.id}`);
                     dislikes.value--;
                     userVote.value = null;
+                    notification.show('Dislike Removed.', 'primary')
                 } else {
                     await api.post(`/reviews/${props.review.id}/dislike/${authStore.user.id}`);
                     dislikes.value++;
                     if (userVote.value === 'like') likes.value--;
                     userVote.value = 'dislike';
+                    notification.show('Dislike Added.', 'primary')
                 }
             } catch (error) {
                 console.error("Error disliking review:", error);
@@ -185,6 +201,7 @@ export default {
             try {
                 await reviewStore.deleteReview(reviewToDelete.value);
                 reviewToDelete.value = null;
+                notification.show('Review deleted.', 'primary')
             } catch (error) {
                 console.error("Error deleting review:", error);
             }
