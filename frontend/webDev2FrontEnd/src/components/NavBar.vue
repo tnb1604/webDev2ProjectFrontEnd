@@ -58,10 +58,12 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import GameForm from "./GameForm.vue";
 import ShowModal from "./ShowModal.vue";
+import { useNotificationStore } from "@/stores/notificationStore";
 
 const authStore = useAuthStore();
 const router = useRouter();
 const showAddGameModal = ref(false);
+const notification = useNotificationStore();
 
 // Ensure user details are loaded when the component mounts
 onMounted(() => {
@@ -71,7 +73,8 @@ onMounted(() => {
 // Logout function
 const logout = () => {
   authStore.logout();
-  router.push("/"); // Redirect to homepage after logout
+  router.push("/");
+  notification.show("Logged out successfully!", "success");
 };
 </script>
 

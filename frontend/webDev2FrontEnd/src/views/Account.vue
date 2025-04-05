@@ -83,14 +83,6 @@
         </div>
       </div>
     </div>
-
-
-    <!-- Logout Button -->
-    <div class="text-center mt-3">
-      <button class="btn btn-outline-danger logout-btn" @click="logout">
-        <i class="bi bi-box-arrow-right"></i> Logout
-      </button>
-    </div>
   </div>
 </template>
 
