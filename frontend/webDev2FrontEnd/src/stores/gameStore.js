@@ -43,10 +43,10 @@ export const useGameStore = defineStore('game', {
                 });
 
                 if (!this.isEditMode) {
-                    console.log('Game added successfully:', response.data);
+                    //console.log('Game added successfully:', response.data);
                     this.game.id = response.data.game_id; // Explicitly set the game ID
                 } else {
-                    console.log('Game edited successfully:', response.data);
+                    //console.log('Game edited successfully:', response.data);
                     response.data.game_id = this.game.id; // Include the existing game ID in the response
                 }
 
@@ -63,11 +63,14 @@ export const useGameStore = defineStore('game', {
         async deleteGame(gameId) {
             try {
                 const response = await axios.delete(`/games/${gameId}`);
-                console.log('Game deleted:', response.data);
                 this.game = {};
                 this.isEditMode = false;
             } catch (error) {
-                console.error('Error deleting game:', error);
+                if (error.response) {
+                    const errorMessage = error.response.data.error || 'An error occurred while deleting the game. Please try again!';
+                    throw new Error(errorMessage);
+                }
+                throw error;
             }
         },
         resetGame() {

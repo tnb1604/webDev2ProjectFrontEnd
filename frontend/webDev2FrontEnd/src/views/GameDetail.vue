@@ -42,7 +42,7 @@ export default {
       immediate: true,
       handler(newGameId) {
         this.gameId = newGameId;
-        console.log('Fetching game ID:', this.gameId);
+        //console.log('Fetching game ID:', this.gameId);
 
         // Fetch game details
         api.get(`/games/${this.gameId}`)

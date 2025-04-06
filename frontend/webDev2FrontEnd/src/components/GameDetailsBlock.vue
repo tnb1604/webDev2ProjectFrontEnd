@@ -89,7 +89,6 @@ export default {
     const gameToDelete = ref(null);
     const showGameForm = ref(false);
     const showImageModalFlag = ref(false);
-    const notificationStore = useNotificationStore();
 
     // Create a local reactive copy of the game prop
     const localGame = reactive({ ...props.game });
@@ -122,7 +121,8 @@ export default {
       this.$refs.confirmModal.show(); // Show the confirmation modal
     },
     async confirmDelete() {
-      const notification = useNotificationStore()
+    const notification = useNotificationStore();
+
       try {
         await this.gameStore.deleteGame(this.gameToDelete);
         this.$emit('gameDeleted');
@@ -130,10 +130,11 @@ export default {
         notification.show('Game deleted successfully!', 'primary')
       } catch (error) {
         console.error('Error deleting game:', error);
+        notification.show(error.message, 'error');
       }
     },
     editGame() {
-      console.log('Editing game with ID:', this.localGame.id); // Debug log
+      //console.log('Editing game with ID:', this.localGame.id); // Debug log
       this.gameStore.game = { ...this.localGame }; // Prefill the game data
       this.gameStore.isEditMode = true; // Ensure isEditMode is set to true
       this.showGameForm = true; // Show the modal
