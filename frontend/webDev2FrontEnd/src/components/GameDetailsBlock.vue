@@ -5,7 +5,7 @@
       <!-- Game Image or Trailer (Left Side) -->
       <div class="col-md-6 text-center">
         <div v-if="!showingTrailer">
-          <img :src="`http://localhost${localGame.image_path}`"
+          <img :src="`${baseURL}${localGame.image_path}`"
             class="game-thumbnail img-fluid img-thumbnail rounded shadow-lg" alt="Game Thumbnail"
             @click="showImageModal" />
         </div>
@@ -55,7 +55,7 @@
 
   <!-- Image Modal -->
   <ShowModal v-if="showImageModalFlag" title="Game Image" @close="closeImageModal">
-    <img :src="`http://localhost${localGame.image_path}`" class="img-fluid" alt="Game Thumbnail" />
+    <img :src="`${baseURL}${localGame.image_path}`" class="img-fluid" alt="Game Thumbnail" />
   </ShowModal>
 
 
@@ -69,7 +69,8 @@ import DeleteButton from './DeleteButton.vue';
 import ConfirmModal from './ConfirmModal.vue';
 import GameForm from './GameForm.vue';
 import ShowModal from './ShowModal.vue';
-import { useNotificationStore } from '@/stores/notificationStore'
+import { useNotificationStore } from '@/stores/notificationStore';
+import axios from '@/utils/axios'; // Import axios instance
 
 export default {
   name: 'GameDetailsBlock',
@@ -89,6 +90,7 @@ export default {
     const gameToDelete = ref(null);
     const showGameForm = ref(false);
     const showImageModalFlag = ref(false);
+    const baseURL = axios.defaults.baseURL; // Extract baseURL from axios
 
     // Create a local reactive copy of the game prop
     const localGame = reactive({ ...props.game });
@@ -113,6 +115,7 @@ export default {
       showGameForm,
       showImageModalFlag,
       localGame,
+      baseURL,
     };
   },
   methods: {

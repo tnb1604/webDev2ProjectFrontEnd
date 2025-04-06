@@ -2,7 +2,7 @@
     <router-link :to="`/game/${game.id}`" class="text-decoration-none">
         <div class="card">
             <!-- Display game image -->
-            <img :src="`http://localhost${game.image_path}`" class="card-img-top" alt="Game Image" />
+            <img :src="`${baseURL}${game.image_path}`" class="card-img-top" alt="Game Image" />
 
             <!-- Display game title -->
             <div class="card-body">
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from '@/utils/axios'; // Import axios instance
 import { onMounted } from 'vue';
 import { useAuthStore } from "@/stores/authStore";
 import StarRating from './StarRating.vue';
@@ -33,6 +34,7 @@ export default {
     },
     setup() {
         const authStore = useAuthStore();
+        const baseURL = axios.defaults.baseURL; // Extract baseURL from axios
 
         onMounted(() => {
             authStore.fetchUserDetails().then(() => {
@@ -40,7 +42,8 @@ export default {
         });
 
         return {
-            authStore
+            authStore,
+            baseURL, // Make baseURL available in the template
         };
     },
     computed: {

@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     setRating(star) {
-        console.log('Rating set to:', star); // Temporary log for verification
+        //console.log('Rating set to:', star); // Temporary log for verification
         this.$emit('update:rating', star); // Emit the updated rating to the parent component
     },
     setHoverRating(star) {

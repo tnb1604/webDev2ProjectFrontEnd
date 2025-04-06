@@ -4,12 +4,14 @@
       <input type="file" id="image" @change="handleImageChange" class="form-control" accept="image/*" :required="!isEditMode && !currentImage" />
       <div v-if="imagePreview || currentImage" class="mt-3">
         <label class="form-label">Image Preview:</label>
-        <img :src="imagePreview || `http://localhost${currentImage}`" class="img-fluid" alt="Selected Game Image" />
+        <img :src="imagePreview || `${baseURL}${currentImage}`" class="img-fluid" alt="Selected Game Image" />
       </div>
     </div>
 </template>
 
 <script>
+import axios from '@/utils/axios'; // Import axios instance
+
 export default {
   props: {
     currentImage: {
@@ -25,6 +27,7 @@ export default {
     return {
       image: null,
       imagePreview: null,
+      baseURL: axios.defaults.baseURL, // Extract baseURL from axios
     };
   },
   methods: {
