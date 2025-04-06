@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/utils/axios.js"; // Axios instance
+import { useNotificationStore } from "@/stores/notificationStore"; // Import notification store
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -57,7 +58,14 @@ export const useAuthStore = defineStore("auth", {
         this.user = response.data;
         return true;
       } catch (error) {
-        console.error("Failed to fetch user details:", error);
+        if (error.response && error.response.status === 401) {
+          console.warn("Token is invalid or expired. Logging out...");
+          const notification = useNotificationStore();
+          notification.show("Token is invalid or expired, please log in again.", "secondary");
+          this.logout();
+        } else {
+          console.error("Failed to fetch user details:", error);
+        }
         return false;
       }
     },
