@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost/', // Update this if needed
+  baseURL: 'https://pixelcritic.up.railway.app', // Update this if needed
   headers: {
     'Content-Type': 'application/json',
   },
